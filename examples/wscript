@@ -1,0 +1,31 @@
+#! /usr/bin/env python
+# encoding: utf-8
+
+VERSION='0.0.1'
+APPNAME='ViennaMaterialsExample'   
+
+top = '.'
+out = 'build'
+
+import sys
+
+def options(ctx):
+   ctx.load('g++')
+   ctx.load('gcc')
+
+def configure(ctx):
+   ctx.load('g++')
+   ctx.load('gcc')
+
+   ctx.env.append_value('CXXFLAGS', ['-O2', '-fPIC', '-Wall', '-pipe'])
+
+
+def build(ctx):
+   ctx(
+      features     = 'cxx cxxprogram', 
+      source       = '../external/pugixml/src/pugixml.cpp src/viennamaterials_test.cpp',
+      target       = 'viennamaterials_test',
+      includes     = '. ../ ../external'
+   )
+
+
