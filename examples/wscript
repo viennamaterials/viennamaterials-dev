@@ -1,9 +1,6 @@
 #! /usr/bin/env python
 # encoding: utf-8
 
-VERSION='0.0.1'
-APPNAME='ViennaMaterialsExample'   
-
 top = '.'
 out = 'build'
 
@@ -21,11 +18,13 @@ def configure(ctx):
 
 
 def build(ctx):
-   ctx(
-      features     = 'cxx cxxprogram', 
-      source       = '../external/pugixml/src/pugixml.cpp src/viennamaterials_test.cpp',
-      target       = 'viennamaterials_test',
-      includes     = '. ../ ../external'
-   )
+   pass
+#   ctx(
+#      features     = 'cxx cxxprogram', 
+#      source       = 'ex1.cpp',
+#      target       = 'ex1',
+#      includes     = '. ../',
+#      uselib       ='VIENNAUTILS'
+#   )
 
 

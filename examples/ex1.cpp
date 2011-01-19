@@ -12,7 +12,7 @@
    license:    see file LICENSE in the ViennaMaterials base directory
 ============================================================================= */
 
-#include "ViennaMaterials/vmat.hpp"
+#include "ViennaMaterials/library.hpp"
 
 int main(int argc, char * argv[])
 {
@@ -24,7 +24,7 @@ int main(int argc, char * argv[])
 
    // create an instance of the material library
    //
-   viennamaterials::Library   matlib;
+   viennamaterials::library   matlib;
    
    // load a specific xml input file
    //
