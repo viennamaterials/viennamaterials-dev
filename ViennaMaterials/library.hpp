@@ -24,10 +24,6 @@
 
 namespace viennamaterials { 
 
-//namespace tag {
-//typedef viennatutils::tag
-//}
-
 template<typename Tag>
 struct library 
 {
