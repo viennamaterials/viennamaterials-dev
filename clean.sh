@@ -1,2 +1,1 @@
-./waf distclean
-
+rm -rf build/

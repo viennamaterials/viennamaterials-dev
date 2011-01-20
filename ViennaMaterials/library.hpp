@@ -19,28 +19,20 @@
 //
 // *** local
 //
-#include "ViennaUtils/xml.hpp"
+//#include "ViennaUtils/xml.hpp"
+#include "ViennaUtils/settings.hpp"
 
 namespace viennamaterials { 
 
-//
-// settings: default case 
-//
+//namespace tag {
+//typedef viennatutils::tag
+//}
+
 template<typename Tag>
 struct library 
 {
-   typedef viennautils::XML   type;
+   typedef typename viennautils::settings<Tag>::type  type;
 };
-
-//
-// settings: xml based
-//
-template<>
-struct library <viennautils::tag::xml>
-{
-   typedef viennautils::XML   type;
-};
-
 
 } //namespace viennamaterials  
 

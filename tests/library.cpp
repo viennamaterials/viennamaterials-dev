@@ -16,30 +16,27 @@
 
 int main(int argc, char * argv[])
 {
-   if(argc != 2)
-   {
-      std::cerr << "Wrong number of parameters: example ./" << argv[0] << " input.xml" << std::endl;
-      return -1;
-   }
-
-   // create an instance of the material library
+   // setup an xml based material library
    //
-   viennamaterials::library   matlib;
+   typedef viennamaterials::library<viennautils::tag::xml>::type   MatlibT;
+   MatlibT   matlib;
    
    // load a specific xml input file
    //
-   matlib.read(argv[1]);
-   std::cout << "-----------------------------------------------" << std::endl;
+   matlib.read("../tests/test.xml");
 
-   // dump the whole xml tree
+   // dump the whole datastructure
    //
    matlib.dump();
-   std::cout << "-----------------------------------------------" << std::endl;
 
    // execute a query and print the result to std::cout
    //
-   std::cout << matlib.query("/Materials/element[identifier='Si']/data[identifier='mass']/representation/double");
-   std::cout << "-----------------------------------------------" << std::endl;
+   std::string result = matlib.query("/Materials/element[identifier='Si']/data[identifier='mass']/representation/double");
+   if(result != "<double> 4.510 </double>")
+   {
+      std::cerr << "Error: query returned wrong result" << std::endl;
+      return -1;
+   }
 
    return 0;
 }
