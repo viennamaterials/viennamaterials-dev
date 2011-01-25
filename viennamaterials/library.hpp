@@ -16,18 +16,16 @@
 #ifndef VIENNAMATERIALS_LIBRARY_HPP
 #define VIENNAMATERIALS_LIBRARY_HPP
 
-//
-// *** local
-//
-//#include "ViennaUtils/xml.hpp"
-#include "ViennaUtils/settings.hpp"
+#include "viennautils/config.hpp"
 
 namespace viennamaterials { 
 
+//! generic library object
+//! wraps around a viennautils::config object
 template<typename Tag>
 struct library 
 {
-   typedef typename viennautils::settings<Tag>::type  type;
+   typedef typename viennautils::config<Tag>::type  type;
 };
 
 } //namespace viennamaterials  

@@ -1,7 +1,9 @@
+# build the doxygen documentation
+cd doc/
+doxygen
+cd .. 
 
-#
-# build ViennaMaterials
-#
+# build the library and the tests
 mkdir -p build
 cd build/
 cmake ..

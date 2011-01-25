@@ -12,7 +12,7 @@
    license:    see file LICENSE in the ViennaMaterials base directory
 ============================================================================= */
 
-#include "ViennaMaterials/library.hpp"
+#include "viennamaterials/library.hpp"
 
 int main(int argc, char * argv[])
 {
