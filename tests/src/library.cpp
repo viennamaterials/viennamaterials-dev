@@ -23,7 +23,7 @@ int main(int argc, char * argv[])
    
    // load a specific xml input file
    //
-   matlib.read("../tests/test.xml");
+   matlib.read("../input/test.xml");
 
    // dump the whole datastructure
    //
