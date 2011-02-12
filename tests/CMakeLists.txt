@@ -17,7 +17,7 @@ INCLUDE_DIRECTORIES("../../ViennaUtils/")
 INCLUDE_DIRECTORIES("../../ViennaUtils/external")  
 
 
-# build external
+# build ViennaUtils
 ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/../../ViennaUtils/ "${CMAKE_CURRENT_BINARY_DIR}/ViennaUtils/")
 
 # set the gnu g++ compiler flags
