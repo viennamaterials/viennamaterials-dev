@@ -16,16 +16,45 @@
 #ifndef VIENNAMATERIALS_LIBRARY_HPP
 #define VIENNAMATERIALS_LIBRARY_HPP
 
-#include "viennautils/config.hpp"
+#include "viennautils/xml.hpp"
+#include "viennautils/file.hpp"
 
-namespace viennamaterials { 
+extern "C" {
+#include "ipd.h"
+}
+ 
+namespace vmat { 
 
-//! generic library object
-//! wraps around a viennautils::config object
-template<typename Tag>
+
 struct library 
 {
-   typedef typename viennautils::config<Tag>::type  type;
+  typedef viennautils::xml<viennautils::tag::pugixml>::type MaterialDatabase;
+
+  bool load(std::string const& filename)
+  {
+    if(!viennautils::file_exists(filename)) return false;
+    
+    if(viennautils::file_extension(filename) == "xml")  // native
+    {
+      mdb.read(filename);
+      //mdb.dump();
+      return true;
+    }
+    else if(viennautils::file_extension(filename) == "ipd")  // conversion required
+    {
+      ipdInit(NULL, NULL);
+      
+      // todo: 
+      
+      return true;
+    }
+    else return false;
+  }
+  
+  
+
+
+  MaterialDatabase mdb;
 };
 
 } //namespace viennamaterials  
