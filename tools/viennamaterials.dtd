@@ -1,0 +1,13 @@
+<!ELEMENT Materials (identifier | element*)+>
+<!ELEMENT element (identifier | relation? | data* | comment? | element*)+>
+<!ELEMENT data (identifier | representation)+>
+<!ELEMENT representation (double | exact | interval | rational)+>
+<!ELEMENT relation (copy?)>
+<!ELEMENT copy (#PCDATA)>
+<!ELEMENT exact (#PCDATA)>
+<!ELEMENT double (#PCDATA)>
+<!ELEMENT interval (#PCDATA)>
+<!ELEMENT rational (#PCDATA)>
+<!ELEMENT identifier (#PCDATA)>
+<!ELEMENT comment (#PCDATA)>
+
