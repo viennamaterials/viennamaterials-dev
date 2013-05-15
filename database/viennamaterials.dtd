@@ -1,0 +1,12 @@
+<!ELEMENT materials (material*)>
+<!ELEMENT material (id,name,category+,parameters*)>
+<!ELEMENT parameters (parameter*)>
+<!ELEMENT parameter (name,value,unit,note?)>
+<!ELEMENT id (#PCDATA)>
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT category (#PCDATA)>
+<!ELEMENT value (#PCDATA)>
+<!ELEMENT unit (#PCDATA)>
+<!ELEMENT note (#PCDATA)>
+
+

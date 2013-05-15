@@ -21,6 +21,7 @@
 #include "exceptions.hpp"
 #include "parameter_extractor.hpp"
 #include "tools.hpp"
+#include "check.hpp"
 
 namespace vmat { 
 
@@ -69,7 +70,12 @@ struct Library
 
   bool load(std::string const& filename)
   {
-    // TODO: perform a sanity check of the material database: are the material ids unique? are the parameters unique? ..
+#ifdef HAVE_LIBXML2
+    if(!vmat::check(filename))
+    {
+      return false;
+    }
+#endif
   
     if(!viennautils::file_exists(filename)) return false;
     
@@ -78,6 +84,7 @@ struct Library
       mdb.read(filename);
       return true;
     }
+#ifdef HAVE_VIENNAIPD    
     else if(viennautils::file_extension(filename) == "ipd")  // conversion required
     {
       ipdInit(NULL, NULL);
@@ -87,6 +94,7 @@ struct Library
       
       return true;
     }
+#endif
     else return false;
   }
   
@@ -163,7 +171,7 @@ public:
     pugi::xpath_node_set const& result = this->queryMaterial(material_id);
     if(result.size() > 1) // there must be only one material with this id
     {
-      throw VMATNonUniqueMaterialException(material_id);
+      throw vmat::NonUniqueMaterialException(material_id);
       return Entry();
     }
     else if (result.size() == 0) return Entry();
@@ -175,7 +183,7 @@ public:
     pugi::xpath_node_set const& result = this->queryMaterial(material_id);
     if(result.size() > 1) // there must be only one material with this id
     {
-      throw VMATNonUniqueMaterialException(material_id);
+      throw vmat::NonUniqueMaterialException(material_id);
       return false;
     }
     else if (result.size() == 0) return false;
@@ -197,7 +205,7 @@ public:
     pugi::xpath_node_set const& result = this->queryParameter(material_id, parameter_id);
     if(result.size() > 1) // there must be only one parameter with this id
     {
-      throw VMATNonUniqueParameterException(parameter_id);
+      throw vmat::NonUniqueParameterException(parameter_id);
       return Entry();
     }
     else if (result.size() == 0) return Entry();
@@ -209,7 +217,7 @@ public:
     pugi::xpath_node_set const& result = this->queryParameter(material_id, parameter_id);
     if(result.size() > 1) // there must be only one material with this id
     {
-      throw VMATNonUniqueParameterException(parameter_id);
+      throw vmat::NonUniqueParameterException(parameter_id);
       return false;
     }
     else if (result.size() == 0) return false;
@@ -251,6 +259,7 @@ private:
   pugi::xpath_query *query_parameter_value;
   pugi::xpath_query *query_parameter_unit;
   pugi::xpath_query *query_parameter_note;  
+  
 };
 
 } //namespace vmat  

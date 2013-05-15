@@ -22,14 +22,14 @@ namespace vmat
     return entry.node().select_nodes(query.c_str());
   }
 
-  bool isParameter(Entry const& entry)
-  {
-//    Entries result = vmat::query(entry, ".//
-  }
+//  bool isParameter(Entry const& entry)
+//  {
+////    Entries result = vmat::query(entry, ".//
+//  }
 
-  bool isMaterial(Entry const& entry)
-  {
-  }
+//  bool isMaterial(Entry const& entry)
+//  {
+//  }
 
   vmat::Numeric value(Entry const& entry)
   {

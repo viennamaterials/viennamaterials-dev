@@ -18,16 +18,10 @@
 
 namespace vmat
 {
-
-//struct VMATNonUniqueMaterialException : public std::runtime_error 
-//{
-//   VMATNonUniqueMaterialException(std::string const & str) : std::runtime_error(str) {}
-//};
-
-struct VMATNonUniqueMaterialException: public std::exception
+struct NonUniqueMaterialException: public std::exception
 {
-  VMATNonUniqueMaterialException(std::string const& info) : info(info) {}
-  ~VMATNonUniqueMaterialException() throw() {}
+  NonUniqueMaterialException(std::string const& info) : info(info) {}
+  ~NonUniqueMaterialException() throw() {}
 
   virtual const char* what() const throw()
   {
@@ -37,10 +31,10 @@ struct VMATNonUniqueMaterialException: public std::exception
   std::string info;
 };
 
-struct VMATNonUniqueParameterException: public std::exception
+struct NonUniqueParameterException: public std::exception
 {
-  VMATNonUniqueParameterException(std::string const& info) : info(info) {}
-  ~VMATNonUniqueParameterException() throw() {}
+  NonUniqueParameterException(std::string const& info) : info(info) {}
+  ~NonUniqueParameterException() throw() {}
 
   virtual const char* what() const throw()
   {
@@ -48,6 +42,30 @@ struct VMATNonUniqueParameterException: public std::exception
   }
   
   std::string info;
+};
+
+struct DTDLoadError: public std::exception
+{
+  virtual const char* what() const throw()
+  {
+    return std::string("Input material database valiadation could not be loaded").c_str();
+  }
+};
+
+struct XMLLoadError: public std::exception
+{
+  virtual const char* what() const throw()
+  {
+    return std::string("Input material database could not be loaded").c_str();
+  }
+};
+
+struct DTDError: public std::exception
+{
+  virtual const char* what() const throw()
+  {
+    return std::string("Input material database is not valid").c_str();
+  }
 };
 
 } // end namespace vmat

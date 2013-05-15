@@ -16,10 +16,11 @@
 #include "viennautils/xml.hpp"
 #include "viennautils/file.hpp"
 
+#ifdef HAVE_VIENNAIPD
 extern "C" {
 #include "ipd.h"
 }
-
+#endif
 
 namespace vmat {
 

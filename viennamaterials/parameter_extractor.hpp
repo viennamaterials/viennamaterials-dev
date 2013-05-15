@@ -37,7 +37,7 @@ public:
     pugi::xpath_node_set const& result = this->queryParameter(material, parameter_id);
     if(result.size() > 1) // there must be only one parameter with this id
     {
-      throw VMATNonUniqueParameterException(parameter_id);
+      throw vmat::NonUniqueParameterException(parameter_id);
       return Entry();
     }
     else if (result.size() == 0) return Entry();
@@ -49,7 +49,7 @@ public:
     pugi::xpath_node_set const& result = this->queryParameter(material, parameter_id);
     if(result.size() > 1) // there must be only one material with this id
     {
-      throw VMATNonUniqueParameterException(parameter_id);
+      throw vmat::NonUniqueParameterException(parameter_id);
       return false;
     }
     else if (result.size() == 0) return false;

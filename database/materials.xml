@@ -26,7 +26,7 @@
         <unit>cm^2/V*s</unit>
       </parameter>    
     </parameters>
-    <source>http://www.matweb.com/search/DataSheet.aspx?MatGUID=7d1b56e9e0c54ac5bb9cd433a0991e27&ckck=1</source>
+<!--    <source>http://www.matweb.com/search/DataSheet.aspx?MatGUID=7d1b56e9e0c54ac5bb9cd433a0991e27&ckck=1</source>-->
   </material>
   <material>
     <id>Ge</id>
@@ -55,7 +55,7 @@
         <unit>cm^2/V*s</unit>
       </parameter>    
     </parameters>
-    <source>http://www.matweb.com/search/DataSheet.aspx?MatGUID=a03ca6b2d6ae431aa5a7e71a129f9a4a</source>
+<!--    <source>http://www.matweb.com/search/DataSheet.aspx?MatGUID=a03ca6b2d6ae431aa5a7e71a129f9a4a</source>-->
   </material>  
   <material>
     <id>GaAs</id>
@@ -85,7 +85,7 @@
         <unit>cm^2/V*s</unit>
       </parameter>      
     </parameters>
-    <source>http://www.matweb.com/search/DataSheet.aspx?MatGUID=029a4ff04bdc46d5906b29e0a36dba36&ckck=1</source>
+<!--    <source>http://www.matweb.com/search/DataSheet.aspx?MatGUID=029a4ff04bdc46d5906b29e0a36dba36&ckck=1</source>-->
   </material>    
   <material>
     <id>SiO2</id>
@@ -93,7 +93,7 @@
     <category>oxide</category>
     <parameters>
     </parameters>
-    <source>http://www.matweb.com/search/DataSheet.aspx?MatGUID=d5c906beded84f18a394afec8735c2a4</source>
+<!--    <source>http://www.matweb.com/search/DataSheet.aspx?MatGUID=d5c906beded84f18a394afec8735c2a4</source>-->
   </material>    
   <material>
     <id>Cu</id>
@@ -101,7 +101,7 @@
     <category>metal</category>
     <parameters>
     </parameters>
-    <source>http://www.matweb.com/search/DataSheet.aspx?MatGUID=9aebe83845c04c1db5126fada6f76f7e</source>
+<!--    <source>http://www.matweb.com/search/DataSheet.aspx?MatGUID=9aebe83845c04c1db5126fada6f76f7e</source>-->
   </material>      
 </materials>
 
