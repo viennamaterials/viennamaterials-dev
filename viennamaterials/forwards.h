@@ -37,7 +37,8 @@ namespace key {
 
   static const std::string id             = "id";
   static const std::string category       = "category";
-  static const std::string parameter      = "parameter";  
+  static const std::string parameter      = "parameter";
+  static const std::string material       = "material";  
   
   static const std::string semiconductor  = "semiconductor";
   static const std::string oxide          = "oxide";

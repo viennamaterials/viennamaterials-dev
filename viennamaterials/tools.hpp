@@ -17,19 +17,35 @@
 
 namespace vmat
 {
+  void printToStream(Entries const& nodeset, std::ostream& stream = std::cout)
+  {
+    for(size_t i = 0; i < nodeset.size(); i++)
+      nodeset[i].node().print(stream, "  ");
+  }
+
+  void printToStream(Entry const& node, std::ostream& stream = std::cout)
+  {
+    node.node().print(stream, "  ");
+  }
+
   Entries query(Entry const& entry, std::string const& query)
   {
     return entry.node().select_nodes(query.c_str());
   }
 
-//  bool isParameter(Entry const& entry)
-//  {
-////    Entries result = vmat::query(entry, ".//
-//  }
+  bool isParameter(Entry const& entry)
+  {
+    if(std::string(entry.node().name()) == vmat::key::parameter)
+      return true;
+    else return false;
+  }
 
-//  bool isMaterial(Entry const& entry)
-//  {
-//  }
+  bool isMaterial(Entry const& entry)
+  {
+    if(std::string(entry.node().name()) == vmat::key::material)
+      return true;
+    else return false;
+  }
 
   vmat::Numeric value(Entry const& entry)
   {

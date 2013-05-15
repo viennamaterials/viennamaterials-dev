@@ -23,10 +23,10 @@ int main(int argc, char * argv[])
   vmat::Library   matlib;
   matlib.load(argv[1]);
 
-//  std::cout << " -------------------------------- " << std::endl;
-//  std::cout << "quick way to dump the whole db to an ostream .. " << std::endl;
-//  std::cout << " ----" << std::endl;  
-//  matlib.dump(std::cout);
+  std::cout << " -------------------------------- " << std::endl;
+  std::cout << "quick way to dump the whole db to a stream .. " << std::endl;
+  std::cout << " ----" << std::endl;  
+  matlib.dump(std::cout);
 
 //  // we have direct xpath access -> if a convenience function is not available 
 //  // for our needs .. note: the value has to be put in apostrophies, e.g., 'Si'
@@ -72,11 +72,11 @@ int main(int argc, char * argv[])
 //  vmat::Entries subset = matlib.query("/materials/material[category='indirect' or category='metal']");
 //  vmat::printToStream(subset);
 //  
-//  std::cout << "-------------------------------- " << std::endl;
-//  std::cout << "query a specific material .. " << std::endl;
-//  std::cout << " ----" << std::endl;
-//  vmat::Entry Si = matlib.getMaterial("Si");
-//  vmat::printToStream(Si);
+  std::cout << "-------------------------------- " << std::endl;
+  std::cout << "query a specific material .. " << std::endl;
+  std::cout << " ----" << std::endl;
+  vmat::Entry Si = matlib.getMaterial("Si");
+  vmat::printToStream(Si);
 //  
 //  std::cout << "-------------------------------- " << std::endl;
 //  std::cout << "quick test if a material is available .. " << std::endl;
@@ -84,11 +84,11 @@ int main(int argc, char * argv[])
 //  std::cout << "db has 'Si'? (should be)      : " << matlib.hasMaterial("Si") << std::endl;
 //  std::cout << "db has 'X0d'? (should not be) : " << matlib.hasMaterial("X0d") << std::endl;  
 
-//  std::cout << " -------------------------------- " << std::endl;
-//  std::cout << "query a parameter for a specific material on the fly.. " << std::endl;
-//  std::cout << " ----" << std::endl;  
-//  vmat::Entry Ge_bandgap = matlib.getParameter("Ge", "bandgap");
-//  vmat::printToStream(Ge_bandgap);
+  std::cout << " -------------------------------- " << std::endl;
+  std::cout << "query a parameter for a specific material on the fly.. " << std::endl;
+  std::cout << " ----" << std::endl;  
+  vmat::Entry Ge_bandgap = matlib.getParameter("Ge", "bandgap");
+  vmat::printToStream(Ge_bandgap);
 
 //  // we can work with extracted materials without using the 'matlib' object
 //  std::cout << " -------------------------------- " << std::endl;
@@ -148,5 +148,17 @@ int main(int argc, char * argv[])
 //  
 //  note = matlib.getParameterNote("Si", "bandgap");
 //  std::cout << "note: " << note << std::endl;
+
+  std::cout << " -------------------------------- " << std::endl;
+  std::cout << "check if an entry is a 'parameter'.. " << std::endl; 
+  std::cout << " ----" << std::endl;  
+  std::cout << "is parameter (should be)    : " << vmat::isParameter(Ge_bandgap) << std::endl;
+  std::cout << "is parameter (should not be): " << vmat::isParameter(Si) << std::endl;
+  
+  std::cout << " -------------------------------- " << std::endl;
+  std::cout << "check if an entry is a 'material'.. " << std::endl; 
+  std::cout << " ----" << std::endl;  
+  std::cout << "is material (should not be): " << vmat::isMaterial(Ge_bandgap) << std::endl;
+  std::cout << "is material (should be)    : " << vmat::isMaterial(Si) << std::endl;  
 }
 
