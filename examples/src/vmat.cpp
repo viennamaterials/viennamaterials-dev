@@ -11,18 +11,26 @@
 ============================================================================= */
 
 #include "viennamaterials/library.hpp"
+#include "viennamaterials/kernels/pugixml.hpp"
 
 int main(int argc, char * argv[])
 {
   if(argc != 2)
   {
-    std::cout << "Error - usage: " << argv[0] << "material_file.{ipd,xml}" << std::endl;
+    std::cout << "Error - usage: " << argv[0] << "material_file.xml" << std::endl;
     return -1;
   }
 
-  vmat::Library   matlib;
+  typedef vmat::Library<vmat::tag::pugixml>::type  Library;
+  typedef Library::Entries          Entries;
+  typedef Library::Entry            Entry;
+  typedef Library::EntryIterator    EntryIterator;
+  typedef Library::String           String;
+  typedef Library::Numeric          Numeric;
+  
+  Library   matlib;
   matlib.load(argv[1]);
-
+  
   std::cout << " -------------------------------- " << std::endl;
   std::cout << "quick way to dump the whole db to a stream .. " << std::endl;
   std::cout << " ----" << std::endl;  
@@ -35,32 +43,32 @@ int main(int argc, char * argv[])
   std::cout << " -------------------------------- " << std::endl;
   std::cout << "perform direct queries without the convenience functions .. " << std::endl;
   std::cout << " ----" << std::endl;  
-  vmat::Entries all_materials = matlib.query("/materials/material[id='Si']/category");
+  Entries all_materials = matlib.query("/materials/material[id='Si']/category");
   vmat::printToStream(all_materials);
 
   // now, let's use the convenience functions with precompiled queries ..
   std::cout << "-------------------------------- " << std::endl;
   std::cout << "list all semiconductors .. " << std::endl;
   std::cout << " ----" << std::endl;
-  vmat::Entries semiconductors = matlib.getSemiconductors();
+  Entries semiconductors = matlib.getSemiconductors();
   vmat::printToStream(semiconductors);
 
   std::cout << "-------------------------------- " << std::endl;
   std::cout << "list all metals .. " << std::endl;
   std::cout << " ----" << std::endl;
-  vmat::Entries metals = matlib.getMetals();
+  Entries metals = matlib.getMetals();
   vmat::printToStream(metals);
 
   std::cout << "-------------------------------- " << std::endl;
   std::cout << "list all oxides .. " << std::endl;
   std::cout << " ----" << std::endl;
-  vmat::Entries oxides = matlib.getOxides();
+  Entries oxides = matlib.getOxides();
   vmat::printToStream(oxides);
 
   std::cout << "-------------------------------- " << std::endl;
   std::cout << "list all materials of an arbitrary category .. " << std::endl;
   std::cout << " ----" << std::endl;
-  vmat::Entries indirect = matlib.getMaterialsOfCategory("indirect");
+  Entries indirect = matlib.getMaterialsOfCategory("indirect");
   vmat::printToStream(indirect);
 
   // materials can have several categories .. we can use XPath to query 
@@ -69,13 +77,13 @@ int main(int argc, char * argv[])
   std::cout << " -------------------------------- " << std::endl;
   std::cout << "checking" << std::endl;
   std::cout << " ----" << std::endl;  
-  vmat::Entries subset = matlib.query("/materials/material[category='indirect' or category='metal']");
+  Entries subset = matlib.query("/materials/material[category='indirect' or category='metal']");
   vmat::printToStream(subset);
   
   std::cout << "-------------------------------- " << std::endl;
   std::cout << "query a specific material .. " << std::endl;
   std::cout << " ----" << std::endl;
-  vmat::Entry Si = matlib.getMaterial("Si");
+  Entry Si = matlib.getMaterial("Si");
   vmat::printToStream(Si);
   
   std::cout << "-------------------------------- " << std::endl;
@@ -87,7 +95,7 @@ int main(int argc, char * argv[])
   std::cout << " -------------------------------- " << std::endl;
   std::cout << "query a parameter for a specific material on the fly.. " << std::endl;
   std::cout << " ----" << std::endl;  
-  vmat::Entry Ge_bandgap = matlib.getParameter("Ge", "bandgap");
+  Entry Ge_bandgap = matlib.getParameter("Ge", "bandgap");
   vmat::printToStream(Ge_bandgap);
 
   // we can work with extracted materials without using the 'matlib' object
@@ -97,11 +105,11 @@ int main(int argc, char * argv[])
   // for repetitive parameter queries, use the parameterextractor object
   // (this object precompiles the queries in advance and holds them in it's state)
   vmat::ParameterExtractor paraext; 
-  vmat::Entry Si_bandgap = paraext(Si, "bandgap"); 
+  Entry Si_bandgap = paraext(Si, "bandgap"); 
   vmat::printToStream(Si_bandgap);
   std::cout << "Parameter is available? (should be) :" << paraext.hasParameter(Si, "bandgap") << std::endl;
   // for a single-shot access, use this free function
-  vmat::Entry Si_bandgap2 = vmat::getParameter(Si, "bandgap"); 
+  Entry Si_bandgap2 = vmat::getParameter(Si, "bandgap"); 
   vmat::printToStream(Si_bandgap2);
   std::cout << "Parameter is available? (should be) :" << vmat::hasParameter(Si, "bandgap") << std::endl;
   
@@ -110,11 +118,11 @@ int main(int argc, char * argv[])
   std::cout << " -------------------------------- " << std::endl;
   std::cout << "traverse entries .. " << std::endl; 
   std::cout << " ----" << std::endl;  
-  for(vmat::EntryIterator iter = indirect.begin(); iter != indirect.end(); iter++)
+  for(EntryIterator iter = indirect.begin(); iter != indirect.end(); iter++)
   {
-    vmat::Entry entry = *iter;
+    Entry entry = *iter;
     // ".//" -> XPath expression relative to current context node 'entry'
-    vmat::Entries subtree = vmat::query(entry, ".//id"); 
+    Entries subtree = vmat::query(entry, ".//id"); 
     vmat::printToStream(subtree);
   }
 
@@ -123,16 +131,16 @@ int main(int argc, char * argv[])
   std::cout << "access parameter values of previously extracted parameters.. " << std::endl; 
   std::cout << " ----" << std::endl;  
   
-  vmat::String name = vmat::name(Si_bandgap);
+  String name = vmat::name(Si_bandgap);
   std::cout << "name: " << name << std::endl;
 
-  vmat::Numeric value = vmat::value(Si_bandgap);
+  Numeric value = vmat::value(Si_bandgap);
   std::cout << "value: " << value << std::endl;
 
-  vmat::String unit = vmat::unit(Si_bandgap);
+  String unit = vmat::unit(Si_bandgap);
   std::cout << "unit: " << unit << std::endl;
 
-  vmat::String note = vmat::note(Si_bandgap);
+  String note = vmat::note(Si_bandgap);
   std::cout << "note: " << note << std::endl;
   
   // if we have a parameter entry, we can access the data, e.g., the actual numerical value
