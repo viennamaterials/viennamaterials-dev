@@ -3,6 +3,7 @@
     <id>Si</id>
     <name>Silicon</name>
     <category>semiconductor</category>
+    <category>indirect</category>    
     <parameters>
       <parameter>
         <name>bandgap</name>
@@ -31,6 +32,7 @@
     <id>Ge</id>
     <name>Germanium</name>
     <category>semiconductor</category>
+    <category>indirect</category>        
     <parameters>
       <parameter>
         <name>bandgap</name>
@@ -56,20 +58,42 @@
     <source>http://www.matweb.com/search/DataSheet.aspx?MatGUID=a03ca6b2d6ae431aa5a7e71a129f9a4a</source>
   </material>  
   <material>
+    <id>GaAs</id>
+    <name>GalliumArsenide</name>
+    <category>semiconductor</category>
+    <category>direct</category>
+    <category>compound</category>
+    <parameters>
+      <parameter>
+        <name>bandgap</name>
+        <value>1.35</value>
+        <unit>eV</unit>
+      </parameter>
+      <parameter>
+        <name>permittivity</name>
+        <value>13.2</value>
+        <unit></unit>
+      </parameter>      
+      <parameter>
+        <name>electron_mobility</name>
+        <value>8800</value>
+        <unit>cm^2/V*s</unit>
+      </parameter>
+      <parameter>
+        <name>hole_mobility</name>
+        <value>400</value>
+        <unit>cm^2/V*s</unit>
+      </parameter>      
+    </parameters>
+    <source>http://www.matweb.com/search/DataSheet.aspx?MatGUID=029a4ff04bdc46d5906b29e0a36dba36&ckck=1</source>
+  </material>    
+  <material>
     <id>SiO2</id>
     <name>SiliconDioxide</name>
     <category>oxide</category>
     <parameters>
     </parameters>
     <source>http://www.matweb.com/search/DataSheet.aspx?MatGUID=d5c906beded84f18a394afec8735c2a4</source>
-  </material>    
-  <material>
-    <id>Custom</id>
-    <name>SuperCustom</name>
-    <category>uber</category>
-    <parameters>
-    </parameters>
-    <source>www.uber.ru</source>
   </material>    
   <material>
     <id>Cu</id>

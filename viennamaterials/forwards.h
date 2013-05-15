@@ -27,7 +27,10 @@ namespace vmat {
 typedef viennautils::xml<viennautils::tag::pugixml>::type           MaterialDatabase;
 typedef MaterialDatabase::NodeSet                                   Entries;
 typedef MaterialDatabase::Node                                      Entry;
-  
+typedef MaterialDatabase::NodeIterator                              EntryIterator;
+typedef double                                                      Numeric;  
+typedef bool                                                        Boolean;
+typedef std::string                                                 String;
 
 namespace key {
 
