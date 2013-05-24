@@ -90,8 +90,12 @@ struct PugiXML
     }
 #endif
   
-    if(!viennautils::file_exists(filename)) return false;
-    
+    if(!viennautils::file_exists(filename))
+    { 
+      throw XMLFileLoadError();
+      return false;
+    }
+
     if(viennautils::file_extension(filename) == "xml")  // native
     {
       mdb.read(filename);

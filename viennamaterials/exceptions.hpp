@@ -68,6 +68,14 @@ struct DTDError: public std::exception
   }
 };
 
+struct XMLFileLoadError: public std::exception
+{
+  virtual const char* what() const throw()
+  {
+    return std::string("Input material database XML file does not exist").c_str();
+  }
+};
+
 } // end namespace vmat
 
 #endif
