@@ -96,6 +96,18 @@
 <!--    <source>http://www.matweb.com/search/DataSheet.aspx?MatGUID=d5c906beded84f18a394afec8735c2a4</source>-->
   </material>    
   <material>
+    <id>HfO2</id>
+    <name>HafniumDioxide</name>
+    <category>oxide</category>
+    <parameters>
+      <parameter>
+        <name>permittivity</name>
+        <value>15.6</value>
+        <unit></unit>
+      </parameter>      
+    </parameters>
+  </material>    
+  <material>
     <id>Cu</id>
     <name>Copper</name>
     <category>metal</category>

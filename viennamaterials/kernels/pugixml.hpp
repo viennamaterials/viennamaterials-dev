@@ -117,6 +117,11 @@ struct PugiXML
     mdb.dump(stream);
   }
 
+  void dump(std::ostream& stream = std::cout) const
+  {
+    mdb.dump(stream);
+  }
+
   Entries query(std::string const& expr)
   {
     return mdb.query_raw(expr);
@@ -133,17 +138,34 @@ struct PugiXML
     return query_category->evaluate_node_set(mdb.xml);
   }
   
+//  Entries getSemiconductors() const
+//  {
+//    vars.set(vmat::key::category.c_str(), vmat::key::semiconductor.c_str());
+//    return query_category->evaluate_node_set(mdb.xml);
+//  }
+
   bool hasSemiconductors()
   {
     return !(this->getSemiconductors().empty());
   }  
+
+//  bool hasSemiconductors() const
+//  {
+//    return !(this->getSemiconductors().empty());
+//  } 
 
   Entries getMetals()
   {
     vars.set(vmat::key::category.c_str(), vmat::key::metal.c_str());
     return query_category->evaluate_node_set(mdb.xml);
   }
-  
+
+//  Entries getMetals() const
+//  {
+//    vars.set(vmat::key::category.c_str(), vmat::key::metal.c_str());
+//    return query_category->evaluate_node_set(mdb.xml);
+//  }
+
   bool hasMetals()
   {
     return !(this->getMetals().empty());
