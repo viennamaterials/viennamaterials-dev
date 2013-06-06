@@ -314,52 +314,52 @@ struct Library <vmat::tag::pugixml>
 
 
 // TOOLS -----------------------------------------------------------------------
-void printToStream(vmat::kernel::PugiXML::Entries const& nodeset, std::ostream& stream = std::cout)
+inline void printToStream(vmat::kernel::PugiXML::Entries const& nodeset, std::ostream& stream = std::cout)
 {
   for(size_t i = 0; i < nodeset.size(); i++)
     nodeset[i].node().print(stream, "  ");
 }
 
-void printToStream(vmat::kernel::PugiXML::Entry const& node, std::ostream& stream = std::cout)
+inline void printToStream(vmat::kernel::PugiXML::Entry const& node, std::ostream& stream = std::cout)
 {
   node.node().print(stream, "  ");
 }
 
-vmat::kernel::PugiXML::Entries query(vmat::kernel::PugiXML::Entry const& entry, std::string const& query)
+inline vmat::kernel::PugiXML::Entries query(vmat::kernel::PugiXML::Entry const& entry, std::string const& query)
 {
   return entry.node().select_nodes(query.c_str());
 }
 
-bool isParameter(vmat::kernel::PugiXML::Entry const& entry)
+inline bool isParameter(vmat::kernel::PugiXML::Entry const& entry)
 {
   if(std::string(entry.node().name()) == vmat::key::parameter)
     return true;
   else return false;
 }
 
-bool isMaterial(vmat::kernel::PugiXML::Entry const& entry)
+inline bool isMaterial(vmat::kernel::PugiXML::Entry const& entry)
 {
   if(std::string(entry.node().name()) == vmat::key::material)
     return true;
   else return false;
 }
 
-vmat::kernel::PugiXML::Numeric value(vmat::kernel::PugiXML::Entry const& entry)
+inline vmat::kernel::PugiXML::Numeric value(vmat::kernel::PugiXML::Entry const& entry)
 {
   return pugi::xpath_query("value").evaluate_number(entry);
 }
 
-vmat::kernel::PugiXML::String name(vmat::kernel::PugiXML::Entry const& entry)
+inline vmat::kernel::PugiXML::String name(vmat::kernel::PugiXML::Entry const& entry)
 {
   return pugi::xpath_query("name").evaluate_string(entry);
 }
 
-vmat::kernel::PugiXML::String unit(vmat::kernel::PugiXML::Entry const& entry)
+inline vmat::kernel::PugiXML::String unit(vmat::kernel::PugiXML::Entry const& entry)
 {
   return pugi::xpath_query("unit").evaluate_string(entry);
 }
 
-vmat::kernel::PugiXML::String note(vmat::kernel::PugiXML::Entry const& entry)
+inline vmat::kernel::PugiXML::String note(vmat::kernel::PugiXML::Entry const& entry)
 {
   return pugi::xpath_query("note").evaluate_string(entry);
 }
@@ -419,12 +419,12 @@ private:
   pugi::xpath_query *query_parameter;  
 };
 
-vmat::kernel::PugiXML::Entry getParameter(vmat::kernel::PugiXML::Entry const& material, std::string const& parameter_id)
+inline vmat::kernel::PugiXML::Entry getParameter(vmat::kernel::PugiXML::Entry const& material, std::string const& parameter_id)
 {
   return vmat::ParameterExtractor()(material, parameter_id);
 }
 
-bool hasParameter(vmat::kernel::PugiXML::Entry const& material, std::string const& parameter_id)
+inline bool hasParameter(vmat::kernel::PugiXML::Entry const& material, std::string const& parameter_id)
 {
   return vmat::ParameterExtractor().hasParameter(material, parameter_id);
 }
