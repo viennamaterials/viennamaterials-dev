@@ -115,6 +115,10 @@ struct PugiXML
     else return false;
   }
   
+  bool load(std::stringstream & stream)
+  {
+    mdb.read(stream);
+  }
   
   void dump(std::ostream& stream = std::cout)
   {
@@ -352,6 +356,11 @@ inline vmat::kernel::PugiXML::Numeric value(vmat::kernel::PugiXML::Entry const& 
 inline vmat::kernel::PugiXML::String name(vmat::kernel::PugiXML::Entry const& entry)
 {
   return pugi::xpath_query("name").evaluate_string(entry);
+}
+
+inline vmat::kernel::PugiXML::String id(vmat::kernel::PugiXML::Entry const& entry)
+{
+  return pugi::xpath_query("id").evaluate_string(entry);
 }
 
 inline vmat::kernel::PugiXML::String unit(vmat::kernel::PugiXML::Entry const& entry)
