@@ -118,6 +118,7 @@ struct PugiXML
   bool load(std::stringstream & stream)
   {
     mdb.read(stream);
+    return true;
   }
   
   void dump(std::ostream& stream = std::cout)
