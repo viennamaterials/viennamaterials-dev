@@ -19,9 +19,15 @@ extern "C" {
 #include "libxml/xmlreader.h"
 }
 
+// System includes
+//
 #include <iostream>
 #include <fstream>
 #include <cstring>
+
+// ViennaMaterials includes
+//
+#include "viennamaterials/exceptions.hpp"
 
 namespace vmat
 {

@@ -21,6 +21,15 @@ int main(int argc, char * argv[])
     return -1;
   }
 
+/*
+  vmat::Library* matlib = new vmat::pugixml;
+
+
+
+*/
+
+
+
   typedef vmat::Library<vmat::tag::pugixml>::type  Library;
   typedef Library::Entries          Entries;
   typedef Library::Entry            Entry;
