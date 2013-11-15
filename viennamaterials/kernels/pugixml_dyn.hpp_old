@@ -23,19 +23,19 @@
 #include "viennautils/xml.hpp"
 #include "viennautils/file.hpp"
 
-#ifdef HAVE_VIENNAIPD
-extern "C" {
-#include "ipd.h"
-}
-#endif
+//#ifdef HAVE_VIENNAIPD
+//extern "C" {
+//#include "ipd.h"
+//}
+//#endif
 
 
-namespace vmat { 
+namespace viennamaterials { 
 
 /** 
     @brief Provides the pugixml backend in the dynamic class hierarchy
 */
-class PugiXMLDyn : public LibraryDyn
+class pugixml : public library
 {
 private:
   typedef vmat::kernel::PugiXML   Library;

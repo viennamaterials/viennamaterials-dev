@@ -1,6 +1,3 @@
-#ifndef VIENNAMATERIALS_FORWARDS_H
-#define VIENNAMATERIALS_FORWARDS_H
-
 /* =============================================================================
    Copyright (c) 2013, Institute for Microelectronics, TU Wien
    http://www.iue.tuwien.ac.at
@@ -13,28 +10,20 @@
    license:    see file LICENSE in the base directory
 ============================================================================= */
 
-
-
-#include <iostream>
+#include "viennamaterials/generator.hpp"
+#include "viennamaterials/pugixml.hpp"
 
 namespace viennamaterials {
 
-namespace key {
-
-  static const std::string id             = "id";
-  static const std::string category       = "category";
-  static const std::string parameter      = "parameter";
-  static const std::string material       = "material";  
-  
-  static const std::string semiconductor  = "semiconductor";
-  static const std::string oxide          = "oxide";
-  static const std::string metal          = "metal";    
+viennamaterials::library* generator(std::string const& filename)
+{
+  std::string extension = filename.substr( filename.rfind(".")+1 );
+  if(extension == "xml")
+    return new viennamaterials::pugixml(filename);
+  else
+    return NULL;
 }
-
-
 
 } // viennamaterials
 
-
-#endif
 

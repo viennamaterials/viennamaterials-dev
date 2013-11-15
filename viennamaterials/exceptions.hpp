@@ -13,69 +13,69 @@
    license:    see file LICENSE in the base directory
 ============================================================================= */
 
-#include <iostream>
 #include <exception>
 
-namespace vmat
+namespace viennamaterials
 {
-struct NonUniqueMaterialException: public std::exception
-{
-  NonUniqueMaterialException(std::string const& info) : info(info) {}
-  ~NonUniqueMaterialException() throw() {}
-
-  virtual const char* what() const throw()
+  struct non_unique_material_exception: public std::exception
   {
-    return std::string("Material \""+info+"\" is not unique").c_str();
-  }
-  
-  std::string info;
-};
+    non_unique_material_exception(std::string const& info) : info(info) {}
+    ~non_unique_material_exception() throw() {}
 
-struct NonUniqueParameterException: public std::exception
-{
-  NonUniqueParameterException(std::string const& info) : info(info) {}
-  ~NonUniqueParameterException() throw() {}
+    virtual const char* what() const throw()
+    {
+      return std::string("Material \""+info+"\" is not unique").c_str();
+    }
+    
+    std::string info;
+  };
 
-  virtual const char* what() const throw()
+  struct non_unique_parameter_exception: public std::exception
   {
-    return std::string("Parameter \""+info+"\" is not unique").c_str();
-  }
-  
-  std::string info;
-};
+    non_unique_parameter_exception(std::string const& info) : info(info) {}
+    ~non_unique_parameter_exception() throw() {}
 
-struct DTDLoadError: public std::exception
-{
-  virtual const char* what() const throw()
+    virtual const char* what() const throw()
+    {
+      return std::string("Parameter \""+info+"\" is not unique").c_str();
+    }
+    
+    std::string info;
+  };
+
+  struct dtd_load_error: public std::exception
   {
-    return std::string("Input material database valiadation could not be loaded").c_str();
-  }
-};
+    virtual const char* what() const throw()
+    {
+      return std::string("Input material database valiadation could not be loaded").c_str();
+    }
+  };
 
-struct XMLLoadError: public std::exception
-{
-  virtual const char* what() const throw()
+  struct xml_load_error: public std::exception
   {
-    return std::string("Input material database could not be loaded").c_str();
-  }
-};
+    virtual const char* what() const throw()
+    {
+      return std::string("Input material database could not be loaded").c_str();
+    }
+  };
 
-struct DTDError: public std::exception
-{
-  virtual const char* what() const throw()
+  struct dtd_error: public std::exception
   {
-    return std::string("Input material database is not valid").c_str();
-  }
-};
+    virtual const char* what() const throw()
+    {
+      return std::string("Input material database is not valid").c_str();
+    }
+  };
 
-struct XMLFileLoadError: public std::exception
-{
-  virtual const char* what() const throw()
+  struct xml_file_load_error: public std::exception
   {
-    return std::string("Input material database XML file does not exist").c_str();
-  }
-};
+    virtual const char* what() const throw()
+    {
+      return std::string("Input material database XML file does not exist").c_str();
+    }
+  };
 
-} // end namespace vmat
+} // viennamaterials
 
 #endif
+

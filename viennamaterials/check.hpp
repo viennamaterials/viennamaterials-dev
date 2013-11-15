@@ -21,7 +21,6 @@ extern "C" {
 
 // System includes
 //
-#include <iostream>
 #include <fstream>
 #include <cstring>
 
@@ -29,16 +28,16 @@ extern "C" {
 //
 #include "viennamaterials/exceptions.hpp"
 
-namespace vmat
+namespace viennamaterials
 {
 
-bool check(std::string const& xml_filename)//, std::string const& dtd_filename)
+inline bool check(std::string const& xml_filename)//, std::string const& dtd_filename)
 {
   // First, load the input xml file (the input material database)
   //
   xmlDocPtr doc = xmlReadFile(xml_filename.c_str(), NULL, 0);
   if (doc == NULL) {
-    throw vmat::XMLLoadError();
+    throw viennamaterials::xml_load_error();
     return false;
   }    
   
@@ -62,7 +61,7 @@ bool check(std::string const& xml_filename)//, std::string const& dtd_filename)
   xmlDtdPtr dtd = xmlIOParseDTD (NULL, buf, XML_CHAR_ENCODING_ASCII); 
 
   if(dtd == NULL) { 
-    throw vmat::DTDLoadError();
+    throw viennamaterials::dtd_load_error();
     return false;
   }
   
@@ -71,7 +70,7 @@ bool check(std::string const& xml_filename)//, std::string const& dtd_filename)
   xmlValidCtxt* ctx = xmlNewValidCtxt();
   
   if(xmlValidateDtd(ctx, doc, dtd) == 0) {
-    throw vmat::DTDError();
+    throw viennamaterials::dtd_error();
     return false;
   }
   else
@@ -83,7 +82,8 @@ bool check(std::string const& xml_filename)//, std::string const& dtd_filename)
   }
 }
 
-} // end namespace vmat
+} // viennamaterials
 
 #endif
 #endif
+

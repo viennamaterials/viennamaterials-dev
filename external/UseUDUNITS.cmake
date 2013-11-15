@@ -8,7 +8,7 @@ ExternalProject_Add(
   SOURCE_DIR ${UDUNITS_PATH}
   CONFIGURE_COMMAND ${UDUNITS_PATH}/configure --prefix=${CMAKE_BINARY_DIR}/udunits
   BINARY_DIR ${CMAKE_BINARY_DIR}/udunits/build
-  BUILD_COMMAND make -j4
+  #BUILD_COMMAND make -j4
 )
 
 INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR}/udunits/include)
