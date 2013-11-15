@@ -47,23 +47,24 @@ public:
 
   bool has_parameter(std::string const& material, std::string const& parameter);
 
-  numeric_type get_parameter_value(std::string const& material, std::string const& parameter);
+  viennamaterials::numeric get_parameter_value(std::string const& material, std::string const& parameter);
 
   std::string get_parameter_unit(std::string const& material, std::string const& parameter);
 
-  keys_type get_materials_of_category(std::string const& category);
+  viennamaterials::keys get_materials_of_category(std::string const& category);
 
   bool has_materials_of_category(std::string const& category);
 
 private:
   void init();
-//  EntriesType queryParameter(EntryType const& material, std::string const& parameter_id);
+  EntriesType query_parameter(std::string const& material, std::string const& parameter);
+  std::string id(EntryType const& entry);
 
 private:
   DatabaseType                database_;
 
   pugi::xpath_variable_set    vars_;
-  
+
   pugi::xpath_query *query_material_;
   pugi::xpath_query *query_category_;
   pugi::xpath_query *query_parameter_;

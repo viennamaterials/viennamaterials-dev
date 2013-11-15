@@ -33,14 +33,7 @@ namespace viennamaterials {
 */
 class library
 {
-private:
-  typedef double                    NumericType;
-  typedef std::vector<std::string>  KeysType;
-
 public:
-  typedef NumericType               numeric_type;
-  typedef KeysType                  keys_type;
-
   /** 
       @brief Loads an input material file and polpulates the internal database
   */
@@ -64,7 +57,7 @@ public:
   /** 
       @brief Access the numeric value of a specific parameter of a material
   */
-  virtual numeric_type get_parameter_value(std::string const& material, std::string const& parameter) = 0;
+  virtual viennamaterials::numeric get_parameter_value(std::string const& material, std::string const& parameter) = 0;
 
   /** 
       @brief Access the unit string of a specific parameter a material
@@ -74,7 +67,7 @@ public:
   /** 
       @brief Retrieve all materials of a specific category
   */
-  virtual keys_type get_materials_of_category(std::string const& category) = 0;
+  virtual viennamaterials::keys get_materials_of_category(std::string const& category) = 0;
 
   /** 
       @brief Checks if the database has materials of a specific category

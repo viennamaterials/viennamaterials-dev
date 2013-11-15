@@ -91,6 +91,7 @@ bool pugixml::load(std::stringstream & stream)
 {
   database_.reset();
   database_.read(stream);
+  return true;
 }
 
 void pugixml::dump(std::ostream& stream)
@@ -100,37 +101,56 @@ void pugixml::dump(std::ostream& stream)
 
 bool pugixml::has_parameter(std::string const& material, std::string const& parameter)
 {
-//  pugi::xpath_node_set const& result = this->query_parameter(material_id, parameter_id);
-//  if(result.size() > 1) // there must be only one material with this id
-//  {
-//    throw viennamaterials::non_unique_parameter_exception(parameter);
-//    return false;
-//  }
-//  else if (result.size() == 0) return false;
-//  else return true;
+  pugi::xpath_node_set const& result = this->query_parameter(material, parameter);
+  if(result.size() > 1) // there must be only one material with this id
+  {
+    throw viennamaterials::non_unique_parameter_exception(parameter);
+    return false;
+  }
+  else if (result.size() == 0) return false;
+  else return true;
 }
 
-pugixml::numeric_type pugixml::get_parameter_value(std::string const& material, std::string const& parameter)
+viennamaterials::numeric pugixml::get_parameter_value(std::string const& material, std::string const& parameter)
 {
+  vars_.set(viennamaterials::key::id.c_str(),        material.c_str());  
+  vars_.set(viennamaterials::key::parameter.c_str(), parameter.c_str());
+  return query_parameter_value_->evaluate_number(database_.xml);
 }
 
 std::string pugixml::get_parameter_unit(std::string const& material, std::string const& parameter)
 {
+  vars_.set(viennamaterials::key::id.c_str(),        material.c_str());  
+  vars_.set(viennamaterials::key::parameter.c_str(), parameter.c_str());
+  return query_parameter_unit_->evaluate_string(database_.xml);
 }
 
-pugixml::keys_type pugixml::get_materials_of_category(std::string const& category)
+viennamaterials::keys pugixml::get_materials_of_category(std::string const& category)
 {
+  vars_.set(viennamaterials::key::category.c_str(), category.c_str());
+  pugixml::EntriesType entries =  query_category_->evaluate_node_set(database_.xml);
+  viennamaterials::keys keys;
+  for(pugixml::EntryIteratorType iter = entries.begin(); iter != entries.end(); iter++)
+    keys.push_back( this->id(*iter) );
+  return keys;
 }
 
 bool pugixml::has_materials_of_category(std::string const& category)
 {
+  return !(this->get_materials_of_category(category).empty());
 }
 
-//pugixml::EntriesType pugixml::query_parameter(pugixml::EntryType const& material, std::string const& parameter)
-//{
-////  vars_.set(viennamaterials::key::parameter.c_str(), parameter_id.c_str());
-////  return query_parameter->evaluate_node_set(material.node());
-//}
+pugixml::EntriesType pugixml::query_parameter(std::string const& material, std::string const& parameter)
+{
+  vars_.set(viennamaterials::key::id.c_str(),        material.c_str());  
+  vars_.set(viennamaterials::key::parameter.c_str(), parameter.c_str());
+  return query_parameter_->evaluate_node_set(database_.xml);
+}
+
+std::string pugixml::id(pugixml::EntryType const& entry)
+{
+  return pugi::xpath_query("id").evaluate_string(entry);
+}
 
 } // viennamaterials
 

@@ -13,9 +13,8 @@
    license:    see file LICENSE in the base directory
 ============================================================================= */
 
-
-
 #include <iostream>
+#include <vector>
 
 namespace viennamaterials {
 
@@ -31,6 +30,9 @@ namespace key {
   static const std::string metal          = "metal";    
 }
 
+
+typedef double                    numeric;
+typedef std::vector<std::string>  keys;
 
 
 } // viennamaterials
