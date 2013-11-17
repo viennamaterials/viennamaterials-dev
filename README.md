@@ -31,21 +31,21 @@ $> mkdir build             # the build folder
 
 Configure the build, default build type is the 'optimized/release' mode:
 <pre>
-$> cmake ..  
+$> cmake ..
 </pre>
 
-or use the following additional and optional configuration parameters
+or use the following additional, optional configuration parameters
 <pre>
 # build with debug symbols (default: off)
-$> cmake -DCMAKE_BUILD_TYPE=DEBUG ..   
+ -DCMAKE_BUILD_TYPE=DEBUG
 # build a shared ViennaMaterials library (default: off)
-$> cmake -DBUILD_SHARED_LIBS=ON         
+ -DBUILD_SHARED_LIBS=ON
 # don't build example applications (default: on)
-$> cmake -DBUILD_EXAMPLES=OFF           
+ -DBUILD_EXAMPLES=OFF
 # don't include DTD checks;requires libxml2 library (default: off)
-$> cmake -DBUILD_DTD_CHECK_SUPPORT=OFF  
+ -DBUILD_DTD_CHECK_SUPPORT=OFF
 # don't include Serialization support; requires Boost.Serialization (default: off)
-$> cmake -DBUILD_SERIALIZATION=OFF      
+ -DBUILD_SERIALIZATION=OFF
 </pre>
 
 Now build and install the executable and libraries (install folder is a subfolder of the build folder):
