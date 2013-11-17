@@ -15,7 +15,7 @@ System requirements
 * [libxml2](http://xmlsoft.org) (optional, for DTD checks of the input XML data)
 * [Boost](http://www.boost.org/) (optional, for Serialization support)
 
-Currently Supported operating systems
+Currently supported operating systems
 --------------------------
 * Linux
 
@@ -36,11 +36,16 @@ $> cmake ..
 
 or use the following additional and optional configuration parameters
 <pre>
-$> cmake -DCMAKE_BUILD_TYPE=DEBUG ..    # build with debug symbols (default: off)
-$> cmake -DBUILD_SHARED_LIBS=ON         # build a shared ViennaMaterials library (default: off)
-$> cmake -DBUILD_EXAMPLES=OFF           # don't build example applications (default: on)
-$> cmake -DBUILD_DTD_CHECK_SUPPORT=OFF  # don't include DTD checks, which requires libxml2 library (default: off)
-$> cmake -DBUILD_SERIALIZATION=OFF      # don't include Serialization support, which requires Boost.Serialization (default: off)
+# build with debug symbols (default: off)
+$> cmake -DCMAKE_BUILD_TYPE=DEBUG ..   
+# build a shared ViennaMaterials library (default: off)
+$> cmake -DBUILD_SHARED_LIBS=ON         
+# don't build example applications (default: on)
+$> cmake -DBUILD_EXAMPLES=OFF           
+# don't include DTD checks;requires libxml2 library (default: off)
+$> cmake -DBUILD_DTD_CHECK_SUPPORT=OFF  
+# don't include Serialization support; requires Boost.Serialization (default: off)
+$> cmake -DBUILD_SERIALIZATION=OFF      
 </pre>
 
 Now build and install the executable and libraries (install folder is a subfolder of the build folder):
