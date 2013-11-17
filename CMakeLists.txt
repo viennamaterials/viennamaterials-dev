@@ -7,7 +7,7 @@ INCLUDE_DIRECTORIES(".")
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
 option(BUILD_EXAMPLES "Build the examples" ON)
-option(BUILD_DTD_CHECK_SUPPORT "Perform DTD checks of the input XML material data - requires libxml2" ON)
+option(BUILD_DTD_CHECK_SUPPORT "Perform DTD checks of the input XML material data - requires libxml2" OFF)
 option(BUILD_SERIALIZATION "Build the material library with Boost Serialization support" OFF)
 
 #set default build type 
