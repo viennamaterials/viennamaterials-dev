@@ -15,10 +15,7 @@
 
 #include "library.hpp"
 
-// ViennaUtils includes
-//
-#include "viennautils/xml.hpp"
-#include "viennautils/file.hpp"
+#include "external/pugixml/pugixml.hpp"
 
 namespace viennamaterials {
 
@@ -72,6 +69,8 @@ private:
   pugi::xpath_query *query_parameter_unit_;
   pugi::xpath_query *query_parameter_note_;
 
+  pugi::xml_document    xml_;
+  std::string           indent_string_;
 };
 
 } // viennamaterials

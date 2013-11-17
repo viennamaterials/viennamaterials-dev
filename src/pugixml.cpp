@@ -15,12 +15,12 @@
 
 namespace viennamaterials {
 
-pugixml::pugixml() 
+pugixml::pugixml() : indent_string("  ")
 {
   this->init();
 }
 
-pugixml::pugixml(std::string const& filename)
+pugixml::pugixml(std::string const& filename) : indent_string("  ")
 {
   this->init();
   this->load(filename);
