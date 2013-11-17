@@ -13,9 +13,15 @@
    license:    see file LICENSE in the base directory
 ============================================================================= */
 
-#include "library.hpp"
+#include <sstream>
 
+#include "viennamaterials/library.hpp"
 #include "external/pugixml/pugixml.hpp"
+
+#ifdef VIENNAMATERIALS_HAS_SERIALIZATION
+  #include "boost/archive/text_iarchive.hpp"
+  #include "boost/archive/text_oarchive.hpp"
+#endif
 
 namespace viennamaterials {
 
@@ -25,20 +31,25 @@ namespace viennamaterials {
 */
 class pugixml : public library
 {
-protected:
-  typedef viennautils::xml<viennautils::tag::pugixml>::type     DatabaseType;
-  typedef DatabaseType::NodeSet                                 EntriesType;
-  typedef DatabaseType::Node                                    EntryType;
-  typedef DatabaseType::NodeIterator                            EntryIteratorType;
+private:
+  typedef pugi::xpath_node_set      node_set_type;
+  typedef pugi::xpath_node          node_type;
+  typedef const pugi::xpath_node *  node_iterator_type;
 
 public:
   pugixml();
   pugixml(std::string const& filename);
   ~pugixml();
 
-  bool load(std::string const& filename);
+  bool read(std::string const& filename);
 
-  bool load(std::stringstream & stream);
+  bool read(std::stringstream & stream);
+
+  bool write(std::stringstream& stream);
+
+  bool write(std::ofstream& ostream);
+
+  bool write(std::string const& filename);
 
   void dump(std::ostream& stream = std::cout);
 
@@ -52,14 +63,36 @@ public:
 
   bool has_materials_of_category(std::string const& category);
 
+#ifdef VIENNAMATERIALS_HAS_SERIALIZATION
+  friend class boost::serialization::access;
+
+  template<class Archive>
+  void save(Archive & ar, const unsigned int version) const
+  {
+    std::stringstream sstream;
+    xml_.save(sstream);
+    std::string xmlstring= sstream.str();
+    ar & xmlstring; 
+  }
+
+  template<class Archive>
+  void load(Archive & ar, const unsigned int version)
+  {
+    std::string xmlstring;
+    ar & xmlstring;
+    std::stringstream sstream(xmlstring);
+    this->read(sstream);
+  }
+
+  BOOST_SERIALIZATION_SPLIT_MEMBER()
+#endif
+
 private:
   void init();
-  EntriesType query_parameter(std::string const& material, std::string const& parameter);
-  std::string id(EntryType const& entry);
+  node_set_type query_parameter(std::string const& material, std::string const& parameter);
+  std::string id(node_type const& entry);
 
 private:
-  DatabaseType                database_;
-
   pugi::xpath_variable_set    vars_;
 
   pugi::xpath_query *query_material_;

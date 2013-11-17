@@ -75,6 +75,38 @@ namespace viennamaterials
     }
   };
 
+  struct no_xml_file_error: public std::exception
+  {
+    virtual const char* what() const throw()
+    {
+      return std::string("Input file is not an XML file").c_str();
+    }
+  };
+
+  struct xml_parse_error: public std::exception
+  {
+    xml_parse_error(std::string const& info) : info(info) {}
+    ~xml_parse_error() throw() {}
+
+    virtual const char* what() const throw()
+    {
+      return std::string("XML parse error: ").c_str();
+    }
+    
+    std::string info;
+  };
+
+
+//  struct XmlQueryException : public std::runtime_error 
+//  {
+//     XmlQueryException(std::string const & str) : std::runtime_error(str) {}
+//  };
+
+//  struct InvalidXmlFileException : public std::runtime_error 
+//  {
+//     InvalidXmlFileException(std::string const & str) : std::runtime_error(str) {}
+//  };
+
 } // viennamaterials
 
 #endif

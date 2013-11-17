@@ -11,19 +11,20 @@
 ============================================================================= */
 
 #include "viennamaterials/pugixml.hpp"
+#include "viennamaterials/utils.hpp"
 
 
 namespace viennamaterials {
 
-pugixml::pugixml() : indent_string("  ")
+pugixml::pugixml() : indent_string_("  ")
 {
   this->init();
 }
 
-pugixml::pugixml(std::string const& filename) : indent_string("  ")
+pugixml::pugixml(std::string const& filename) : indent_string_("  ")
 {
   this->init();
-  this->load(filename);
+  this->read(filename);
 }
 
 pugixml::~pugixml()
@@ -63,40 +64,69 @@ void pugixml::init()
   query_parameter_note_ = new pugi::xpath_query(parameter_note_query_string.c_str(), &vars_);      
 }
 
-bool pugixml::load(std::string const& filename)
+bool pugixml::read(std::string const& filename)
 {
-  database_.reset();
-#ifdef HAVE_LIBXML2
+  if(viennamaterials::file_extension(filename) != "xml")  
+  {
+    throw no_xml_file_error();
+    return false;
+  }
+
+  xml_.reset();
+#ifdef VIENNAMATERIALS_HAS_LIBXML2
   if(!viennamaterials::check(filename))
   {
     return false;
   }
 #endif
 
-  if(!viennautils::file_exists(filename))
+  if(!viennamaterials::file_exists(filename))
   { 
     throw xml_file_load_error();
     return false;
   }
 
-  if(viennautils::file_extension(filename) == "xml")  // native
-  {
-    database_.read(filename);
-    return true;
-  }
-  else return false;
+  pugi::xml_parse_result result = xml_.load_file(filename.c_str());
+  if(!result)
+    throw viennamaterials::xml_parse_error(std::string(result.description()));
+
+  return true;
 }
 
-bool pugixml::load(std::stringstream & stream)
+bool pugixml::read(std::stringstream & stream)
 {
-  database_.reset();
-  database_.read(stream);
+  xml_.reset();
+
+  pugi::xml_parse_result result = xml_.load(stream);
+  if(!result)
+    throw viennamaterials::xml_parse_error(std::string(result.description()));
+
+  return true;
+}
+
+bool pugixml::write(std::stringstream& stream)
+{
+  dump(stream);
+  return true;
+}
+
+bool pugixml::write(std::ofstream& ostream)
+{
+  dump(ostream);
+  return true;
+}
+
+bool pugixml::write(std::string const& filename)
+{
+  std::ofstream stream(filename.c_str());
+  dump(stream);
+  stream.close();
   return true;
 }
 
 void pugixml::dump(std::ostream& stream)
 {
-  database_.dump(stream);
+  xml_.save(stream, indent_string_.c_str());
 }
 
 bool pugixml::has_parameter(std::string const& material, std::string const& parameter)
@@ -115,22 +145,22 @@ viennamaterials::numeric pugixml::get_parameter_value(std::string const& materia
 {
   vars_.set(viennamaterials::key::id.c_str(),        material.c_str());  
   vars_.set(viennamaterials::key::parameter.c_str(), parameter.c_str());
-  return query_parameter_value_->evaluate_number(database_.xml);
+  return query_parameter_value_->evaluate_number(xml_);
 }
 
 std::string pugixml::get_parameter_unit(std::string const& material, std::string const& parameter)
 {
   vars_.set(viennamaterials::key::id.c_str(),        material.c_str());  
   vars_.set(viennamaterials::key::parameter.c_str(), parameter.c_str());
-  return query_parameter_unit_->evaluate_string(database_.xml);
+  return query_parameter_unit_->evaluate_string(xml_);
 }
 
 viennamaterials::keys pugixml::get_materials_of_category(std::string const& category)
 {
   vars_.set(viennamaterials::key::category.c_str(), category.c_str());
-  pugixml::EntriesType entries =  query_category_->evaluate_node_set(database_.xml);
+  pugixml::node_set_type entries =  query_category_->evaluate_node_set(xml_);
   viennamaterials::keys keys;
-  for(pugixml::EntryIteratorType iter = entries.begin(); iter != entries.end(); iter++)
+  for(pugixml::node_iterator_type iter = entries.begin(); iter != entries.end(); iter++)
     keys.push_back( this->id(*iter) );
   return keys;
 }
@@ -140,17 +170,18 @@ bool pugixml::has_materials_of_category(std::string const& category)
   return !(this->get_materials_of_category(category).empty());
 }
 
-pugixml::EntriesType pugixml::query_parameter(std::string const& material, std::string const& parameter)
+pugixml::node_set_type pugixml::query_parameter(std::string const& material, std::string const& parameter)
 {
   vars_.set(viennamaterials::key::id.c_str(),        material.c_str());  
   vars_.set(viennamaterials::key::parameter.c_str(), parameter.c_str());
-  return query_parameter_->evaluate_node_set(database_.xml);
+  return query_parameter_->evaluate_node_set(xml_);
 }
 
-std::string pugixml::id(pugixml::EntryType const& entry)
+std::string pugixml::id(pugixml::node_type const& entry)
 {
   return pugi::xpath_query("id").evaluate_string(entry);
 }
+
 
 } // viennamaterials
 

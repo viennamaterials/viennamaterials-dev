@@ -62,7 +62,7 @@ int main(int argc, char * argv[])
   }
   {
     viennamaterials::library* mylib = new viennamaterials::pugixml;
-    mylib->load(filename);
+    mylib->read(filename);
     test_material_library(mylib);
     delete mylib;
   }

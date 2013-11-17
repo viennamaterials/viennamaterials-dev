@@ -1,3 +1,6 @@
+#ifndef VIENNAMATERIALS_UTILS_HPP
+#define VIENNAMATERIALS_UTILS_HPP
+
 /* =============================================================================
    Copyright (c) 2013, Institute for Microelectronics, TU Wien
    http://www.iue.tuwien.ac.at
@@ -10,21 +13,24 @@
    license:    see file LICENSE in the base directory
 ============================================================================= */
 
-#include "viennamaterials/generator.hpp"
-#include "viennamaterials/pugixml.hpp"
-#include "viennamaterials/utils.hpp"
+#include <fstream>
 
 namespace viennamaterials {
 
-viennamaterials::library* generator(std::string const& filename)
+
+inline bool file_exists(std::string const& filename)
 {
-  std::string extension = viennamaterials::file_extension(filename);
-  if(extension == "xml")
-    return new viennamaterials::pugixml(filename);
-  else
-    return NULL;
+   std::ifstream ifile(filename.c_str());
+   return ifile;
 }
+
+inline std::string file_extension(std::string const& filename)
+{
+   return filename.substr(filename.rfind(".")+1, filename.size());
+}
+
 
 } // viennamaterials
 
+#endif
 

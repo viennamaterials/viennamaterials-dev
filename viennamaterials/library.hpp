@@ -35,14 +35,29 @@ class library
 {
 public:
   /** 
-      @brief Loads an input material file and polpulates the internal database
+      @brief Reads an input material file and polpulates the internal database
   */
-  virtual bool load(std::string const& filename) = 0;
+  virtual bool read(std::string const& filename) = 0;
 
   /** 
-      @brief Loads an input material stream and polpulates the internal database
+      @brief Reads an input material stream and polpulates the internal database
   */
-  virtual bool load(std::stringstream & stream) = 0;
+  virtual bool read(std::stringstream & stream) = 0;
+
+  /** 
+      @brief Writes the material database to the output string stream
+  */
+  virtual bool write(std::stringstream& stream) = 0;
+
+  /** 
+      @brief Writes the material database to the output stream
+  */
+  virtual bool write(std::ofstream& ostream) = 0;
+
+  /** 
+      @brief Writes the material database to an XML file
+  */
+  virtual bool write(std::string const& filename) = 0;
 
   /** 
       @brief Writes the content of the database to the stream
