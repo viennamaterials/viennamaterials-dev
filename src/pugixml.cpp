@@ -13,6 +13,7 @@
 #include "viennamaterials/pugixml.hpp"
 #include "viennamaterials/utils.hpp"
 
+#include "boost/algorithm/string/trim.hpp"
 
 namespace viennamaterials {
 
@@ -32,7 +33,7 @@ pugixml::~pugixml()
   delete query_material_;
   delete query_category_;
   delete query_parameter_;
-  delete query_parameter_value_;
+//  delete query_parameter_value_;
   delete query_parameter_unit_;
   delete query_parameter_note_;
 }
@@ -54,8 +55,8 @@ void pugixml::init()
   std::string parameter_query_string = "/materials/material[id = string($"+viennamaterials::key::id+")]/parameters/parameter[name = string($"+viennamaterials::key::parameter+")]";
   query_parameter_ = new pugi::xpath_query(parameter_query_string.c_str(), &vars_);    
 
-  std::string parameter_value_query_string = "/materials/material[id = string($"+viennamaterials::key::id+")]/parameters/parameter[name = string($"+viennamaterials::key::parameter+")]/value";
-  query_parameter_value_ = new pugi::xpath_query(parameter_value_query_string.c_str(), &vars_);    
+//  std::string parameter_value_query_string = "/materials/material[id = string($"+viennamaterials::key::id+")]/parameters/parameter[name = string($"+viennamaterials::key::parameter+")]/value";
+//  query_parameter_value_ = new pugi::xpath_query(parameter_value_query_string.c_str(), &vars_);    
 
   std::string parameter_unit_query_string = "/materials/material[id = string($"+viennamaterials::key::id+")]/parameters/parameter[name = string($"+viennamaterials::key::parameter+")]/unit";
   query_parameter_unit_ = new pugi::xpath_query(parameter_unit_query_string.c_str(), &vars_);    
@@ -143,9 +144,34 @@ bool pugixml::has_parameter(std::string const& material, std::string const& para
 
 viennamaterials::numeric pugixml::get_parameter_value(std::string const& material, std::string const& parameter)
 {
-  vars_.set(viennamaterials::key::id.c_str(),        material.c_str());  
-  vars_.set(viennamaterials::key::parameter.c_str(), parameter.c_str());
-  return query_parameter_value_->evaluate_number(xml_);
+  // [JW] this method works, as the built-in 'evaluate_number' method can not 
+  // handle scientific E notations
+  std::string value_string = this->query("/materials/material[id = \""+material+"\"]/parameters/parameter[name = \""+parameter+"\"]/value/text()");
+  viennamaterials::numeric result;
+  std::stringstream sstr;
+  sstr << value_string;
+  sstr >> result;
+  return result;
+}
+
+std::string pugixml::query(std::string const& xpath_query_str)
+{
+  std::stringstream result_stream;
+  try
+  {
+     pugi::xpath_node_set query_result = xml_.select_nodes(xpath_query_str.c_str());
+     for(size_t i = 0; i < query_result.size(); i++)
+     {
+       query_result[i].node().print(result_stream, "  ");
+     }
+  }
+  catch (const pugi::xpath_exception& e)
+  {
+     std::cerr << "Exception caught in XmlReader::query ->  " << e.what() << std::endl;
+  }
+  std::string result = result_stream.str();
+  boost::trim(result);  // remove front/trailing whitespaces
+  return result;
 }
 
 std::string pugixml::get_parameter_unit(std::string const& material, std::string const& parameter)

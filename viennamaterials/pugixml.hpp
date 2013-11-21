@@ -57,6 +57,8 @@ public:
 
   viennamaterials::numeric get_parameter_value(std::string const& material, std::string const& parameter);
 
+  std::string query(std::string const& xpath_query_str);
+
   std::string get_parameter_unit(std::string const& material, std::string const& parameter);
 
   viennamaterials::keys get_materials_of_category(std::string const& category);
@@ -98,7 +100,7 @@ private:
   pugi::xpath_query *query_material_;
   pugi::xpath_query *query_category_;
   pugi::xpath_query *query_parameter_;
-  pugi::xpath_query *query_parameter_value_;
+//  pugi::xpath_query *query_parameter_value_;
   pugi::xpath_query *query_parameter_unit_;
   pugi::xpath_query *query_parameter_note_;
 
