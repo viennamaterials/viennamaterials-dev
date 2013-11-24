@@ -1,5 +1,5 @@
-#ifndef VIENNAMATERIALS_UTILS_HPP
-#define VIENNAMATERIALS_UTILS_HPP
+#ifndef VIENNAMATERIALS_BASEACCESSOR_HPP
+#define VIENNAMATERIALS_BASEACCESSOR_HPP
 
 /* =============================================================================
    Copyright (c) 2013, Institute for Microelectronics, TU Wien
@@ -13,21 +13,14 @@
    license:    see file LICENSE in the base directory
 ============================================================================= */
 
-#include <fstream>
-
 namespace viennamaterials {
 
-
-inline bool file_exists(std::string const& filename)
+struct base_accessor
 {
-   std::ifstream ifile(filename.c_str());
-   return ifile;
-}
-
-inline std::string file_extension(std::string const& filename)
-{
-   return filename.substr(filename.rfind(".")+1, filename.size());
-}
+public:
+  typedef viennamaterials::string result_type;
+  virtual result_type operator()() = 0;
+};
 
 
 } // viennamaterials

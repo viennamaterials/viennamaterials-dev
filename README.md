@@ -42,10 +42,6 @@ or use the following additional, optional configuration parameters
  -DBUILD_SHARED_LIBS=ON
 # don't build example applications (default: on)
  -DBUILD_EXAMPLES=OFF
-# don't include DTD checks;requires libxml2 library (default: off)
- -DBUILD_DTD_CHECK_SUPPORT=OFF
-# don't include Serialization support; requires Boost.Serialization (default: off)
- -DBUILD_SERIALIZATION=OFF
 </pre>
 
 Now build and install the executable and libraries (install folder is a subfolder of the build folder):

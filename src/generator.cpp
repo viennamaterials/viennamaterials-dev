@@ -12,7 +12,7 @@
 
 #include "viennamaterials/generator.hpp"
 #include "viennamaterials/pugixml.hpp"
-#include "viennamaterials/utils.hpp"
+#include "viennamaterials/utils/file_extension.hpp"
 
 namespace viennamaterials {
 

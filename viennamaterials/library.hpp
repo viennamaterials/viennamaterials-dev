@@ -23,7 +23,14 @@
 #include "viennamaterials/forwards.h"
 #include "viennamaterials/exceptions.hpp"
 #include "viennamaterials/check.hpp"
+#include "viennamaterials/make_query.hpp"
+#include "viennamaterials/base_accessor.hpp"
+#include "viennamaterials/utils/file_extension.hpp"
+#include "viennamaterials/utils/convert.hpp"
 
+// Boost includes
+//
+#include "boost/algorithm/string/replace.hpp"
 
 namespace viennamaterials { 
 
@@ -33,61 +40,58 @@ namespace viennamaterials {
 */
 class library
 {
+private:
+  typedef std::vector<base_accessor*>      accessor_container_type;
+
+protected:
+  accessor_container_type& accessors()                     { return accessors_; }
+  base_accessor&           get_accessor(std::size_t index) { return *accessors_[index]; }
+
 public:
-  /** 
-      @brief Reads an input material file and polpulates the internal database
-  */
+  /** @brief The constructor sets the default placeholder used for processing the accessors */
+  library() : placeholder_("%") {}
+  virtual ~library() {}
+
+  /** @brief Allows to register query accessors, returns unique id required for query entries */
+  accessor_handle register_accessor(base_accessor* accessor)
+  {
+    accessors_.push_back(accessor);
+    return accessors_.size()-1;
+  }
+
+  /** @brief Allows to externally set the placeholder in the accessor string */
+  string& placeholder() { return placeholder_; }
+
+  /** @brief Reads an input material file and polpulates the internal database */
   virtual bool read(std::string const& filename) = 0;
 
-  /** 
-      @brief Reads an input material stream and polpulates the internal database
-  */
+  /** @brief Reads an input material stream and polpulates the internal database */
   virtual bool read(std::stringstream & stream) = 0;
 
-  /** 
-      @brief Writes the material database to the output string stream
-  */
+  /** @brief Writes the material database to the output string stream */
   virtual bool write(std::stringstream& stream) = 0;
 
-  /** 
-      @brief Writes the material database to the output stream
-  */
+  /** @brief Writes the material database to the output stream */
   virtual bool write(std::ofstream& ostream) = 0;
 
-  /** 
-      @brief Writes the material database to an XML file
-  */
+  /** @brief Writes the material database to an XML file */
   virtual bool write(std::string const& filename) = 0;
 
-  /** 
-      @brief Writes the content of the database to the stream
-  */
+  /** @brief Writes the content of the database to the stream */
   virtual void dump(std::ostream& stream = std::cout) = 0;
 
-  /** 
-      @brief Checks if the database has a specific parameter for a specific material available
-  */
-  virtual bool has_parameter(std::string const& material_id, std::string const& parameter_id) = 0;
+  /** @brief Perform a generic query regardless of the backend, returns a string object holding the result */
+  virtual viennamaterials::string   query  (viennamaterials::query & query)                           = 0;
 
-  /** 
-      @brief Access the numeric value of a specific parameter of a material
-  */
-  virtual viennamaterials::numeric get_parameter_value(std::string const& material, std::string const& parameter) = 0;
+  /** @brief Perform a generic query regardless of the backend, performs automatic conversion to numeric type */
+  virtual viennamaterials::numeric  query_value  (viennamaterials::query & query)                     = 0;
 
-  /** 
-      @brief Access the unit string of a specific parameter a material
-  */
-  virtual std::string get_parameter_unit(std::string const& material, std::string const& parameter) = 0;
+  /** @brief Perform a native query, i.e., the method expects a backend-specifc encoded path string */
+  virtual viennamaterials::string   query_native (viennamaterials::string const& native_query_string) = 0;
 
-  /** 
-      @brief Retrieve all materials of a specific category
-  */
-  virtual viennamaterials::keys get_materials_of_category(std::string const& category) = 0;
-
-  /** 
-      @brief Checks if the database has materials of a specific category
-  */
-  virtual bool has_materials_of_category(std::string const& category_id) = 0;
+private:
+  accessor_container_type accessors_;
+  string                  placeholder_;
 };
 
 

@@ -18,16 +18,11 @@
 #include "viennamaterials/library.hpp"
 #include "external/pugixml/pugixml.hpp"
 
-#ifdef VIENNAMATERIALS_HAS_SERIALIZATION
-  #include "boost/archive/text_iarchive.hpp"
-  #include "boost/archive/text_oarchive.hpp"
-#endif
-
 namespace viennamaterials {
 
 
 /** 
-    @brief Provides the pugixml backend in the dynamic class hierarchy
+    @brief Provides the pugixml backend
 */
 class pugixml : public library
 {
@@ -53,57 +48,17 @@ public:
 
   void dump(std::ostream& stream = std::cout);
 
-  bool has_parameter(std::string const& material, std::string const& parameter);
+  viennamaterials::string   query        (viennamaterials::query & query);
 
-  viennamaterials::numeric get_parameter_value(std::string const& material, std::string const& parameter);
+  viennamaterials::numeric  query_value  (viennamaterials::query & query);
 
-  std::string query(std::string const& xpath_query_str);
-
-  std::string get_parameter_unit(std::string const& material, std::string const& parameter);
-
-  viennamaterials::keys get_materials_of_category(std::string const& category);
-
-  bool has_materials_of_category(std::string const& category);
-
-#ifdef VIENNAMATERIALS_HAS_SERIALIZATION
-  friend class boost::serialization::access;
-
-  template<class Archive>
-  void save(Archive & ar, const unsigned int version) const
-  {
-    std::stringstream sstream;
-    xml_.save(sstream);
-    std::string xmlstring= sstream.str();
-    ar & xmlstring; 
-  }
-
-  template<class Archive>
-  void load(Archive & ar, const unsigned int version)
-  {
-    std::string xmlstring;
-    ar & xmlstring;
-    std::stringstream sstream(xmlstring);
-    this->read(sstream);
-  }
-
-  BOOST_SERIALIZATION_SPLIT_MEMBER()
-#endif
+  viennamaterials::string   query_native (viennamaterials::string const& native_query_string);
 
 private:
-  void init();
-  node_set_type query_parameter(std::string const& material, std::string const& parameter);
-  std::string id(node_type const& entry);
+  void                      init();
+  viennamaterials::string   query_pugixml(viennamaterials::string const& native_query_string);
 
 private:
-  pugi::xpath_variable_set    vars_;
-
-  pugi::xpath_query *query_material_;
-  pugi::xpath_query *query_category_;
-  pugi::xpath_query *query_parameter_;
-//  pugi::xpath_query *query_parameter_value_;
-  pugi::xpath_query *query_parameter_unit_;
-  pugi::xpath_query *query_parameter_note_;
-
   pugi::xml_document    xml_;
   std::string           indent_string_;
 };

@@ -13,6 +13,7 @@
    license:    see file LICENSE in the base directory
 ============================================================================= */
 
+#include <iostream>
 #include <exception>
 
 namespace viennamaterials
@@ -96,6 +97,18 @@ namespace viennamaterials
     std::string info;
   };
 
+  struct parameter_value_exception: public std::exception
+  {
+    parameter_value_exception(std::string const& info) : info(info) {}
+    ~parameter_value_exception() throw() {}
+
+    virtual const char* what() const throw()
+    {
+      return info.c_str();
+    }
+    
+    std::string info;
+  };
 
 //  struct XmlQueryException : public std::runtime_error 
 //  {

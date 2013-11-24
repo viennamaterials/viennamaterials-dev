@@ -1,6 +1,5 @@
-#ifndef VIENNAMATERIALS_KERNELS_HPP
-#define VIENNAMATERIALS_KERNELS_HPP
-
+#ifndef VIENNAMATERIALS_UTILS_FILEEXTENSION_HPP
+#define VIENNAMATERIALS_UTILS_FILEEXTENSION_HPP
 
 /* =============================================================================
    Copyright (c) 2013, Institute for Microelectronics, TU Wien
@@ -14,7 +13,24 @@
    license:    see file LICENSE in the base directory
 ============================================================================= */
 
-#include "kernels/pugixml.hpp"
+#include <fstream>
+
+namespace viennamaterials {
+
+
+inline bool file_exists(std::string const& filename)
+{
+   std::ifstream ifile(filename.c_str());
+   return ifile;
+}
+
+inline std::string file_extension(std::string const& filename)
+{
+   return filename.substr(filename.rfind(".")+1, filename.size());
+}
+
+
+} // viennamaterials
 
 #endif
 

@@ -15,25 +15,15 @@
 
 #include <iostream>
 #include <vector>
+#include <utility>
 
 namespace viennamaterials {
 
-namespace key {
-
-  static const std::string id             = "id";
-  static const std::string category       = "category";
-  static const std::string parameter      = "parameter";
-  static const std::string material       = "material";  
-  
-  static const std::string semiconductor  = "semiconductor";
-  static const std::string oxide          = "oxide";
-  static const std::string metal          = "metal";    
-}
-
-
-typedef double                    numeric;
-typedef std::vector<std::string>  keys;
-
+typedef double                                    numeric;
+typedef std::string                               string;
+typedef std::size_t                               accessor_handle;
+typedef std::pair<accessor_handle, string>        entry;
+typedef std::vector<entry>                        query;
 
 } // viennamaterials
 
