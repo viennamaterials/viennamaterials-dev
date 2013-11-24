@@ -1,6 +1,3 @@
-#ifndef VIENNAMATERIALS_WRITEQUERY_HPP
-#define VIENNAMATERIALS_WRITEQUERY_HPP
-
 /* =============================================================================
    Copyright (c) 2013, Institute for Microelectronics, TU Wien
    http://www.iue.tuwien.ac.at
@@ -14,27 +11,30 @@
 ============================================================================= */
 
 #include "viennamaterials/forwards.h"
+#include "viennamaterials/library.hpp"
 
-// Boost includes
-//
 #include "boost/algorithm/string/replace.hpp"
 
 namespace viennamaterials {
 
-template<typename MaterialLibraryPtrT>
-void write_query(MaterialLibraryPtrT matlib, query& some_query, std::ostream& stream = std::cout)
+viennamaterials::string generate_query_string(viennamaterials::library * matlib, viennamaterials::query const& some_query)
 {
+  viennamaterials::string result;
   for(viennamaterials::query::const_iterator iter = some_query.begin(); 
       iter != some_query.end(); iter++)
   {
-    std::string path = matlib->get_accessor(iter->first)();
+    viennamaterials::string path = matlib->get_accessor(iter->first)();
     boost::algorithm::replace_first(path, matlib->placeholder(), iter->second);
-    stream << path;
+    result += path;
   }
-  stream << "\n";
+  return result;
+}
+
+viennamaterials::string generate_query_string(boost::shared_ptr<viennamaterials::library> & matlib, viennamaterials::query const& some_query)
+{
+  return viennamaterials::generate_query_string(matlib.get(), some_query);
 }
 
 } // viennamaterials
 
-#endif
 

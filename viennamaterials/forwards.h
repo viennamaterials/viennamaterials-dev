@@ -17,6 +17,8 @@
 #include <vector>
 #include <utility>
 
+#include "boost/shared_ptr.hpp"
+
 namespace viennamaterials {
 
 class library;
@@ -27,8 +29,13 @@ typedef std::size_t                               accessor_handle;
 typedef std::pair<accessor_handle, string>        entry;
 typedef std::vector<entry>                        query;
 
-} // viennamaterials
+void write_query(viennamaterials::library* matlib, query& some_query, std::ostream& stream = std::cout);
+void write_query(boost::shared_ptr<viennamaterials::library>& matlib, query& some_query, std::ostream& stream = std::cout);
 
+viennamaterials::string generate_query_string(viennamaterials::library* matlib,                    query const& some_query);
+viennamaterials::string generate_query_string(boost::shared_ptr<viennamaterials::library>& matlib, query const& some_query);
+
+} // viennamaterials
 
 #endif
 

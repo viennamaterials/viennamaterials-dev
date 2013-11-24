@@ -24,7 +24,6 @@
 #include "viennamaterials/exceptions.hpp"
 #include "viennamaterials/check.hpp"
 #include "viennamaterials/make_query.hpp"
-#include "viennamaterials/write_query.hpp"
 #include "viennamaterials/base_accessor.hpp"
 #include "viennamaterials/utils/file_extension.hpp"
 #include "viennamaterials/utils/convert.hpp"
@@ -82,6 +81,9 @@ public:
 
   /** @brief Writes the content of the database to the stream */
   virtual void dump(std::ostream& stream = std::cout) = 0;
+
+  /** @brief Checks whether the query path is available in the database */
+  virtual bool has_entry(viennamaterials::query const& query) = 0;
 
   /** @brief Perform a generic query regardless of the backend, returns a string object holding the result */
   virtual viennamaterials::string   query  (viennamaterials::query const& query)                           = 0;

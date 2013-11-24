@@ -79,6 +79,13 @@ void test_material_library(viennamaterials::library* matlib)
                                       make_entry(parameter, "bandgap"),
                                       make_entry(data     , "value"));
 
+  /** @brief Write the final query to a stream (cout is default) for debugging purposes */
+  viennamaterials::write_query(matlib, Si_bandgap_query, std::cout);
+
+  /** @brief Safely test whether a database entry is available, i.e., the query resolves successfully */
+  if(matlib->has_entry(Si_bandgap_query))
+    std::cout << "Success! The query works .." << std::endl;
+
   /** @brief Perform the actual query. If the uses knows in advance that the
              above query yields a numerical value, the query_value can be used, 
              performing an automatic conversion to double */
@@ -90,6 +97,24 @@ void test_material_library(viennamaterials::library* matlib)
              'query' method should be used. */
   viennamaterials::string value_string = matlib->query(Si_bandgap_query);
   std::cout << "value string: " << value_string << std::endl;
+
+  query faulty_query = make_query(make_entry(material , "definitly"), 
+                                  make_entry(parameter, "not"),
+                                  make_entry(data     , "available"));
+
+  /** @brief You can check in advance (does not throw) whether a query resolves .. */
+  if(!matlib->has_entry(faulty_query))
+    std::cout << "Failure! The query does not work .. (Its supposed to not work ..)" << std::endl;
+
+  /** @brief Or, you can use the exception mechanism */
+  try
+  {
+    matlib->query(faulty_query);
+  }
+  catch(std::exception& e)
+  {
+    std::cout << "Exception message: " << e.what() << std::endl;
+  }
 }
 
 

@@ -18,32 +18,6 @@
 
 namespace viennamaterials
 {
-  struct non_unique_material_exception: public std::exception
-  {
-    non_unique_material_exception(std::string const& info) : info(info) {}
-    ~non_unique_material_exception() throw() {}
-
-    virtual const char* what() const throw()
-    {
-      return std::string("Material \""+info+"\" is not unique").c_str();
-    }
-    
-    std::string info;
-  };
-
-  struct non_unique_parameter_exception: public std::exception
-  {
-    non_unique_parameter_exception(std::string const& info) : info(info) {}
-    ~non_unique_parameter_exception() throw() {}
-
-    virtual const char* what() const throw()
-    {
-      return std::string("Parameter \""+info+"\" is not unique").c_str();
-    }
-    
-    std::string info;
-  };
-
   struct dtd_load_error: public std::exception
   {
     virtual const char* what() const throw()
@@ -97,10 +71,10 @@ namespace viennamaterials
     std::string info;
   };
 
-  struct parameter_value_exception: public std::exception
+  struct entry_not_found_exception : public std::exception
   {
-    parameter_value_exception(std::string const& info) : info(info) {}
-    ~parameter_value_exception() throw() {}
+    entry_not_found_exception(std::string const& info) : info(info) {}
+    ~entry_not_found_exception() throw() {}
 
     virtual const char* what() const throw()
     {
@@ -110,15 +84,7 @@ namespace viennamaterials
     std::string info;
   };
 
-//  struct XmlQueryException : public std::runtime_error 
-//  {
-//     XmlQueryException(std::string const & str) : std::runtime_error(str) {}
-//  };
 
-//  struct InvalidXmlFileException : public std::runtime_error 
-//  {
-//     InvalidXmlFileException(std::string const & str) : std::runtime_error(str) {}
-//  };
 
 } // viennamaterials
 

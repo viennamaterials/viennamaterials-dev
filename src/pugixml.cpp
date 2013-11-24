@@ -103,21 +103,16 @@ void pugixml::dump(std::ostream& stream)
   xml_.save(stream, indent_string_.c_str());
 }
 
+bool pugixml::has_entry(viennamaterials::query const& query)
+{
+  return ( this->query_pugixml(viennamaterials::generate_query_string(this, query)) != "" );
+}
+
 viennamaterials::string pugixml::query(viennamaterials::query const& query)
 {
-  viennamaterials::string native_query_string;
-
-  for(viennamaterials::query::const_iterator iter = query.begin(); 
-      iter != query.end(); iter++)
-  {
-    std::string path = get_accessor(iter->first)();
-//    std::cout << "original path: " << path << std::endl;
-    boost::algorithm::replace_first(path, placeholder(), iter->second);
-//    std::cout << "replaced path: " << path << std::endl;
-    native_query_string += path;
-  }
-//  std::cout << "final path: " << native_query_string << std::endl;
-  return this->query_pugixml(native_query_string);
+  viennamaterials::string result = this->query_pugixml(viennamaterials::generate_query_string(this, query));
+  if(result.empty()) throw entry_not_found_exception("XPath does not resolve: "+viennamaterials::generate_query_string(this, query));
+  return result;
 }
 
 viennamaterials::numeric pugixml::query_value(viennamaterials::query const& query)
