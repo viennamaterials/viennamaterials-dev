@@ -48,9 +48,9 @@ public:
 
   void dump(std::ostream& stream = std::cout);
 
-  viennamaterials::string   query        (viennamaterials::query & query);
+  viennamaterials::string   query        (viennamaterials::query const& query);
 
-  viennamaterials::numeric  query_value  (viennamaterials::query & query);
+  viennamaterials::numeric  query_value  (viennamaterials::query const& query);
 
   viennamaterials::string   query_native (viennamaterials::string const& native_query_string);
 

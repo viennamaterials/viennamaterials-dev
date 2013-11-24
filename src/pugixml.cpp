@@ -103,11 +103,11 @@ void pugixml::dump(std::ostream& stream)
   xml_.save(stream, indent_string_.c_str());
 }
 
-viennamaterials::string pugixml::query(viennamaterials::query & query)
+viennamaterials::string pugixml::query(viennamaterials::query const& query)
 {
   viennamaterials::string native_query_string;
 
-  for(viennamaterials::query::iterator iter = query.begin(); 
+  for(viennamaterials::query::const_iterator iter = query.begin(); 
       iter != query.end(); iter++)
   {
     std::string path = get_accessor(iter->first)();
@@ -120,7 +120,7 @@ viennamaterials::string pugixml::query(viennamaterials::query & query)
   return this->query_pugixml(native_query_string);
 }
 
-viennamaterials::numeric pugixml::query_value(viennamaterials::query & query)
+viennamaterials::numeric pugixml::query_value(viennamaterials::query const& query)
 {
   return viennamaterials::convert<viennamaterials::numeric>()(this->query(query));
 }

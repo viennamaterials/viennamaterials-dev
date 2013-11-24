@@ -81,10 +81,10 @@ public:
   virtual void dump(std::ostream& stream = std::cout) = 0;
 
   /** @brief Perform a generic query regardless of the backend, returns a string object holding the result */
-  virtual viennamaterials::string   query  (viennamaterials::query & query)                           = 0;
+  virtual viennamaterials::string   query  (viennamaterials::query const& query)                           = 0;
 
   /** @brief Perform a generic query regardless of the backend, performs automatic conversion to numeric type */
-  virtual viennamaterials::numeric  query_value  (viennamaterials::query & query)                     = 0;
+  virtual viennamaterials::numeric  query_value  (viennamaterials::query const& query)                = 0;
 
   /** @brief Perform a native query, i.e., the method expects a backend-specifc encoded path string */
   virtual viennamaterials::string   query_native (viennamaterials::string const& native_query_string) = 0;
