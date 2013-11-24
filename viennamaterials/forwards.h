@@ -19,6 +19,8 @@
 
 namespace viennamaterials {
 
+class library;
+
 typedef double                                    numeric;
 typedef std::string                               string;
 typedef std::size_t                               accessor_handle;

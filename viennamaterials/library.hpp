@@ -24,6 +24,7 @@
 #include "viennamaterials/exceptions.hpp"
 #include "viennamaterials/check.hpp"
 #include "viennamaterials/make_query.hpp"
+#include "viennamaterials/write_query.hpp"
 #include "viennamaterials/base_accessor.hpp"
 #include "viennamaterials/utils/file_extension.hpp"
 #include "viennamaterials/utils/convert.hpp"
@@ -43,11 +44,8 @@ class library
 private:
   typedef std::vector<base_accessor*>      accessor_container_type;
 
-protected:
-  accessor_container_type& accessors()                     { return accessors_; }
-  base_accessor&           get_accessor(std::size_t index) { return *accessors_[index]; }
-
 public:
+
   /** @brief The constructor sets the default placeholder used for processing the accessors */
   library() : placeholder_("%") {}
   virtual ~library() {}
@@ -61,6 +59,11 @@ public:
 
   /** @brief Allows to externally set the placeholder in the accessor string */
   string& placeholder() { return placeholder_; }
+
+  accessor_container_type& accessors()                     { return accessors_; }
+
+  base_accessor&           get_accessor(std::size_t index) { return *accessors_[index]; }
+
 
   /** @brief Reads an input material file and polpulates the internal database */
   virtual bool read(std::string const& filename) = 0;
