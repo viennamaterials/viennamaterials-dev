@@ -98,13 +98,14 @@ void test_material_library(viennamaterials::library* matlib)
   viennamaterials::string value_string = matlib->query(Si_bandgap_query);
   std::cout << "value string: " << value_string << std::endl;
 
+  /** @brief You can check in advance (does not throw) whether a query resolves .. */
   query faulty_query = make_query(make_entry(material , "definitly"), 
                                   make_entry(parameter, "not"),
                                   make_entry(data     , "available"));
 
   /** @brief You can check in advance (does not throw) whether a query resolves .. */
   if(!matlib->has_entry(faulty_query))
-    std::cout << "Failure! The query does not work .. (Its supposed to not work ..)" << std::endl;
+    std::cout << "Failure! The query does not work .. (It is supposed to not work ..)" << std::endl;
 
   /** @brief Or, you can use the exception mechanism */
   try
