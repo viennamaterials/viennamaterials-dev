@@ -64,6 +64,24 @@ inline viennamaterials::query make_query(viennamaterials::entry const& l0, vienn
   return query_vector;
 }
 
+inline viennamaterials::query make_query(viennamaterials::entry const& l0, viennamaterials::entry const& l1, 
+                                         viennamaterials::entry const& l2, viennamaterials::entry const& l3,
+                                         viennamaterials::entry const& l4)
+{
+  viennamaterials::entry array[] = { l0, l1, l2, l3, l4 };
+  std::vector<viennamaterials::entry> query_vector(detail::begin(array), detail::end(array));
+  return query_vector;
+}
+
+inline viennamaterials::query make_query(viennamaterials::entry const& l0, viennamaterials::entry const& l1, 
+                                         viennamaterials::entry const& l2, viennamaterials::entry const& l3,
+                                         viennamaterials::entry const& l4, viennamaterials::entry const& l5)
+{
+  viennamaterials::entry array[] = { l0, l1, l2, l3, l4, l5 };
+  std::vector<viennamaterials::entry> query_vector(detail::begin(array), detail::end(array));
+  return query_vector;
+}
+
 
 } // viennamaterials
 
