@@ -1,8 +1,8 @@
 /* =============================================================================
-   Copyright (c) 2010, 2011, Institute for Microelectronics, TU Wien
+   Copyright (c) 2013, Institute for Microelectronics, TU Wien
    http://www.iue.tuwien.ac.at
                              -----------------
-                ViennaUtils - The Vienna Utilities Library
+            ViennaMaterials - The Vienna Materials Library
                              -----------------
 
    authors:    Josef Weinbub                      weinbub@iue.tuwien.ac.at
