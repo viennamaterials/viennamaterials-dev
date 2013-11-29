@@ -18,6 +18,8 @@
 #include <utility>
 
 #include "boost/shared_ptr.hpp"
+#include "boost/algorithm/string/split.hpp" 
+#include "boost/algorithm/string/classification.hpp"
 
 namespace viennamaterials {
 
@@ -28,6 +30,7 @@ typedef std::string                               string;
 typedef std::size_t                               accessor_handle;
 typedef std::pair<accessor_handle, string>        entry;
 typedef std::vector<entry>                        query;
+typedef std::vector<string>                       range;
 
 typedef boost::shared_ptr<viennamaterials::library> library_handle;
 
@@ -36,6 +39,13 @@ void write_query(library_handle& matlib, query& some_query, std::ostream& stream
 
 viennamaterials::string generate_query_string(viennamaterials::library* matlib,                    query const& some_query);
 viennamaterials::string generate_query_string(library_handle& matlib, query const& some_query);
+
+inline range make_range(string const& encoded_string)
+{
+  range result;
+  boost::algorithm::split(result, encoded_string, boost::algorithm::is_any_of("\n"));
+  return result;
+}
 
 } // viennamaterials
 
