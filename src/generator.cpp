@@ -16,13 +16,13 @@
 
 namespace viennamaterials {
 
-viennamaterials::library* generator(std::string const& filename)
+viennamaterials::library_handle generator(std::string const& filename)
 {
   std::string extension = viennamaterials::file_extension(filename);
   if(extension == "xml")
-    return new viennamaterials::pugixml(filename);
+    return viennamaterials::library_handle(new viennamaterials::pugixml(filename));
   else
-    return NULL;
+    return viennamaterials::library_handle();
 }
 
 } // viennamaterials

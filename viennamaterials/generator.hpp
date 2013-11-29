@@ -17,7 +17,7 @@
 
 namespace viennamaterials {
 
-viennamaterials::library* generator(std::string const& filename);
+viennamaterials::library_handle generator(std::string const& filename);
 
 } // viennamaterials
 

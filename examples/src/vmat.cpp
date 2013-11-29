@@ -52,7 +52,7 @@ struct data_accessor : public viennamaterials::base_accessor
   }
 };
 
-void test_material_library(viennamaterials::library* matlib)
+void test_material_library(viennamaterials::library_handle& matlib)
 {
   using namespace viennamaterials;
   std::cout << "--------------------------------" << std::endl;
@@ -123,20 +123,17 @@ int main(int argc, char * argv[])
 {
   std::string filename("../../database/materials.xml");
   {
-    viennamaterials::library* mylib = new viennamaterials::pugixml(filename);
+    viennamaterials::library_handle mylib = viennamaterials::library_handle(new viennamaterials::pugixml(filename));
     test_material_library(mylib);
-    delete mylib;
   }
   {
-    viennamaterials::library* mylib = new viennamaterials::pugixml;
+    viennamaterials::library_handle mylib = viennamaterials::library_handle(new viennamaterials::pugixml);
     mylib->read(filename);
     test_material_library(mylib);
-    delete mylib;
   }
   {
-    viennamaterials::library* mylib = viennamaterials::generator(filename);
+    viennamaterials::library_handle mylib = viennamaterials::generator(filename);
     test_material_library(mylib);
-    delete mylib;  
   }
   return 0;
 }
