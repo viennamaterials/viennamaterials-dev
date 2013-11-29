@@ -38,7 +38,7 @@ public:
 
   bool read(std::string const& filename);
 
-  bool read(std::stringstream & stream);
+  bool read(std::stringstream const& stream);
 
   bool write(std::stringstream& stream);
 

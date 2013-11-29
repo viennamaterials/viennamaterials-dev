@@ -68,7 +68,7 @@ public:
   virtual bool read(std::string const& filename) = 0;
 
   /** @brief Reads an input material stream and polpulates the internal database */
-  virtual bool read(std::stringstream & stream) = 0;
+  virtual bool read(std::stringstream const& stream) = 0;
 
   /** @brief Writes the material database to the output string stream */
   virtual bool write(std::stringstream& stream) = 0;
