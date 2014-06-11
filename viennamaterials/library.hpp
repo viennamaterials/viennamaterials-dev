@@ -32,10 +32,10 @@
 //
 #include "boost/algorithm/string/replace.hpp"
 
-namespace viennamaterials { 
+namespace viennamaterials {
 
 
-/** 
+/**
     @brief Class acts as a base class for dynamic utilization
 */
 class library
@@ -86,7 +86,7 @@ public:
   virtual bool has_entry(viennamaterials::query const& query) = 0;
 
   /** @brief Perform a generic query regardless of the backend, returns a string object holding the result */
-  virtual viennamaterials::string   query  (viennamaterials::query const& query)                           = 0;
+  virtual viennamaterials::string   query  (viennamaterials::query const& query)                      = 0;
 
   /** @brief Perform a generic query regardless of the backend, performs automatic conversion to numeric type */
   virtual viennamaterials::numeric  query_value  (viennamaterials::query const& query)                = 0;
@@ -103,4 +103,3 @@ private:
 } // viennamaterials
 
 #endif
-
