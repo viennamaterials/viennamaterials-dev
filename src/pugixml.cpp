@@ -11,6 +11,7 @@
 ============================================================================= */
 
 #include "viennamaterials/pugixml.hpp"
+#include "viennamaterials/exceptions.hpp"
 
 #include "boost/algorithm/string/trim.hpp"
 
@@ -103,23 +104,14 @@ void pugixml::dump(std::ostream& stream)
   xml_.save(stream, indent_string_.c_str());
 }
 
-bool pugixml::has_entry(viennamaterials::query const& query)
-{
-  return ( this->query_native(viennamaterials::generate_query_string(this, query)) != "" );
-}
+//bool pugixml::has_entry(viennamaterials::query const& query)
+//{
+//  return ( this->query_native(viennamaterials::generate_query_string(this, query)) != "" );
+//}
 
-viennamaterials::string pugixml::query(viennamaterials::string const& query)
+std::string pugixml::query(std::string const& query)
 {
-  if(this->has_markup())
-  {
-//    std::cout << "we have a markup" << std::endl;
-    return query_native( markup()->translate(query) );
-  }
-  else
-  {
-//    std::cout << "we do not have a markup" << std::endl;
-    return query_native(query);
-  }
+
 //  viennamaterials::string result = this->query_pugixml(viennamaterials::generate_query_string(this, query));
 //  if(result.empty()) throw entry_not_found_exception("XPath does not resolve: "+viennamaterials::generate_query_string(this, query));
 //  return result;
@@ -131,7 +123,7 @@ viennamaterials::string pugixml::query(viennamaterials::string const& query)
 //  return viennamaterials::convert<viennamaterials::numeric>()(this->query(query));
 //}
 
-viennamaterials::string pugixml::query_native(viennamaterials::string const& native_query)
+std::string pugixml::query_native(std::string const& native_query)
 {
   std::stringstream result_stream;
   try

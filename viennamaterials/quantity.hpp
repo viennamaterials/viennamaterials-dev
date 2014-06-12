@@ -1,3 +1,6 @@
+#ifndef VIENNAMATERIALS_QUANTITY_HP
+#define VIENNAMATERIALS_QUANTITY_HP
+
 /* =============================================================================
    Copyright (c) 2013, Institute for Microelectronics, TU Wien
    http://www.iue.tuwien.ac.at
@@ -14,14 +17,21 @@
 
 namespace viennamaterials {
 
-void write_query(viennamaterials::library* matlib, query& some_query, std::ostream& stream)
+struct quantity
 {
-  stream << viennamaterials::generate_query_string(matlib, some_query) << "\n";
-}
+public:
+  quantity() {}
+  quantity(numeric const& value, std::string const& unit):
+    value_(value), unit_(unit) {}
 
-void write_query(viennamaterials::library_handle& matlib, query& some_query, std::ostream& stream)
-{
-  stream << viennamaterials::generate_query_string(matlib, some_query) << "\n";
-}
+  numeric&      value() { return value_; }
+  std::string&  unit()  { return unit_;  }
+
+private:
+  numeric     value_;
+  std::string unit_;
+};
 
 } // viennamaterials
+
+#endif

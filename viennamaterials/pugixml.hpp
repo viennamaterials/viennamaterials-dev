@@ -48,13 +48,13 @@ public:
 
   void dump(std::ostream& stream = std::cout);
 
-  bool                      has_entry    (viennamaterials::query const& query);
+//  bool                      has_entry    (viennamaterials::query const& query);
 
-  viennamaterials::string   query        (viennamaterials::string const& query);
+  std::string   query        (std::string const& query);
 
 //  viennamaterials::numeric  query_value  (viennamaterials::query const& query);
 
-  viennamaterials::string   query_native (viennamaterials::string const& native_query);
+  std::string   query_native (std::string const& native_query);
 
 private:
   void                      init();
