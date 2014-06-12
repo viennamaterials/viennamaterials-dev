@@ -17,7 +17,8 @@ namespace viennamaterials {
 
 struct markup
 {
-  virtual void operator()(query const& q) = 0;
+  virtual ~markup(){};
+  virtual viennamaterials::string const& translate(viennamaterials::string const& q) = 0;
 };
 
 } // viennamaterials

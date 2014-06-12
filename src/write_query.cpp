@@ -19,10 +19,9 @@ void write_query(viennamaterials::library* matlib, query& some_query, std::ostre
   stream << viennamaterials::generate_query_string(matlib, some_query) << "\n";
 }
 
-void write_query(boost::shared_ptr<viennamaterials::library>& matlib, query& some_query, std::ostream& stream)
+void write_query(viennamaterials::library_handle& matlib, query& some_query, std::ostream& stream)
 {
   stream << viennamaterials::generate_query_string(matlib, some_query) << "\n";
 }
 
 } // viennamaterials
-

@@ -20,7 +20,7 @@ namespace viennamaterials {
 viennamaterials::string generate_query_string(viennamaterials::library * matlib, viennamaterials::query const& some_query)
 {
   viennamaterials::string result;
-  for(viennamaterials::query::const_iterator iter = some_query.begin(); 
+  for(viennamaterials::query::const_iterator iter = some_query.begin();
       iter != some_query.end(); iter++)
   {
     viennamaterials::string path = matlib->get_accessor(iter->first)();
@@ -30,11 +30,9 @@ viennamaterials::string generate_query_string(viennamaterials::library * matlib,
   return result;
 }
 
-viennamaterials::string generate_query_string(boost::shared_ptr<viennamaterials::library> & matlib, viennamaterials::query const& some_query)
+viennamaterials::string generate_query_string(library_handle& matlib, viennamaterials::query const& some_query)
 {
   return viennamaterials::generate_query_string(matlib.get(), some_query);
 }
 
 } // viennamaterials
-
-

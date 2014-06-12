@@ -27,6 +27,7 @@
 #include "viennamaterials/base_accessor.hpp"
 #include "viennamaterials/utils/file_extension.hpp"
 #include "viennamaterials/utils/convert.hpp"
+#include "viennamaterials/markup.hpp"
 
 // Boost includes
 //
@@ -86,17 +87,38 @@ public:
   virtual bool has_entry(viennamaterials::query const& query) = 0;
 
   /** @brief Perform a generic query regardless of the backend, returns a string object holding the result */
-  virtual viennamaterials::string   query  (viennamaterials::query const& query)                      = 0;
+  virtual viennamaterials::string   query  (viennamaterials::string const& query)                      = 0;
 
   /** @brief Perform a generic query regardless of the backend, performs automatic conversion to numeric type */
-  virtual viennamaterials::numeric  query_value  (viennamaterials::query const& query)                = 0;
+//  virtual viennamaterials::numeric  query_value  (viennamaterials::query const& query)                = 0;
 
   /** @brief Perform a native query, i.e., the method expects a backend-specifc encoded path string */
-  virtual viennamaterials::string   query_native (viennamaterials::string const& native_query_string) = 0;
+  virtual viennamaterials::string   query_native (viennamaterials::string const& native_query) = 0;
+
+  void set_markup(viennamaterials::markup_handle& new_markup)
+  {
+    markup_ = new_markup;
+  }
+
+  void release_markup()
+  {
+    markup_.reset();
+  }
+
+  bool has_markup()
+  {
+    return markup_ ? true : false;
+  }
+
+  viennamaterials::markup_handle& markup()
+  {
+    return markup_;
+  }
 
 private:
-  accessor_container_type accessors_;
-  string                  placeholder_;
+  accessor_container_type         accessors_;
+  string                          placeholder_;
+  viennamaterials::markup_handle  markup_;
 };
 
 

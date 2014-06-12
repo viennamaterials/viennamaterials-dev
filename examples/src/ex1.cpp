@@ -12,11 +12,11 @@
 
 #include "viennamaterials/generator.hpp"
 #include "viennamaterials/pugixml.hpp"
-#include "viennamaterials/markup.hpp"
 
-struct viennastar : public viennamaterials::markup
+
+struct viennastar_markup : public viennamaterials::markup
 {
-  void operator()(viennamaterials::query const& q)
+  viennamaterials::string const& translate(viennamaterials::string const& q)
   {
   }
 };
@@ -29,11 +29,11 @@ void test_material_library(viennamaterials::library_handle& matlib)
   std::cout << "value: " << value << std::endl;
 
 
-  viennamaterials::markup* mymarkup = new viennastar;
-//  matlib->set_markup(mymarkup);
-//  string result = matlib->query("Si/bandgap");
+  viennamaterials::markup_handle mymarkup = viennamaterials::markup_handle(new viennastar_markup);
+  matlib->set_markup(mymarkup);
+  string result = matlib->query("Si/bandgap");
 
-  delete mymarkup;
+
 }
 
 
@@ -50,8 +50,8 @@ int main(int argc, char * argv[])
     test_material_library(mylib);
   }
   {
-    viennamaterials::library_handle mylib = viennamaterials::generator(filename);
-    test_material_library(mylib);
+//    viennamaterials::library_handle mylib = viennamaterials::generator(filename);
+//    test_material_library(mylib);
   }
   return 0;
 }

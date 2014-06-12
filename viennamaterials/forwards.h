@@ -17,13 +17,15 @@
 #include <vector>
 #include <utility>
 
-#include "boost/shared_ptr.hpp"
-#include "boost/algorithm/string/split.hpp" 
+#include "boost/algorithm/string/split.hpp"
 #include "boost/algorithm/string/classification.hpp"
+
+#include "viennamaterials/utils/shared_ptr.hpp"
 
 namespace viennamaterials {
 
 class library;
+class markup;
 
 typedef double                                    numeric;
 typedef std::string                               string;
@@ -32,7 +34,8 @@ typedef std::pair<accessor_handle, string>        entry;
 typedef std::vector<entry>                        query;
 typedef std::vector<string>                       range;
 
-typedef boost::shared_ptr<viennamaterials::library> library_handle;
+typedef viennamaterials::shared_ptr<viennamaterials::library> library_handle;
+typedef viennamaterials::shared_ptr<viennamaterials::markup>  markup_handle;
 
 void write_query(viennamaterials::library* matlib, query& some_query, std::ostream& stream = std::cout);
 void write_query(library_handle& matlib, query& some_query, std::ostream& stream = std::cout);
@@ -50,4 +53,3 @@ inline range make_range(string const& encoded_string)
 } // viennamaterials
 
 #endif
-

@@ -21,7 +21,7 @@
 namespace viennamaterials {
 
 
-/** 
+/**
     @brief Provides the pugixml backend
 */
 class pugixml : public library
@@ -50,15 +50,14 @@ public:
 
   bool                      has_entry    (viennamaterials::query const& query);
 
-  viennamaterials::string   query        (viennamaterials::query const& query);
+  viennamaterials::string   query        (viennamaterials::string const& query);
 
-  viennamaterials::numeric  query_value  (viennamaterials::query const& query);
+//  viennamaterials::numeric  query_value  (viennamaterials::query const& query);
 
-  viennamaterials::string   query_native (viennamaterials::string const& native_query_string);
+  viennamaterials::string   query_native (viennamaterials::string const& native_query);
 
 private:
   void                      init();
-  viennamaterials::string   query_pugixml(viennamaterials::string const& native_query_string);
 
 private:
   pugi::xml_document    xml_;
@@ -68,4 +67,3 @@ private:
 } // viennamaterials
 
 #endif
-
