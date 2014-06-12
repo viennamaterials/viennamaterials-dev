@@ -14,10 +14,19 @@
 #include "viennamaterials/pugixml.hpp"
 
 
+#include "boost/algorithm/string/split.hpp"
+
 struct viennastar_markup : public viennamaterials::markup
 {
   viennamaterials::string const& translate(viennamaterials::string const& q)
   {
+    std::string result_query = "/materials/material[id=\"Si\"]";
+    std::vector<std::string> query_parts;
+    boost::algorithm::split(query_parts, q, boost::algorithm::is_any_of("/"));
+    for(std::vector<std::string>::const_iterator iter = query_parts.begin();
+        iter != query_parts.end(); iter++)
+    {
+    }
   }
 };
 
