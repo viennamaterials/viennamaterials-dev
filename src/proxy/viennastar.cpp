@@ -16,9 +16,8 @@
 
 // Boost includes
 //
-#include "boost/algorithm/string/split.hpp"
+#include "viennamaterials/utils/string.hpp"
 #include "boost/algorithm/string/replace.hpp"
-#include "boost/algorithm/string/classification.hpp"
 
 namespace viennamaterials
 {
@@ -26,7 +25,7 @@ namespace viennamaterials
 viennastar_proxy::viennastar_proxy(viennamaterials::library_handle& matlib) :
   viennamaterials::proxy(matlib),
   placeholder_    ("%"),
-  token_          ("/"),
+  token_          ('/'),
   sub_path_       ("/*[id=\""+placeholder_+"\"]"),
   value_path_     ("/value/text()"),
   unit_path_      ("/unit/text()")
@@ -64,7 +63,7 @@ viennamaterials::quantity viennastar_proxy::query_quantity(std::string const& q)
 void viennastar_proxy::generate_base_path(std::string const& q, std::string & base_path)
 {
   query_parts_.clear();
-  boost::algorithm::split(query_parts_, q, boost::algorithm::is_any_of(token_));
+  viennamaterials::split(query_parts_, q, token_);
   for(QueryPartsType::const_iterator iter = query_parts_.begin();
       iter != query_parts_.end(); iter++)
   {

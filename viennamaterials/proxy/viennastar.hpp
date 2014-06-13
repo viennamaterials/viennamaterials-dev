@@ -44,7 +44,7 @@ private:
   void generate_base_path(std::string const& q, std::string & base_path);
 
   const std::string placeholder_;
-  const std::string token_;
+  const char        token_;
   const std::string sub_path_;
   const std::string value_path_;
   const std::string unit_path_;

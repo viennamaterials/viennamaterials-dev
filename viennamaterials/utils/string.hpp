@@ -19,6 +19,9 @@
 #include <functional>
 #include <cctype>
 #include <locale>
+#include <sstream>
+#include <vector>
+#include <algorithm>
 
 namespace viennamaterials {
 
@@ -37,6 +40,13 @@ inline std::string& rtrim(std::string &s)
 inline std::string& trim(std::string &s)
 {
   return ltrim(rtrim(s));
+}
+
+inline void split(std::vector<std::string>& result_container, std::string const& str, char const& delimiter)
+{
+  std::istringstream buf(str);
+  for(std::string token; getline(buf, token, delimiter); )
+      result_container.push_back(token);
 }
 
 } // viennamaterials
