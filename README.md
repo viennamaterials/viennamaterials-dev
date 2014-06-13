@@ -11,9 +11,8 @@ ViennaMaterials is currently in a prototype state.
 System requirements
 --------------------------
 
-* C++ compiler
+* C++ compiler (tested on GCC 4.8.1)
 * [Boost](http://www.boost.org/)
-* [libxml2](http://xmlsoft.org) (optional, for DTD checks of the input XML data)
 
 Currently supported operating systems
 --------------------------
@@ -31,6 +30,7 @@ $> mkdir build             # the build folder
 
 Configure the build, default build type is the 'optimized/release' mode:
 <pre>
+$> cd build/
 $> cmake ..
 </pre>
 
