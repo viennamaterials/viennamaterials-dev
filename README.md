@@ -1,31 +1,31 @@
-ViennaMaterials 
+ViennaMaterials
 --------------------------
 
-This is the developer repository of ViennaMaterials, being a C++-based 
-library for providing material parameters to scientific simulation tools via a 
-convenient API. The default database kernel is based on the pugixml library, 
+This is the developer repository of ViennaMaterials, being a C++-based
+library for providing material parameters to scientific simulation tools via a
+convenient API. The default database kernel is based on the pugixml library,
 providing XML and XPATH support, which is used by ViennaMaterials' API.
-ViennaMaterials is currently in a prototype state. 
+ViennaMaterials is currently in a prototype state.
 
 
 System requirements
 --------------------------
 
 * C++ compiler
+* [Boost](http://www.boost.org/)
 * [libxml2](http://xmlsoft.org) (optional, for DTD checks of the input XML data)
-* [Boost](http://www.boost.org/) (optional, for Serialization support)
 
 Currently supported operating systems
 --------------------------
 * Linux
 
-Building instructions 
+Building instructions
 --------------------------
 
 To build ViennaMaterials, simply clone the repository and issue the following suggested commands (the following steps are for Unix-based systems):
 
 <pre>
-$> cd viennamaterials-dev  # the checked-out GIT folder 
+$> cd viennamaterials-dev  # the checked-out GIT folder
 $> mkdir build             # the build folder
 </pre>
 
