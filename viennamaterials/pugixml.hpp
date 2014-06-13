@@ -48,13 +48,14 @@ public:
 
   void dump(std::ostream& stream = std::cout);
 
-//  bool                      has_entry    (viennamaterials::query const& query);
+  /** @brief Checks whether the query path is available in the database */
+  bool has_entry(std::string const& native_query);
 
-  std::string   query        (std::string const& query);
+  /** @brief Perform a native query without conversion */
+  std::string               query (std::string const& native_query);
 
-//  viennamaterials::numeric  query_value  (viennamaterials::query const& query);
-
-  std::string   query_native (std::string const& native_query);
+  /** @brief Access the numeric value pointed to by the native query path */
+  viennamaterials::numeric  query_value  (std::string const& native_query);
 
 private:
   void                      init();

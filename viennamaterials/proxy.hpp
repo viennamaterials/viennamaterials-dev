@@ -26,10 +26,15 @@ public:
 
   viennamaterials::library_handle& matlib() { return matlib_; }
 
-//  virtual std::string query         (std::string const& q) = 0;
-//  virtual std::string query_unit    (std::string const& q) = 0;
-//  virtual numeric     query_value   (std::string const& q) = 0;
-//  virtual quantity    query_quantity(std::string const& q) = 0;
+  std::string         query_native  (std::string const& q)
+  {
+    return matlib_->query(q);
+  }
+
+  virtual std::string query          (std::string const& q) = 0;
+  virtual std::string query_unit     (std::string const& q) = 0;
+  virtual numeric     query_value    (std::string const& q) = 0;
+  virtual quantity    query_quantity (std::string const& q) = 0;
 
 private:
   viennamaterials::library_handle& matlib_;

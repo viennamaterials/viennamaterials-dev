@@ -12,6 +12,8 @@
 
 #include "viennamaterials/pugixml.hpp"
 #include "viennamaterials/exceptions.hpp"
+#include "viennamaterials/utils/convert.hpp"
+#include "viennamaterials/utils/file_extension.hpp"
 
 #include "boost/algorithm/string/trim.hpp"
 
@@ -104,26 +106,12 @@ void pugixml::dump(std::ostream& stream)
   xml_.save(stream, indent_string_.c_str());
 }
 
-//bool pugixml::has_entry(viennamaterials::query const& query)
-//{
-//  return ( this->query_native(viennamaterials::generate_query_string(this, query)) != "" );
-//}
-
-std::string pugixml::query(std::string const& query)
+bool pugixml::has_entry(std::string const& native_query)
 {
-
-//  viennamaterials::string result = this->query_pugixml(viennamaterials::generate_query_string(this, query));
-//  if(result.empty()) throw entry_not_found_exception("XPath does not resolve: "+viennamaterials::generate_query_string(this, query));
-//  return result;
-
+  return ( this->query(native_query) != "" );
 }
 
-//viennamaterials::numeric pugixml::query_value(viennamaterials::query const& query)
-//{
-//  return viennamaterials::convert<viennamaterials::numeric>()(this->query(query));
-//}
-
-std::string pugixml::query_native(std::string const& native_query)
+std::string pugixml::query(std::string const& native_query)
 {
   std::stringstream result_stream;
   try
@@ -143,6 +131,10 @@ std::string pugixml::query_native(std::string const& native_query)
   return result;
 }
 
+viennamaterials::numeric pugixml::query_value(std::string const& native_query)
+{
+  return viennamaterials::convert<viennamaterials::numeric>()(this->query(native_query));
+}
 
 
 } // viennamaterials

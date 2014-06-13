@@ -13,24 +13,11 @@
    license:    see file LICENSE in the base directory
 ============================================================================= */
 
-// System includes
-//
-#include <iostream>
-#include <vector>
-
 // ViennaMaterials includes
 //
 #include "viennamaterials/forwards.h"
-//#include "viennamaterials/exceptions.hpp"
-//#include "viennamaterials/check.hpp"
-//#include "viennamaterials/make_query.hpp"
-//#include "viennamaterials/base_accessor.hpp"
-#include "viennamaterials/utils/file_extension.hpp"
-#include "viennamaterials/utils/convert.hpp"
+//#include "viennamaterials/quantity.hpp"
 
-// Boost includes
-//
-#include "boost/algorithm/string/replace.hpp"
 
 namespace viennamaterials {
 
@@ -40,29 +27,11 @@ namespace viennamaterials {
 */
 class library
 {
-private:
-//  typedef std::vector<base_accessor*>      accessor_container_type;
 
 public:
 
   /** @brief The constructor sets the default placeholder used for processing the accessors */
-//  library() : placeholder_("%") {}
   virtual ~library() {}
-
-//  /** @brief Allows to register query accessors, returns unique id required for query entries */
-//  accessor_handle register_accessor(base_accessor* accessor)
-//  {
-//    accessors_.push_back(accessor);
-//    return accessors_.size()-1;
-//  }
-
-//  /** @brief Allows to externally set the placeholder in the accessor string */
-//  string& placeholder() { return placeholder_; }
-
-//  accessor_container_type& accessors()                     { return accessors_; }
-
-//  base_accessor&           get_accessor(std::size_t index) { return *accessors_[index]; }
-
 
   /** @brief Reads an input material file and polpulates the internal database */
   virtual bool read(std::string const& filename) = 0;
@@ -83,20 +52,14 @@ public:
   virtual void dump(std::ostream& stream = std::cout) = 0;
 
   /** @brief Checks whether the query path is available in the database */
-//  virtual bool has_entry(viennamaterials::query const& query) = 0;
+  virtual bool has_entry(std::string const& native_query) = 0;
 
-  /** @brief Perform a generic query regardless of the backend, returns a string object holding the result */
-  virtual std::string   query  (std::string const& query)                      = 0;
+  /** @brief Perform a native query without conversion */
+  virtual std::string               query (std::string const& native_query) = 0;
 
-  /** @brief Perform a generic query regardless of the backend, performs automatic conversion to numeric type */
-//  virtual viennamaterials::numeric  query_value  (viennamaterials::query const& query)                = 0;
+  /** @brief Access the numeric value pointed to by the native query path */
+  virtual viennamaterials::numeric  query_value  (std::string const& native_query)                = 0;
 
-  /** @brief Perform a native query, i.e., the method expects a backend-specifc encoded path string */
-  virtual std::string   query_native (std::string const& native_query) = 0;
-
-private:
-//  accessor_container_type         accessors_;
-//  string                          placeholder_;
 };
 
 
