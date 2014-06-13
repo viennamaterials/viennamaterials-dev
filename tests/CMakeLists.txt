@@ -1,6 +1,7 @@
 
 set(TEST_PROGRAMS ${TEST_PROGRAMS} strings)
-
+set(TEST_PROGRAMS ${TEST_PROGRAMS} native)
+set(TEST_PROGRAMS ${TEST_PROGRAMS} proxy)
 
 # setup tests for all previously defined tests
 #
