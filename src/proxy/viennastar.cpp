@@ -13,11 +13,7 @@
 // ViennaMaterials includes
 //
 #include "viennamaterials/proxy/viennastar.hpp"
-
-// Boost includes
-//
 #include "viennamaterials/utils/string.hpp"
-#include "boost/algorithm/string/replace.hpp"
 
 namespace viennamaterials
 {
@@ -68,7 +64,7 @@ void viennastar_proxy::generate_base_path(std::string const& q, std::string & ba
       iter != query_parts_.end(); iter++)
   {
     std::string temp_path = sub_path_;
-    boost::algorithm::replace_first(temp_path, placeholder_, *iter);
+    viennamaterials::replace_first(temp_path, placeholder_, *iter);
     base_path += temp_path;
   }
 }

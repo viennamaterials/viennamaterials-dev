@@ -49,6 +49,13 @@ inline void split(std::vector<std::string>& result_container, std::string const&
       result_container.push_back(token);
 }
 
+inline void replace_first(std::string & target, std::string const& placeholder, std::string const& replacement)
+{
+  size_t start_pos = target.find(placeholder);
+  if(start_pos == std::string::npos) return;
+  target.replace(start_pos, placeholder.length(), replacement);
+}
+
 } // viennamaterials
 
 

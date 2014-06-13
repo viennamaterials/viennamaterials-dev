@@ -12,7 +12,6 @@ System requirements
 --------------------------
 
 * C++ compiler (tested on GCC 4.8.1)
-* [Boost](http://www.boost.org/)
 
 Currently supported operating systems
 --------------------------

@@ -40,4 +40,8 @@ int main()
   assert(result[2] == "for");
   assert(result[3] == "splitting");
   assert(result.size() == 4);
+
+  /** String 'replace' tests **/
+  viennamaterials::replace_first(test4, "/", "?");
+  assert(test4 == "some?test/for/splitting");
 }
