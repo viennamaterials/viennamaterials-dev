@@ -15,6 +15,7 @@ System requirements
 
 Currently supported operating systems
 --------------------------
+
 * Linux
 
 Building instructions
@@ -41,10 +42,28 @@ or use the following additional, optional configuration parameters
  -DBUILD_SHARED_LIBS=ON
 # don't build example applications (default: on)
  -DBUILD_EXAMPLES=OFF
+# don't build tests (default: on)
+ -DBUILD_TESTS=OFF
 </pre>
 
-Now build and install the executable and libraries (install folder is a subfolder of the build folder):
+Now build the library (and potentially the examples and tests)
 <pre>
 $> make -j4  # adjust to your CPU core count for efficient parallel building
-$> make install
+</pre>
+
+Examples
+--------------------------
+
+Execute the examples in the tutorial build folder
+<pre>
+$> cd examples/tutorial/
+</pre>
+
+Tests
+--------------------------
+
+If ViennaMaterials has been configured to generate tests (cf. Building instructions),
+you can quickly execute all tests after the building step via executing:
+<pre>
+$> make test
 </pre>
