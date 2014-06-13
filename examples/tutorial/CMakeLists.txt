@@ -1,0 +1,7 @@
+
+
+ADD_EXECUTABLE(native native.cpp)
+TARGET_LINK_LIBRARIES(native ${LIBRARIES})
+
+ADD_EXECUTABLE(proxy proxy.cpp)
+TARGET_LINK_LIBRARIES(proxy ${LIBRARIES})

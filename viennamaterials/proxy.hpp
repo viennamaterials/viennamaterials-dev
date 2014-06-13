@@ -16,6 +16,7 @@
 // ViennaMaterials includes
 //
 #include "viennamaterials/forwards.h"
+#include "viennamaterials/library.hpp"
 #include "viennamaterials/quantity.hpp"
 
 namespace viennamaterials {

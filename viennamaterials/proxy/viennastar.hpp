@@ -21,12 +21,6 @@
 //
 #include "viennamaterials/proxy.hpp"
 
-// Boost includes
-//
-#include "boost/algorithm/string/split.hpp"
-#include "boost/algorithm/string/replace.hpp"
-#include "boost/algorithm/string/classification.hpp"
-
 namespace viennamaterials
 {
 
@@ -36,58 +30,18 @@ private:
   typedef std::vector<std::string>    QueryPartsType;
 
 public:
-  viennastar_proxy(viennamaterials::library_handle& matlib) :
-    viennamaterials::proxy(matlib),
-    placeholder_    ("%"),
-    token_          ("/"),
-    sub_path_       ("/*[id=\""+placeholder_+"\"]"),
-    value_path_     ("/value/text()"),
-    unit_path_      ("/unit/text()")
-  {
-  }
+  viennastar_proxy(viennamaterials::library_handle& matlib);
 
-  std::string query          (std::string const& q)
-  {
-    std::string base_path;
-    generate_base_path(q, base_path);
-    return matlib()->query(base_path);
-  }
+  std::string query          (std::string const& q);
 
-  std::string query_unit     (std::string const& q)
-  {
-    std::string base_path;
-    generate_base_path(q, base_path);
-    base_path += unit_path_;
-    return matlib()->query(base_path);
-  }
+  std::string query_unit     (std::string const& q);
 
-  numeric     query_value    (std::string const& q)
-  {
-    std::string base_path;
-    generate_base_path(q, base_path);
-    base_path += value_path_;
-    return matlib()->query_value(base_path);
-  }
+  numeric     query_value    (std::string const& q);
 
-  quantity    query_quantity (std::string const& q)
-  {
-    return quantity(query_value(q), query_unit(q));
-  }
+  quantity    query_quantity (std::string const& q);
 
 private:
-
-  void generate_base_path(std::string const& q, std::string & base_path)
-  {
-    query_parts_.clear();
-    boost::algorithm::split(query_parts_, q, boost::algorithm::is_any_of(token_));
-    for(QueryPartsType::const_iterator iter = query_parts_.begin();
-        iter != query_parts_.end(); iter++)
-    {
-      std::string temp_path = sub_path_;
-      boost::algorithm::replace_first(temp_path, placeholder_, *iter);
-      base_path += temp_path;
-    }
-  }
+  void generate_base_path(std::string const& q, std::string & base_path);
 
   const std::string placeholder_;
   const std::string token_;

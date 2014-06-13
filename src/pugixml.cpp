@@ -137,7 +137,7 @@ std::string pugixml::query(std::string const& native_query)
 
 viennamaterials::numeric pugixml::query_value(std::string const& native_query)
 {
-  return viennamaterials::convert<viennamaterials::numeric>()(this->query(native_query));
+  return viennamaterials::convert<viennamaterials::numeric>(this->query(native_query));
 }
 
 
