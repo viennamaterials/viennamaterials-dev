@@ -2,8 +2,8 @@
 #define VIENNAMATERIALS_EXCEPTIONS_HPP
 
 /* =============================================================================
-   Copyright (c) 2013, Institute for Microelectronics, TU Wien
-   http://www.iue.tuwien.ac.at
+   Copyright (c) 2013-2014, Institute for Microelectronics, TU Wien
+   http://www.iue.tuwien.ac.at/
                              -----------------
             ViennaMaterials - The Vienna Materials Library
                              -----------------
@@ -13,6 +13,8 @@
    license:    see file LICENSE in the base directory
 ============================================================================= */
 
+// System includes
+//
 #include <iostream>
 #include <exception>
 
@@ -67,7 +69,7 @@ namespace viennamaterials
     {
       return std::string("XML parse error: ").c_str();
     }
-    
+
     std::string info;
   };
 
@@ -80,7 +82,7 @@ namespace viennamaterials
     {
       return info.c_str();
     }
-    
+
     std::string info;
   };
 
@@ -89,4 +91,3 @@ namespace viennamaterials
 } // viennamaterials
 
 #endif
-

@@ -1,6 +1,9 @@
+#ifndef VIENNAMATERIALS_UTILS_CONVERT_HPP
+#define VIENNAMATERIALS_UTILS_CONVERT_HPP
+
 /* =============================================================================
-   Copyright (c) 2013, Institute for Microelectronics, TU Wien
-   http://www.iue.tuwien.ac.at
+   Copyright (c) 2013-2014, Institute for Microelectronics, TU Wien
+   http://www.iue.tuwien.ac.at/
                              -----------------
             ViennaMaterials - The Vienna Materials Library
                              -----------------
@@ -10,12 +13,13 @@
    license:    see file LICENSE in the base directory
 ============================================================================= */
 
-#ifndef VIENNAMATERIALS_UTILS_CONVERT_HPP
-#define VIENNAMATERIALS_UTILS_CONVERT_HPP
-
+// System includes
+//
 #include <sstream>
 #include <string>
 
+// Boost includes
+//
 #include <boost/type_traits/is_same.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/lexical_cast.hpp>
@@ -25,7 +29,7 @@ namespace viennamaterials {
 template<typename Target>
 struct convert
 {
-  typedef Target result_type; 
+  typedef Target result_type;
 
   template<typename Source>
   result_type operator()(Source const& source, typename boost::enable_if<boost::is_same<Source,result_type> >::type* dummy = 0)
@@ -43,8 +47,8 @@ struct convert
 template<>
 struct convert<float>
 {
-  typedef float result_type; 
-   
+  typedef float result_type;
+
   template<typename Source>
   result_type operator()(Source const& source, typename boost::enable_if<boost::is_same<Source,result_type> >::type* dummy = 0)
   {
@@ -66,8 +70,8 @@ private:
 template<>
 struct convert<double>
 {
-  typedef double result_type; 
-   
+  typedef double result_type;
+
   template<typename Source>
   result_type operator()(Source const& source, typename boost::enable_if<boost::is_same<Source,result_type> >::type* dummy = 0)
   {
@@ -91,7 +95,7 @@ template<>
 struct convert<std::string>
 {
   typedef std::string result_type;
-   
+
   template<typename Source>
   result_type operator()(Source const& source, typename boost::enable_if<boost::is_same<Source,result_type> >::type* dummy = 0)
   {
@@ -113,7 +117,3 @@ private:
 } // end namespace viennamaterials
 
 #endif
-
-
-
-

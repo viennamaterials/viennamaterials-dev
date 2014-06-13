@@ -1,6 +1,6 @@
 /* =============================================================================
-   Copyright (c) 2013, Institute for Microelectronics, TU Wien
-   http://www.iue.tuwien.ac.at
+   Copyright (c) 2013-2014, Institute for Microelectronics, TU Wien
+   http://www.iue.tuwien.ac.at/
                              -----------------
             ViennaMaterials - The Vienna Materials Library
                              -----------------
@@ -10,11 +10,15 @@
    license:    see file LICENSE in the base directory
 ============================================================================= */
 
+// ViennaMaterials includes
+//
 #include "viennamaterials/pugixml.hpp"
 #include "viennamaterials/exceptions.hpp"
 #include "viennamaterials/utils/convert.hpp"
 #include "viennamaterials/utils/file_extension.hpp"
 
+// Boost includes
+//
 #include "boost/algorithm/string/trim.hpp"
 
 namespace viennamaterials {

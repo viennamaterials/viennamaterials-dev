@@ -2,8 +2,8 @@
 #define VIENNAMATERIALS_UTILS_FILEEXTENSION_HPP
 
 /* =============================================================================
-   Copyright (c) 2013, Institute for Microelectronics, TU Wien
-   http://www.iue.tuwien.ac.at
+   Copyright (c) 2013-2014, Institute for Microelectronics, TU Wien
+   http://www.iue.tuwien.ac.at/
                              -----------------
             ViennaMaterials - The Vienna Materials Library
                              -----------------
@@ -13,6 +13,8 @@
    license:    see file LICENSE in the base directory
 ============================================================================= */
 
+// System includes
+//
 #include <fstream>
 
 namespace viennamaterials {
@@ -33,4 +35,3 @@ inline std::string file_extension(std::string const& filename)
 } // viennamaterials
 
 #endif
-

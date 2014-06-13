@@ -2,8 +2,8 @@
 #define VIENNAMATERIALS_LIBRARY_HPP
 
 /* =============================================================================
-   Copyright (c) 2013, Institute for Microelectronics, TU Wien
-   http://www.iue.tuwien.ac.at
+   Copyright (c) 2013-2014, Institute for Microelectronics, TU Wien
+   http://www.iue.tuwien.ac.at/
                              -----------------
             ViennaMaterials - The Vienna Materials Library
                              -----------------
@@ -16,7 +16,6 @@
 // ViennaMaterials includes
 //
 #include "viennamaterials/forwards.h"
-//#include "viennamaterials/quantity.hpp"
 
 
 namespace viennamaterials {

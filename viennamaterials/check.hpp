@@ -2,8 +2,8 @@
 #define VIENNAMATERIALS_CHECK_HPP
 
 /* =============================================================================
-   Copyright (c) 2013, Institute for Microelectronics, TU Wien
-   http://www.iue.tuwien.ac.at
+   Copyright (c) 2013-2014, Institute for Microelectronics, TU Wien
+   http://www.iue.tuwien.ac.at/
                              -----------------
             ViennaMaterials - The Vienna Materials Library
                              -----------------
@@ -39,8 +39,8 @@ inline bool check(std::string const& xml_filename)//, std::string const& dtd_fil
   if (doc == NULL) {
     throw viennamaterials::xml_load_error();
     return false;
-  }    
-  
+  }
+
   // Second, setup a DTD string
   //
   const char* dtd_string = "\
@@ -55,27 +55,27 @@ inline bool check(std::string const& xml_filename)//, std::string const& dtd_fil
 <!ELEMENT unit (#PCDATA)>\n\
 <!ELEMENT note (#PCDATA)>\n";
 
-  // Third, read the DTD string 
+  // Third, read the DTD string
   //
   xmlParserInputBufferPtr buf = xmlParserInputBufferCreateStatic (dtd_string, strlen(dtd_string),XML_CHAR_ENCODING_ASCII);
-  xmlDtdPtr dtd = xmlIOParseDTD (NULL, buf, XML_CHAR_ENCODING_ASCII); 
+  xmlDtdPtr dtd = xmlIOParseDTD (NULL, buf, XML_CHAR_ENCODING_ASCII);
 
-  if(dtd == NULL) { 
+  if(dtd == NULL) {
     throw viennamaterials::dtd_load_error();
     return false;
   }
-  
-  // Finally, check the xml document against the dtd 
+
+  // Finally, check the xml document against the dtd
   //
   xmlValidCtxt* ctx = xmlNewValidCtxt();
-  
+
   if(xmlValidateDtd(ctx, doc, dtd) == 0) {
     throw viennamaterials::dtd_error();
     return false;
   }
   else
   {
-    xmlFreeValidCtxt(ctx);  
+    xmlFreeValidCtxt(ctx);
     xmlFreeDtd(dtd);
     xmlFreeDoc(doc);
     return true;
@@ -86,4 +86,3 @@ inline bool check(std::string const& xml_filename)//, std::string const& dtd_fil
 
 #endif
 #endif
-

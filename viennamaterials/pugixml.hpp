@@ -2,8 +2,8 @@
 #define VIENNAMATERIALS_PUGIXML_HPP
 
 /* =============================================================================
-   Copyright (c) 2013, Institute for Microelectronics, TU Wien
-   http://www.iue.tuwien.ac.at
+   Copyright (c) 2013-2014, Institute for Microelectronics, TU Wien
+   http://www.iue.tuwien.ac.at/
                              -----------------
             ViennaMaterials - The Vienna Materials Library
                              -----------------
@@ -13,8 +13,12 @@
    license:    see file LICENSE in the base directory
 ============================================================================= */
 
+// System includes
+//
 #include <sstream>
 
+// ViennaMaterials includes
+//
 #include "viennamaterials/library.hpp"
 #include "external/pugixml/pugixml.hpp"
 

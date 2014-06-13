@@ -2,8 +2,8 @@
 #define VIENNAMATERIALS_PROXY_VIENNASTAR_HPP
 
 /* =============================================================================
-   Copyright (c) 2013, Institute for Microelectronics, TU Wien
-   http://www.iue.tuwien.ac.at
+   Copyright (c) 2013-2014, Institute for Microelectronics, TU Wien
+   http://www.iue.tuwien.ac.at/
                              -----------------
             ViennaMaterials - The Vienna Materials Library
                              -----------------
@@ -13,10 +13,19 @@
    license:    see file LICENSE in the base directory
 ============================================================================= */
 
+// System includes
+//
+#include <vector>
+
+// ViennaMaterials includes
+//
 #include "viennamaterials/proxy.hpp"
 
+// Boost includes
+//
 #include "boost/algorithm/string/split.hpp"
 #include "boost/algorithm/string/replace.hpp"
+#include "boost/algorithm/string/classification.hpp"
 
 namespace viennamaterials
 {

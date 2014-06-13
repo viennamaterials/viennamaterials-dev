@@ -10,6 +10,8 @@
    license:    see file LICENSE in the base directory
 ============================================================================= */
 
+// ViennaMaterials includes
+//
 #include "viennamaterials/generator.hpp"
 #include "viennamaterials/pugixml.hpp"
 #include "viennamaterials/proxy/viennastar.hpp"
@@ -60,10 +62,10 @@ int main(int argc, char * argv[])
 {
   std::string filename("../../database/materials.xml");
   {
-    viennamaterials::library_handle mylib = viennamaterials::library_handle(new viennamaterials::pugixml(filename));
+//    viennamaterials::library_handle mylib = viennamaterials::library_handle(new viennamaterials::pugixml(filename));
 //    test_native_explicit(mylib);
 //    test_native_wildcard(mylib);
-    test_proxy(mylib);
+//    test_proxy(mylib);
   }
   {
 //    viennamaterials::library_handle mylib = viennamaterials::library_handle(new viennamaterials::pugixml);
@@ -72,8 +74,10 @@ int main(int argc, char * argv[])
 //    test_proxy(mylib);
   }
   {
-//    viennamaterials::library_handle mylib = viennamaterials::generator(filename);
-//    test_material_library(mylib);
+    viennamaterials::library_handle mylib = viennamaterials::generator(filename);
+    test_native_explicit(mylib);
+    test_native_wildcard(mylib);
+    test_proxy(mylib);
   }
   return 0;
 }

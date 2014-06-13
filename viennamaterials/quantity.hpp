@@ -1,9 +1,9 @@
-#ifndef VIENNAMATERIALS_QUANTITY_HP
-#define VIENNAMATERIALS_QUANTITY_HP
+#ifndef VIENNAMATERIALS_QUANTITY_HPP
+#define VIENNAMATERIALS_QUANTITY_HPP
 
 /* =============================================================================
-   Copyright (c) 2013, Institute for Microelectronics, TU Wien
-   http://www.iue.tuwien.ac.at
+   Copyright (c) 2013-2014, Institute for Microelectronics, TU Wien
+   http://www.iue.tuwien.ac.at/
                              -----------------
             ViennaMaterials - The Vienna Materials Library
                              -----------------
@@ -13,6 +13,8 @@
    license:    see file LICENSE in the base directory
 ============================================================================= */
 
+// ViennaMaterials includes
+//
 #include "viennamaterials/forwards.h"
 
 namespace viennamaterials {
