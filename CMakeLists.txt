@@ -6,7 +6,8 @@ INCLUDE_DIRECTORIES(".")
 
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
-option(BUILD_EXAMPLES "Build the examples" ON)
+OPTION(BUILD_EXAMPLES "Build the examples" ON)
+OPTION(BUILD_TESTS    "Build the tests"    ON)
 #option(BUILD_DTD_CHECK_SUPPORT "Perform DTD checks of the input XML material data - requires libxml2" OFF)
 
 #set default build type
@@ -53,3 +54,8 @@ INSTALL(TARGETS ${VIENNAMATERIALS_LIBRARY} DESTINATION ${CMAKE_CURRENT_BINARY_DI
 IF(BUILD_EXAMPLES)
   ADD_SUBDIRECTORY(examples)
 ENDIF(BUILD_EXAMPLES)
+
+if(BUILD_TESTS)
+  INCLUDE(CTest)
+  ADD_SUBDIRECTORY(tests)
+endif()

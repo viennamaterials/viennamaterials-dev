@@ -16,10 +16,7 @@
 #include "viennamaterials/exceptions.hpp"
 #include "viennamaterials/utils/convert.hpp"
 #include "viennamaterials/utils/file_extension.hpp"
-
-// Boost includes
-//
-#include "boost/algorithm/string/trim.hpp"
+#include "viennamaterials/utils/string.hpp"
 
 namespace viennamaterials {
 
@@ -131,7 +128,7 @@ std::string pugixml::query(std::string const& native_query)
      std::cerr << "PugiXML query exception: " << e.what() << std::endl;
   }
   std::string result = result_stream.str();
-  boost::trim(result);  // remove front/trailing whitespaces
+  viennamaterials::trim(result);  // remove front/trailing whitespaces
   return result;
 }
 
