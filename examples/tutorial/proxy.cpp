@@ -18,8 +18,16 @@
 
 int main(int argc, char * argv[])
 {
+  if(argc != 2)
+  {
+    std::cerr << "Error - Usage: " << argv[0] << " input-material-file.xml" << std::endl;
+    std::cerr << "Aborting .." << std::endl;
+    return -1;
+  }
+
+
   /** A string-path to a test material xml file **/
-  std::string filename("../../../examples/data/test.xml");
+  std::string filename(argv[1]);
 
   /** Import the file and create a material library object **/
   viennamaterials::library_handle matlib = viennamaterials::generator(filename);

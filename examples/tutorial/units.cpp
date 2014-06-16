@@ -17,8 +17,15 @@
 
 int main(int argc, char * argv[])
 {
+  if(argc != 2)
+  {
+    std::cerr << "Error - Usage: " << argv[0] << " input-units-file.xml" << std::endl;
+    std::cerr << "Aborting .." << std::endl;
+    return -1;
+  }
+
   /** Import the unit database file and create a unit object **/
-  viennamaterials::udunits   units_converter("../../../units/units.xml");
+  viennamaterials::udunits   units_converter(argv[1]);
 
   /** Prepare an input value and an unit **/
   double value = 1.0;

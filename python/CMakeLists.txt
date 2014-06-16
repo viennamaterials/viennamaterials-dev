@@ -3,5 +3,9 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 
 SET(CMAKE_SWIG_FLAGS "")
 SET_SOURCE_FILES_PROPERTIES(pyviennamaterials.i PROPERTIES CPLUSPLUS ON)
+#SET_SOURCE_FILES_PROPERTIES(pyviennamaterials.i PROPERTIES SWIG_FLAGS "-includeall")
 SWIG_ADD_MODULE(pyviennamaterials python pyviennamaterials.i)
 SWIG_LINK_LIBRARIES(pyviennamaterials ${VIENNAMATERIALS_LIBRARY})
+
+install(TARGETS _pyviennamaterials DESTINATION ${CMAKE_INSTALL_PREFIX}/python)
+install(FILES ${CMAKE_BINARY_DIR}/python/pyviennamaterials.py DESTINATION ${CMAKE_INSTALL_PREFIX}/python)

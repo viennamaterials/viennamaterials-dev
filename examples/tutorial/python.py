@@ -1,9 +1,13 @@
 import sys
-sys.path.insert(0, "../../build/python/")
 import pyviennamaterials
 
+if len(sys.argv) != 3:
+  print "Error - Usage:", sys.argv[0], " input-material-file.xml unit-database.xml"
+  print "Aborting .."
+  exit(-1)
 
-matfile = "../../examples/data/test.xml"
+matfile  = str(sys.argv[1])
+unitfile = str(sys.argv[2])
 
 pugi = pyviennamaterials.pugixml(matfile)
 print "pugi string query:  ", pugi.query("/material[id=\"Si\"]/parameter[id=\"bandgap\"]/value/text()")
@@ -20,6 +24,6 @@ print "proxy unit query: "   , proxy.query_unit("Si/bandgap")
 quan = proxy.query_quantity("Si/bandgap")
 print "proxy quantity query: ", quan
 
-units_converter = pyviennamaterials.udunits("../../units/units.xml")
+units_converter = pyviennamaterials.udunits(unitfile)
 units_converter.convert(quan, "J")
 print "converted quantity: ", quan

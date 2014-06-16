@@ -41,6 +41,9 @@ IF(SWIG_FOUND)
   FIND_PACKAGE(PythonLibs)
   INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_PATH})
   LINK_DIRECTORIES(${PYTHON_LIBRARY_DIR})
+  MESSAGE(STATUS "ViennaMaterials will be built with Python support!")
+ELSE(SWIG_FOUND)
+  MESSAGE(STATUS "ViennaMaterials will be built without Python support!")
 ENDIF(SWIG_FOUND)
 
 INCLUDE_DIRECTORIES(.)
@@ -55,14 +58,32 @@ INCLUDE_DIRECTORIES(.)
 #  ENDIF(LIBXML2_FOUND)
 #ENDIF(BUILD_DTD_CHECK_SUPPORT)
 
+
+# http://www.cmake.org/Wiki/CMake_RPATH_handling
+# use, i.e. don't skip the full RPATH for the build tree
+SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
+# when building, don't use the install RPATH already
+# (but later on when installing)
+SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+# add the automatically determined parts of the RPATH
+# which point to directories outside the build tree to the install RPATH
+SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+# the RPATH to be used when installing, but only if it's not a system directory
+LIST(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
+IF("${isSystemDir}" STREQUAL "-1")
+   SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+ENDIF("${isSystemDir}" STREQUAL "-1")
+
 # build the ViennaMaterials library
 SET(VIENNAMATERIALS_LIBRARY viennamaterials)
 FILE(GLOB_RECURSE LIBSOURCES src/*.cpp)
 ADD_LIBRARY(${VIENNAMATERIALS_LIBRARY} ${LIBSOURCES})
 TARGET_LINK_LIBRARIES(${VIENNAMATERIALS_LIBRARY} ${LIBRARIES})
 SET(LIBRARIES ${LIBRARIES} ${VIENNAMATERIALS_LIBRARY})
-
-INSTALL(TARGETS ${VIENNAMATERIALS_LIBRARY} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+INSTALL(TARGETS ${VIENNAMATERIALS_LIBRARY} DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+install(DIRECTORY viennamaterials/ DESTINATION ${CMAKE_INSTALL_PREFIX}/include/viennamaterials)
+INSTALL(DIRECTORY units/ DESTINATION ${CMAKE_INSTALL_PREFIX}/units)
 
 IF(BUILD_EXAMPLES)
   ADD_SUBDIRECTORY(examples)
