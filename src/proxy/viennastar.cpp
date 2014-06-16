@@ -28,6 +28,10 @@ viennastar_proxy::viennastar_proxy(viennamaterials::library_handle& matlib) :
 {
 }
 
+viennastar_proxy::~viennastar_proxy()
+{
+}
+
 std::string viennastar_proxy::query(std::string const& q)
 {
   std::string base_path;

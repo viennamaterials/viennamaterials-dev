@@ -31,14 +31,15 @@ private:
 
 public:
   viennastar_proxy(viennamaterials::library_handle& matlib);
+  ~viennastar_proxy();
 
   std::string query          (std::string const& q);
 
   std::string query_unit     (std::string const& q);
 
-  numeric     query_value    (std::string const& q);
+  viennamaterials::numeric     query_value    (std::string const& q);
 
-  quantity    query_quantity (std::string const& q);
+  viennamaterials::quantity    query_quantity (std::string const& q);
 
 private:
   void generate_base_path(std::string const& q, std::string & base_path);

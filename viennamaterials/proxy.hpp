@@ -36,8 +36,8 @@ public:
 
   virtual std::string query          (std::string const& q) = 0;
   virtual std::string query_unit     (std::string const& q) = 0;
-  virtual numeric     query_value    (std::string const& q) = 0;
-  virtual quantity    query_quantity (std::string const& q) = 0;
+  virtual viennamaterials::numeric     query_value    (std::string const& q) = 0;
+  virtual viennamaterials::quantity    query_quantity (std::string const& q) = 0;
 
 private:
   viennamaterials::library_handle& matlib_;

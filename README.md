@@ -38,8 +38,8 @@ or use the following additional, optional configuration parameters
 <pre>
 # build with debug symbols (default: off)
  -DCMAKE_BUILD_TYPE=DEBUG
-# build a shared ViennaMaterials library (default: off)
- -DBUILD_SHARED_LIBS=ON
+# build a shared ViennaMaterials library (default: on)
+ -DBUILD_SHARED_LIBS=OFF
 # don't build example applications (default: on)
  -DBUILD_EXAMPLES=OFF
 # don't build tests (default: on)
