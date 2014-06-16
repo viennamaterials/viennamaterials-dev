@@ -44,6 +44,8 @@ or use the following additional, optional configuration parameters
  -DBUILD_EXAMPLES=OFF
 # don't build tests (default: on)
  -DBUILD_TESTS=OFF
+# build Python library (default: off)
+ -DBUILD_PYLIB=ON
 </pre>
 
 Now build the library (and potentially the examples and tests)
