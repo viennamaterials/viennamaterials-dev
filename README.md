@@ -5,6 +5,7 @@ This is the developer repository of ViennaMaterials, being a C++-based
 library for providing material parameters to scientific simulation tools via a
 convenient API. The default database kernel is based on the pugixml library,
 providing XML and XPATH support, which is used by ViennaMaterials' API.
+A Python interface is provided via the SWIG library.
 ViennaMaterials is currently in a prototype state.
 
 
@@ -45,8 +46,8 @@ or use the following additional, optional configuration parameters
 <pre>
 # configure the installation path (default: /usr/local/)
  -DCMAKE_INSTALL_PREFIX=/path/to/install/folder/
-# build with debug symbols (default: off)
- -DCMAKE_BUILD_TYPE=DEBUG
+# build with debug symbols (default: Release)
+ -DCMAKE_BUILD_TYPE=Debug
 # build a shared ViennaMaterials library (default: off)
  -DBUILD_SHARED_LIBS=ON
 # don't build example applications (default: on)
@@ -57,9 +58,9 @@ or use the following additional, optional configuration parameters
  -DBUILD_PYLIB=ON
 </pre>
 
-For instance, here is a configuration for building only the Python module in release mode:
+For instance, here is a configuration for building the default setup plus the Python module:
 <pre>
-cmake -DBUILD_PYLIB=ON -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_TESTS=OFF  ..
+cmake -DBUILD_PYLIB=ON  ..
 </pre>
 
 Watch for errors during CMake's configuration phase, particularly whether CMake was able to locate SWIG or UDUNITS.
