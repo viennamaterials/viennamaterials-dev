@@ -15,5 +15,9 @@ INSTALL(TARGETS units DESTINATION ${CMAKE_INSTALL_PREFIX}/examples)
 ENDIF(UDUNITS_FOUND)
 
 IF(SWIG_FOUND)
+# copy the python example to the build directory, so it is available
+# as the other C++ examples in the same examples/tutorial/directory
+FILE(COPY python.py DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+
 INSTALL(FILES python.py DESTINATION ${CMAKE_INSTALL_PREFIX}/examples)
 ENDIF(SWIG_FOUND)

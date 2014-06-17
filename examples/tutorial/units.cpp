@@ -20,6 +20,7 @@ int main(int argc, char * argv[])
   if(argc != 2)
   {
     std::cerr << "Error - Usage: " << argv[0] << " input-units-file.xml" << std::endl;
+    std::cerr << "Example:       " << argv[0] << " ../units/units.xml" << std::endl;
     std::cerr << "Aborting .." << std::endl;
     return -1;
   }
