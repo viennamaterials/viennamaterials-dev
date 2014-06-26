@@ -19,7 +19,7 @@
 int main(int argc, char * argv[])
 {
   /** A string-path to a test material xml file **/
-  std::string filename("../../examples/data/test.xml");
+  std::string filename("../../examples/data/material_test.xml");
 
   /** Import the file and create a material library object **/
   viennamaterials::library_handle matlib = viennamaterials::generator(filename);
