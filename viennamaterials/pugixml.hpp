@@ -62,7 +62,10 @@ public:
   viennamaterials::numeric  query_value  (std::string const& native_query);
   
   /** @brief Perform a native query of type number */
-  virtual double            query_xpath_number(std::string const& native_query);
+  double                    query_xpath_number(std::string const& native_query);
+
+  /** @brief Perform a native query of type string */
+  std::string               query_xpath_string(std::string const& native_query);
 
 private:
   void                      init();

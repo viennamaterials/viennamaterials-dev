@@ -62,6 +62,9 @@ public:
   /** @brief Perform a native query of type number */
   virtual double                    query_xpath_number(std::string const& native_query)           = 0;
 
+  /** @brief Perform a native query of type string */
+  virtual std::string               query_xpath_string(std::string const& native_query)           = 0;
+
 };
 
 
