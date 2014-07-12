@@ -5,9 +5,11 @@
     <id>parameter1</id>
     <value>1.0</value>
     <unit>W</unit>
+    <function a='apples' b='bananas' r='raspberries'>fruit_salat(a,b,r)</function>
   </parameter>
   <parameter>
     <id>parameter2</id>
+    <function x='foo' y='bar'>f(x,y)</function>
   </parameter>
 </material>
 
