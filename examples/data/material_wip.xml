@@ -1,0 +1,228 @@
+<material>
+  <id>test-material</id>
+  
+  <parameter>
+    <id>parameter1</id>
+    <value>1.0</value>
+    <unit>W</unit>
+  </parameter>
+  <parameter>
+    <id>parameter2</id>
+  </parameter>
+</material>
+
+
+<material>
+  <id>Si</id>
+  <name>Silicon</name>
+  <category>semiconductor</category>
+  <category>indirect</category>
+
+  <!--General material parameters-->
+  <parameter>
+    <id>bandgap</id>
+    <value>1.107</value>
+    <unit>eV</unit>
+  </parameter>
+  <parameter>
+    <id>intrinsic_carrier_concentration</id>
+    <value>1.0E16</value>
+    <unit>1/m3</unit>
+  </parameter>
+  <parameter>
+    <id>relative_permittivity</id>
+    <value>11.8</value>
+    <unit></unit>
+  </parameter>
+
+  <!--Model-specific parameters-->
+  <model>
+    <id>DriftDiffusion</id>
+    <!--General model parameters-->
+    <parameter>
+      <id>some_dd_parameter</id>
+      <value>some_value</value>
+      <unit>some_unit</unit>
+    </parameter>
+    <model>
+      <!--Embedded model-specific parameters-->
+      <id>SRH</id>
+      <category>recombination</category>
+      <parameter>
+        <id>para_srh</id>
+        <value>4.0</value>
+        <unit>cm</unit>
+      </parameter>
+    </model>
+    <model>
+      <id>Lattice</id>
+      <category>scattering</category>
+      <parameter>
+        <id>some_srh_parameter</id>
+        <value>some_value</value>
+        <unit>some_unit</unit>
+      </parameter>
+    </model>
+    <model>
+      <id>IoniziedImpurities</id>
+      <category>scattering</category>
+      <parameter>
+        <id>some_srh_parameter</id>
+        <value>some_value</value>
+        <unit>some_unit</unit>
+      </parameter>
+    </model>
+  </model>
+  <model>
+    <id>HydroDynamic</id>
+  </model>
+  <model>
+    <id>SphericalHarmonics</id>
+  </model>
+</material>
+<material>
+  <id>Ge</id>
+  <name>Germanium</name>
+  <category>semiconductor</category>
+  <category>indirect</category>
+  <parameters>
+    <parameter>
+      <id>bandgap</id>
+      <value>0.67</value>
+      <unit>eV</unit>
+    </parameter>
+    <parameter>
+      <id>intrinsic_carrier_concentration</id>
+      <value>2.4E13</value>
+      <unit>1/cm3</unit>
+    </parameter>
+    <parameter>
+      <id>relative_permittivity</id>
+      <value>16</value>
+      <unit></unit>
+    </parameter>
+    <parameter>
+      <id>mu_n_0</id>
+      <value>0.3800</value>
+      <unit>cm^2/V*s</unit>
+    </parameter>
+    <parameter>
+      <id>mu_p_0</id>
+      <value>0.1800</value>
+      <unit>cm^2/V*s</unit>
+    </parameter>
+    <parameter>
+      <id>alpha_n</id>
+      <value>1.66</value>
+      <unit>1</unit>
+    </parameter>
+    <parameter>
+      <id>alpha_p</id>
+      <value>2.33</value>
+      <unit>1</unit>
+    </parameter>
+  </parameters>
+<!--    <source>http://www.matweb.com/search/DataSheet.aspx?MatGUID=a03ca6b2d6ae431aa5a7e71a129f9a4a</source>-->
+</material>
+<material>
+  <id>GaAs</id>
+  <name>GalliumArsenide</name>
+  <category>semiconductor</category>
+  <category>direct</category>
+  <category>compound</category>
+  <parameters>
+    <parameter>
+      <id>bandgap</id>
+      <value>1.35</value>
+      <unit>eV</unit>
+    </parameter>
+    <parameter>
+      <id>intrinsic_carrier_concentration</id>
+      <value>1.79E6</value>
+      <unit>1/cm3</unit>
+    </parameter>
+    <parameter>
+      <id>relative_permittivity</id>
+      <value>13.2</value>
+      <unit></unit>
+    </parameter>
+    <parameter>
+      <id>mu_n_0</id>
+      <value>0.8500</value>
+      <unit>cm^2/V*s</unit>
+    </parameter>
+    <parameter>
+      <id>mu_p_0</id>
+      <value>0.0400</value>
+      <unit>cm^2/V*s</unit>
+    </parameter>
+    <parameter>
+      <id>alpha_n</id>
+      <value>1</value>
+      <unit>1</unit>
+    </parameter>
+    <parameter>
+      <id>alpha_p</id>
+      <value>2.1</value>
+      <unit>1</unit>
+    </parameter>
+  </parameters>
+<!--    <source>http://www.matweb.com/search/DataSheet.aspx?MatGUID=029a4ff04bdc46d5906b29e0a36dba36&ckck=1</source>-->
+</material>
+<material>
+  <id>SiO2</id>
+  <name>SiliconDioxide</name>
+  <category>oxide</category>
+  <parameters>
+    <parameter>
+      <id>relative_permittivity</id>
+      <value>3.9</value>
+      <unit></unit>
+    </parameter>
+  </parameters>
+<!--    <source>http://www.matweb.com/search/DataSheet.aspx?MatGUID=d5c906beded84f18a394afec8735c2a4</source>-->
+</material>
+<material>
+  <id>InP</id>
+  <name>IndiumPhosphide</name>
+  <category>oxide</category>
+  <parameters>
+    <parameter>
+      <id>relative_permittivity</id>
+      <value>12.4</value>
+      <unit></unit>
+    </parameter>
+  </parameters>
+</material>
+<material>
+  <id>HfO2</id>
+  <name>HafniumDioxide</name>
+  <category>oxide</category>
+  <parameters>
+    <parameter>
+      <id>relative_permittivity</id>
+      <value>15.6</value>
+      <unit></unit>
+    </parameter>
+  </parameters>
+</material>
+<material>
+  <id>Air</id>
+  <name>air</name>
+  <category>air</category>
+  <parameters>
+    <parameter>
+      <id>relative_permittivity</id>
+      <value>1.0</value>
+      <unit></unit>
+    </parameter>
+  </parameters>
+</material>
+<material>
+  <id>Cu</id>
+  <name>Copper</name>
+  <category>metal</category>
+  <parameters>
+  </parameters>
+<!--    <source>http://www.matweb.com/search/DataSheet.aspx?MatGUID=9aebe83845c04c1db5126fada6f76f7e</source>-->
+</material>
