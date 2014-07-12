@@ -137,5 +137,10 @@ viennamaterials::numeric pugixml::query_value(std::string const& native_query)
   return viennamaterials::convert<viennamaterials::numeric>(this->query(native_query));
 }
 
+double pugixml::query_xpath_number(std::string const& native_query)
+{
+  pugi::xpath_query query(native_query.c_str());
+  return query.evaluate_number(xml_);
+}
 
 } // viennamaterials

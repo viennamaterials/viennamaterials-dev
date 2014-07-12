@@ -60,6 +60,9 @@ public:
 
   /** @brief Access the numeric value pointed to by the native query path */
   viennamaterials::numeric  query_value  (std::string const& native_query);
+  
+  /** @brief Perform a native query of type number */
+  virtual double            query_xpath_number(std::string const& native_query);
 
 private:
   void                      init();
