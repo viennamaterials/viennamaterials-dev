@@ -51,7 +51,7 @@ public:
   virtual void                                deinit() = 0;
   virtual FunctionArgumentBase                evaluate(std::vector<FunctionArgumentBase> args) = 0;
 
-protected:
+//protected:
   /* TODO xpath wrapper
    *
    * function specific wrappers
