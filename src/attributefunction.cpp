@@ -48,3 +48,19 @@ long viennamaterials::IAttributeFunction::query_number_of_arguments(viennamateri
   return lib->query_xpath_number(query);
 }
 
+viennamaterials::xml_attribute_entity viennamaterials::IAttributeFunction::query_return_type(viennamaterials::library_handle& lib, std::string& xpath_query_to_function)
+{
+  //FIXME: return (entity + type)
+
+  std::string query = "name(" + xpath_query_to_function + "/return/*)";
+  std::string type_string = lib->query_xpath_string(query);
+  if(type_string.compare("scalar") == 0)
+    return scalar;
+  else if(type_string.compare("tensor") == 0)
+    return tensor;
+  else if(type_string.compare("function") == 0)
+    return function;
+
+  return scalar; //TODO error handling? (exception or 'invalid type')
+}
+

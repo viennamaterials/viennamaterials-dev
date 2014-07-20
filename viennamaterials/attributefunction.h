@@ -20,11 +20,18 @@
 namespace viennamaterials
 {
 
-enum xml_data_types
+enum xml_data_types //TODO: move into XML layout header
 {
   boolean,
   integer,
   floating_point
+};
+
+enum xml_attribute_entity //TODO: move into XML layout header
+{
+  scalar,
+  tensor,
+  function
 };
 
 enum xml_code_lang
@@ -55,21 +62,21 @@ public:
   /* TODO xpath wrapper
    *
    * function specific wrappers
-   * xml_data_types query_return_type(xpath to function)
    *
    * FunctionArgumentBase query_arguments(xpath to function)
    */
 
   //FIXME: should be implemented in class pugixml
 
-  long          query_number_of_attributes(viennamaterials::library_handle& lib, std::string& xpath_query);
-  std::string   query_attribute_name(viennamaterials::library_handle& lib, std::string& xpath_query, long position);
-  std::string   query_attribute(viennamaterials::library_handle& lib, std::string& xpath_query, long position);
-  std::string   query_attribute(viennamaterials::library_handle& lib, std::string& xpath_query, std::string attribute_name);
+  long                  query_number_of_attributes(viennamaterials::library_handle& lib, std::string& xpath_query);
+  std::string           query_attribute_name(viennamaterials::library_handle& lib, std::string& xpath_query, long position);
+  std::string           query_attribute(viennamaterials::library_handle& lib, std::string& xpath_query, long position);
+  std::string           query_attribute(viennamaterials::library_handle& lib, std::string& xpath_query, std::string attribute_name);
 
   //function specific xml wrappers
 
-  long          query_number_of_arguments(viennamaterials::library_handle& lib, std::string& xpath_query_to_function);
+  long                  query_number_of_arguments(viennamaterials::library_handle& lib, std::string& xpath_query_to_function);
+  xml_attribute_entity  query_return_type(viennamaterials::library_handle& lib, std::string& xpath_query_to_function);
 
 };
 
