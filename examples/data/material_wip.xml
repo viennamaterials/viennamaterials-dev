@@ -12,11 +12,22 @@
     <attribute>
       <id>parameter2</id>
       <function>
-        <code lang='python'>
-          def test_func():
+        <code lang='python' call='func'>
+          def func(x,y):
             var = 3*4
-            return var
+            print var
+            return x*y
         </code>
+        <arg>
+          <id>x</id>
+          <quantity>x-value</quantity>
+          <scalar type='float'>2.0</scalar>
+        </arg>
+        <arg>
+          <id>y</id>
+          <quantity>y-value</quantity>
+          <scalar type='float'>1.0</scalar>
+        </arg>
         <return>
           <scalar type='int'/>
         </return>
