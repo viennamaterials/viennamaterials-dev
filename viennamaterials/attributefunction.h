@@ -62,7 +62,7 @@ protected:
 
   //FIXME: should be implemented in class pugixml
 
-  long qeuery_number_of_attributes(viennamaterials::library_handle& lib, std::string& xpath_query);
+  long query_number_of_attributes(viennamaterials::library_handle& lib, std::string& xpath_query);
   std::string query_attribute_name(viennamaterials::library_handle& lib, std::string& xpath_query, long position);
   std::string query_attribute(viennamaterials::library_handle& lib, std::string& xpath_query, long position);
   std::string query_attribute(viennamaterials::library_handle& lib, std::string& xpath_query, std::string attribute_name);

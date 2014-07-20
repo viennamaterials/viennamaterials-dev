@@ -12,7 +12,7 @@
 
 #include "viennamaterials/attributefunction.h"
 
-long viennamaterials::IAttributeFunction::qeuery_number_of_attributes(viennamaterials::library_handle& lib, std::string& xpath_query)
+long viennamaterials::IAttributeFunction::query_number_of_attributes(viennamaterials::library_handle& lib, std::string& xpath_query)
 {
   std::string query = "count(" + xpath_query + "/@*)";
   return lib->query_xpath_number(query);
