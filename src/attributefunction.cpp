@@ -41,3 +41,10 @@ std::string viennamaterials::IAttributeFunction::query_attribute(viennamaterials
   std::string query = "string(" + xpath_query + "/@" + attribute_name + ")";
   return lib->query_xpath_string(query);
 }
+
+long viennamaterials::IAttributeFunction::query_number_of_arguments(viennamaterials::library_handle& lib, std::string& xpath_query_to_function)
+{
+  std::string query = "count(" + xpath_query_to_function + "/arg)";
+  return lib->query_xpath_number(query);
+}
+

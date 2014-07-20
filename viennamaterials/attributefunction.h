@@ -57,7 +57,6 @@ protected:
    * function specific wrappers
    * xml_data_types query_return_type(xpath to function)
    *
-   * long query_number_of_arguments(xpath to function)
    * FunctionArgumentBase query_arguments(xpath to function)
    */
 
@@ -67,6 +66,10 @@ protected:
   std::string query_attribute_name(viennamaterials::library_handle& lib, std::string& xpath_query, long position);
   std::string query_attribute(viennamaterials::library_handle& lib, std::string& xpath_query, long position);
   std::string query_attribute(viennamaterials::library_handle& lib, std::string& xpath_query, std::string attribute_name);
+
+  //function specific xml wrappers
+
+  long query_number_of_arguments(viennamaterials::library_handle& lib, std::string& xpath_query_to_function);
 
 };
 
