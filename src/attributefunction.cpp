@@ -12,13 +12,16 @@
 
 #include "viennamaterials/attributefunction.h"
 
-long viennamaterials::IAttributeFunction::query_number_of_attributes(viennamaterials::library_handle& lib, std::string& xpath_query)
+namespace viennamaterials
+{
+
+long IAttributeFunction::query_number_of_attributes(library_handle& lib, std::string& xpath_query)
 {
   std::string query = "count(" + xpath_query + "/@*)";
   return lib->query_xpath_number(query);
 }
 
-std::string viennamaterials::IAttributeFunction::query_attribute_name(viennamaterials::library_handle& lib, std::string& xpath_query, long position)
+std::string IAttributeFunction::query_attribute_name(library_handle& lib, std::string& xpath_query, long position)
 {
   //TODO: check validity position?
   std::ostringstream position_string;
@@ -27,7 +30,7 @@ std::string viennamaterials::IAttributeFunction::query_attribute_name(viennamate
   return lib->query_xpath_string(query);
 }
 
-std::string viennamaterials::IAttributeFunction::query_attribute(viennamaterials::library_handle& lib, std::string& xpath_query, long position)
+std::string IAttributeFunction::query_attribute(library_handle& lib, std::string& xpath_query, long position)
 {
   //TODO: check validity position?
   std::ostringstream position_string;
@@ -36,19 +39,19 @@ std::string viennamaterials::IAttributeFunction::query_attribute(viennamaterials
   return lib->query_xpath_string(query);
 }
 
-std::string viennamaterials::IAttributeFunction::query_attribute(viennamaterials::library_handle& lib, std::string& xpath_query, std::string attribute_name)
+std::string IAttributeFunction::query_attribute(library_handle& lib, std::string& xpath_query, std::string attribute_name)
 {
   std::string query = "string(" + xpath_query + "/@" + attribute_name + ")";
   return lib->query_xpath_string(query);
 }
 
-long viennamaterials::IAttributeFunction::query_number_of_arguments(viennamaterials::library_handle& lib, std::string& xpath_query_to_function)
+long IAttributeFunction::query_number_of_arguments(library_handle& lib, std::string& xpath_query_to_function)
 {
   std::string query = "count(" + xpath_query_to_function + "/arg)";
   return lib->query_xpath_number(query);
 }
 
-viennamaterials::xml_attribute_entity viennamaterials::IAttributeFunction::query_return_type(viennamaterials::library_handle& lib, std::string& xpath_query_to_function)
+xml_attribute_entity IAttributeFunction::query_return_type(library_handle& lib, std::string& xpath_query_to_function)
 {
   //FIXME: return (entity + type)
 
@@ -64,3 +67,4 @@ viennamaterials::xml_attribute_entity viennamaterials::IAttributeFunction::query
   return scalar; //TODO error handling? (exception or 'invalid type')
 }
 
+} /* namespace viennamaterials */
