@@ -27,13 +27,13 @@ namespace viennamaterials
 //  floating_point
 //};
 
-enum xml_types //TODO: move into XML layout header
+typedef enum xml_types //TODO: move into XML layout header
 {
   scalar_bool,
   scalar_int,
   scalar_float,
   tensor
-};
+} XmlType;
 
 //enum xml_attribute_entity //TODO: move into XML layout header
 //{
@@ -54,7 +54,7 @@ class FunctionArgument : public FunctionArgumentBase //TODO: not ready for tenso
 {
 public:
   std::string     quantity;
-  xml_types       type;
+  XmlType         type;
   T               value;
 };
 
@@ -84,7 +84,7 @@ public:
   //function specific xml wrappers
 
   long                  query_number_of_arguments(viennamaterials::library_handle& lib, std::string& xpath_query_to_function);
-  xml_types             query_return_type(viennamaterials::library_handle& lib, std::string& xpath_query_to_function);
+  XmlType               query_return_type(viennamaterials::library_handle& lib, std::string& xpath_query_to_function);
 
 };
 

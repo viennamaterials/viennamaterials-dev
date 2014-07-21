@@ -51,7 +51,7 @@ long IAttributeFunction::query_number_of_arguments(library_handle& lib, std::str
   return lib->query_xpath_number(query);
 }
 
-xml_types IAttributeFunction::query_return_type(library_handle& lib, std::string& xpath_query_to_function)
+XmlType IAttributeFunction::query_return_type(library_handle& lib, std::string& xpath_query_to_function)
 {
   std::string query = "name(" + xpath_query_to_function + "/return/*)";
   std::string entity_string = lib->query_xpath_string(query);
