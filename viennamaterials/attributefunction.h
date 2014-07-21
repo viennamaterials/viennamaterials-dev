@@ -20,19 +20,27 @@
 namespace viennamaterials
 {
 
-enum xml_data_types //TODO: move into XML layout header
+//enum xml_data_types //TODO: move into XML layout header
+//{
+//  boolean,
+//  integer,
+//  floating_point
+//};
+
+enum xml_types //TODO: move into XML layout header
 {
-  boolean,
-  integer,
-  floating_point
+  scalar_bool,
+  scalar_int,
+  scalar_float,
+  tensor
 };
 
-enum xml_attribute_entity //TODO: move into XML layout header
-{
-  scalar,
-  tensor,
-  function
-};
+//enum xml_attribute_entity //TODO: move into XML layout header
+//{
+//  scalar,
+//  tensor,
+//  function
+//};
 
 enum xml_code_lang
 {
@@ -42,11 +50,11 @@ enum xml_code_lang
 class FunctionArgumentBase {};
 
 template <typename T>
-class FunctionArgument : public FunctionArgumentBase
+class FunctionArgument : public FunctionArgumentBase //TODO: not ready for tensor
 {
 public:
   std::string     quantity;
-  xml_data_types  type;
+  xml_types       type;
   T               value;
 };
 
@@ -76,7 +84,7 @@ public:
   //function specific xml wrappers
 
   long                  query_number_of_arguments(viennamaterials::library_handle& lib, std::string& xpath_query_to_function);
-  xml_attribute_entity  query_return_type(viennamaterials::library_handle& lib, std::string& xpath_query_to_function);
+  xml_types             query_return_type(viennamaterials::library_handle& lib, std::string& xpath_query_to_function);
 
 };
 

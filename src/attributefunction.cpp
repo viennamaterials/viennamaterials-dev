@@ -51,20 +51,27 @@ long IAttributeFunction::query_number_of_arguments(library_handle& lib, std::str
   return lib->query_xpath_number(query);
 }
 
-xml_attribute_entity IAttributeFunction::query_return_type(library_handle& lib, std::string& xpath_query_to_function)
+xml_types IAttributeFunction::query_return_type(library_handle& lib, std::string& xpath_query_to_function)
 {
-  //FIXME: return (entity + type)
-
   std::string query = "name(" + xpath_query_to_function + "/return/*)";
-  std::string type_string = lib->query_xpath_string(query);
-  if(type_string.compare("scalar") == 0)
-    return scalar;
-  else if(type_string.compare("tensor") == 0)
+  std::string entity_string = lib->query_xpath_string(query);
+  if(entity_string.compare("scalar") == 0)
+  {
+    query = "string(" + xpath_query_to_function + "/return/scalar/@type)";
+    std::string type_string = lib->query_xpath_string(query);
+    if(type_string.compare("bool") == 0)
+      return scalar_bool;
+    else if(type_string.compare("int") == 0)
+      return scalar_int;
+    else if(type_string.compare("float") == 0)
+      return scalar_float;
+  }
+  else if(entity_string.compare("tensor") == 0)
     return tensor;
-  else if(type_string.compare("function") == 0)
-    return function;
+  else if(entity_string.compare("function") == 0)
+    return tensor; //FIXME
 
-  return scalar; //TODO error handling? (exception or 'invalid type')
+  return scalar_bool; //TODO error handling? (exception or 'invalid type')
 }
 
 } /* namespace viennamaterials */
