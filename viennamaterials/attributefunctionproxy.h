@@ -22,9 +22,6 @@ namespace viennamaterials
 class attribute_function_proxy
 {
 public:
-  attribute_function_proxy();
-  virtual ~attribute_function_proxy();
-
   std::vector<FunctionArgumentBase>   init(viennamaterials::library_handle& lib, std::string& xpath_query, xml_code_lang lang);
   void                                deinit();
   FunctionArgumentBase                evaluate(std::vector<FunctionArgumentBase> args);
