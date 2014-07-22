@@ -6,6 +6,9 @@ TARGET_LINK_LIBRARIES(native ${LIBRARIES})
 ADD_EXECUTABLE(proxy proxy.cpp)
 TARGET_LINK_LIBRARIES(proxy ${LIBRARIES})
 
+ADD_EXECUTABLE(functionbackend-demo functionbackend-demo.cpp)
+TARGET_LINK_LIBRARIES(functionbackend-demo ${LIBRARIES})
+
 INSTALL(TARGETS native proxy DESTINATION ${CMAKE_INSTALL_PREFIX}/examples)
 
 IF(UDUNITS_FOUND)
