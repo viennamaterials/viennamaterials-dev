@@ -14,6 +14,7 @@
 #define ATTRIBUTEFUNCTIONPYTHON_H_
 
 #include "viennamaterials/attributefunction.h"
+#include <Python.h>
 
 namespace viennamaterials
 {
@@ -23,6 +24,13 @@ class attribute_function_python : public IAttributeFunction
   std::vector<FunctionArgumentBase>   init(viennamaterials::library_handle& lib, std::string& xpath_query);
   void                                deinit();
   FunctionArgumentBase                evaluate(std::vector<FunctionArgumentBase> args);
+
+private:
+  long number_of_arguments;
+  PyObject *pFunc; //pointer to function in python module object
+  PyObject *pGlobal;
+  PyObject *pLocal;
+  PyObject *pNewMod;
 };
 
 } /* namespace viennamaterials */
