@@ -27,6 +27,11 @@ namespace viennamaterials
 //  floating_point
 //};
 
+//TODO: move into XML layout header
+typedef bool xml_bool;
+typedef long xml_int;
+typedef numeric xml_float;
+
 typedef enum xml_types //TODO: move into XML layout header
 {
   scalar_bool,
@@ -84,7 +89,11 @@ public:
   //function specific xml wrappers
 
   long                  query_number_of_arguments(viennamaterials::library_handle& lib, std::string& xpath_query_to_function);
+  std::vector<FunctionArgumentBase>  query_argument(viennamaterials::library_handle& lib, std::string& xpath_query_to_function, long xml_index);
+  std::vector<FunctionArgument<xml_float> >  query_argument_testing(viennamaterials::library_handle& lib, std::string& xpath_query_to_function, long xml_index);
   XmlType               query_return_type(viennamaterials::library_handle& lib, std::string& xpath_query_to_function);
+  std::vector<FunctionArgumentBase>  query_arguments(viennamaterials::library_handle& lib, std::string& xpath_query_to_function);
+  std::vector<FunctionArgument<xml_float> >  query_arguments_testing(viennamaterials::library_handle& lib, std::string& xpath_query_to_function);
 
 };
 
