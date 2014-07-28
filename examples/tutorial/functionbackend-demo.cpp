@@ -14,7 +14,6 @@
 //
 #include "viennamaterials/platform.hpp"
 
-#include "python_backend.h"
 #include "viennamaterials/attributefunctionproxy.h"
 
 int main(int argc, char * argv[])
