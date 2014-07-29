@@ -13,7 +13,8 @@
 #ifndef ATTRIBUTEENTITYFUNCTION_HPP_
 #define ATTRIBUTEENTITYFUNCTION_HPP_
 
-#include "attributeentity.hpp"
+#include "viennamaterials/attributeentity.hpp"
+#include "viennamaterials/functionbackend.hpp"
 
 namespace viennamaterials
 {
@@ -22,11 +23,14 @@ class attribute_entity_function: public attribute_entity
 {
 public:
   attribute_entity_function();
-  attribute_entity_function(xml_attribute_type entity_type);
+  attribute_entity_function(xml_attribute_type entity_type, function_backend *backend);
 
   xml_bool  eval(tag_scalar_bool tag);
   xml_int   eval(tag_scalar_int tag);
   xml_float eval(tag_scalar_float tag);
+
+private:
+  function_backend *backend;
 };
 
 } /* namespace viennamaterials */

@@ -21,9 +21,10 @@ attribute_entity_function::attribute_entity_function()
   entity_type = invalid;
 }
 
-attribute_entity_function::attribute_entity_function(xml_attribute_type entity_type)
+attribute_entity_function::attribute_entity_function(xml_attribute_type entity_type, function_backend *backend)
 {
   this->entity_type = entity_type;
+  this->backend = backend;
 }
 
 xml_bool attribute_entity_function::eval(tag_scalar_bool tag)
@@ -31,7 +32,7 @@ xml_bool attribute_entity_function::eval(tag_scalar_bool tag)
   if(entity_type != function_bool)
     throw func_backend_attr_type_error();
 
-  return true; //FIXME
+  return backend->eval(tag); //FIXME
 }
 
 xml_int attribute_entity_function::eval(tag_scalar_int tag)
@@ -39,7 +40,7 @@ xml_int attribute_entity_function::eval(tag_scalar_int tag)
   if(entity_type != function_int)
     throw func_backend_attr_type_error();
 
-  return 0; //FIXME
+  return backend->eval(tag); //FIXME
 }
 
 xml_float attribute_entity_function::eval(tag_scalar_float tag)
@@ -47,7 +48,7 @@ xml_float attribute_entity_function::eval(tag_scalar_float tag)
   if(entity_type != function_float)
     throw func_backend_attr_type_error();
 
-  return 0.0; //FIXME
+  return backend->eval(tag); //FIXME
 }
 
 } /* namespace viennamaterials */
