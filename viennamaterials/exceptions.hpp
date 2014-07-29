@@ -86,6 +86,21 @@ namespace viennamaterials
     std::string info;
   };
 
+  struct func_backend_attr_type_error: public std::exception
+  {
+    virtual const char* what() const throw()
+    {
+      return std::string("Wrong attribute type tag given").c_str();
+    }
+  };
+
+  struct func_backend_attr_value_type_error: public std::exception
+  {
+    virtual const char* what() const throw()
+    {
+      return std::string("Wrong attribute value type tag given").c_str();
+    }
+  };
 
 
 } // viennamaterials
