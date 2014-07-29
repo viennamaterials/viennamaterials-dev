@@ -15,6 +15,20 @@
 namespace viennamaterials
 {
 
+bool viennamaterials::attribute_entity::is_type(tag_scalar_bool tag)
+{
+  if(entity_type == scalar_bool)
+    return true;
+  return false;
+}
+
+bool viennamaterials::attribute_entity::is_type(xml_attribute_type type)
+{
+  if(entity_type == type)
+    return true;
+  return false;
+}
+
 bool viennamaterials::attribute_entity::is_scalar()
 {
   if(     entity_type == scalar_bool

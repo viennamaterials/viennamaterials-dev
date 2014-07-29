@@ -25,6 +25,8 @@ public:
 
   bool is_type(tag_scalar_bool tag);
   //TODO etc
+  bool is_type(xml_attribute_type type);
+
   bool is_scalar();
   bool is_scalar(tag_scalar_bool tag);
   bool is_scalar(tag_scalar_int tag);
