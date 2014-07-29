@@ -75,28 +75,30 @@ int main(int argc, char * argv[])
   std::cout << "value: " << value_ptr->get_value(tag) << std::endl;
 
 
+  std::cout << "python backend demo:" << std::endl;
   std::string code = "def func(x,y): \n print x*y \n return 2.0";
   std::string func_name = "func";
   viennamaterials::function_backend *demo = new viennamaterials::function_backend_python;
   demo->init(code, func_name);
-  demo->evaluate();
-  delete demo;
+  demo->eval(tag);
 
 
+  std::cout << "attribute entity demo:" << std::endl;
+  viennamaterials::attribute_entity* attr_ptr = new viennamaterials::attribute_entity_function(viennamaterials::function_int, demo);
+  std::cout << "result: " << attr_ptr->eval(tag) << std::endl;
 
-  viennamaterials::attribute_entity* attr_ptr = new viennamaterials::attribute_entity_function(viennamaterials::function_int);
   if(attr_ptr->is_function_int()) /// using method name
-    std::cout << "result: " << attr_ptr->eval(tag) << std::endl;
+    std::cout << "is_function_int" << std::endl;
 
   viennamaterials::tag_function_int func_tag;
   if(attr_ptr->is_function(func_tag))  /// using tag dispatching
-    std::cout << "result: " << attr_ptr->eval(tag) << std::endl;
+    std::cout << "is_function" << std::endl;
 
   if(attr_ptr->is_type(viennamaterials::function_int))  /// using enum argument
-      std::cout << "result: " << attr_ptr->eval(tag) << std::endl;
+    std::cout << "is_type" << std::endl;
 
 
-
+  delete demo;
   std::cout << "end of program" << std::endl;
   return EXIT_SUCCESS;
 }
