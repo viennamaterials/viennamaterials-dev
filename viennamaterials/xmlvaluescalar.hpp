@@ -10,8 +10,8 @@
    license:    see file LICENSE in the base directory
 ============================================================================= */
 
-#ifndef XMLVALUESCALARINTEGER_H_
-#define XMLVALUESCALARINTEGER_H_
+#ifndef XMLVALUESCALARINTEGER_HPP_
+#define XMLVALUESCALARINTEGER_HPP_
 
 #include "xmlvalueentity.hpp"
 
@@ -45,4 +45,4 @@ private:
 };
 
 } /* namespace viennamaterials */
-#endif /* XMLVALUESCALARINTEGER_H_ */
+#endif /* XMLVALUESCALARINTEGER_HPP_ */

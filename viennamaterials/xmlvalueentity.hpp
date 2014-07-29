@@ -10,8 +10,8 @@
    license:    see file LICENSE in the base directory
 ============================================================================= */
 
-#ifndef XMLVALUEENTITY_H_
-#define XMLVALUEENTITY_H_
+#ifndef XMLVALUEENTITY_HPP_
+#define XMLVALUEENTITY_HPP_
 
 #include <string>
 #include "viennamaterials/platform.hpp"
@@ -60,4 +60,4 @@ private:
 };
 
 } /* namespace viennamaterials */
-#endif /* XMLVALUEENTITY_H_ */
+#endif /* XMLVALUEENTITY_HPP_ */

@@ -10,8 +10,8 @@
    license:    see file LICENSE in the base directory
 ============================================================================= */
 
-#ifndef FUNCTIONBACKENDPYTHON_H_
-#define FUNCTIONBACKENDPYTHON_H_
+#ifndef FUNCTIONBACKENDPYTHON_HPP_
+#define FUNCTIONBACKENDPYTHON_HPP_
 
 #include "viennamaterials/functionbackend.hpp"
 #include <Python.h>
@@ -34,4 +34,4 @@ private:
 };
 
 } /* namespace viennamaterials */
-#endif /* FUNCTIONBACKENDPYTHON_H_ */
+#endif /* FUNCTIONBACKENDPYTHON_HPP_ */
