@@ -11,30 +11,39 @@
 ============================================================================= */
 
 #include "../viennamaterials/xmlvaluescalar.hpp"
+#include "../viennamaterials/exceptions.hpp"
 
 namespace viennamaterials
 {
 
-void* xml_value_scalar_integer::get_value_ptr()
+void viennamaterials::xml_value_scalar_integer::set_value(tag_scalar_bool tag, xml_bool value)
 {
-  return new xml_int(value); //note: must be destructed by caller
+  throw func_backend_attr_value_type_error();
 }
 
-void xml_value_scalar_integer::set_value(void* value)
+void viennamaterials::xml_value_scalar_integer::set_value(tag_scalar_int tag, xml_int value)
 {
-  this->value = *(xml_int*)value;
+  this->value = value;
 }
 
-
-
-void* xml_value_scalar_float::get_value_ptr()
+void viennamaterials::xml_value_scalar_integer::set_value(tag_scalar_float tag, xml_float value)
 {
-  return new xml_float(value); //note: must be destructed by caller
+  throw func_backend_attr_value_type_error();
 }
 
-void xml_value_scalar_float::set_value(void* value)
+xml_bool viennamaterials::xml_value_scalar_integer::get_value(tag_scalar_bool tag)
 {
-  this->value = *(xml_float*)value;
+  throw func_backend_attr_value_type_error();
+}
+
+xml_int viennamaterials::xml_value_scalar_integer::get_value(tag_scalar_int tag)
+{
+  return value;
+}
+
+xml_float viennamaterials::xml_value_scalar_integer::get_value(tag_scalar_float tag)
+{
+  throw func_backend_attr_value_type_error();
 }
 
 } /* namespace viennamaterials */

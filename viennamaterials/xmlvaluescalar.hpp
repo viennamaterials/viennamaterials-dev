@@ -14,6 +14,7 @@
 #define XMLVALUESCALARINTEGER_HPP_
 
 #include "xmlvalueentity.hpp"
+#include "xmldatatypes.h"
 
 namespace viennamaterials
 {
@@ -24,8 +25,12 @@ namespace viennamaterials
 class xml_value_scalar_integer : public xml_value_entity
 {
 public:
-  void* get_value_ptr();
-  void  set_value(void* value);
+  void      set_value(tag_scalar_bool tag, xml_bool value);
+  void      set_value(tag_scalar_int tag, xml_int value);
+  void      set_value(tag_scalar_float tag, xml_float value);
+  xml_bool  get_value(tag_scalar_bool tag);
+  xml_int   get_value(tag_scalar_int tag);
+  xml_float get_value(tag_scalar_float tag);
 
 private:
   xml_int value;
@@ -37,8 +42,7 @@ private:
 class xml_value_scalar_float : public xml_value_entity
 {
 public:
-  void* get_value_ptr();
-  void  set_value(void* value);
+  //TODO
 
 private:
   xml_float value;

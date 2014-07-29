@@ -14,30 +14,20 @@
 #define XMLVALUEENTITY_HPP_
 
 #include <string>
-#include "viennamaterials/platform.hpp"
+#include "xmldatatypes.h"
 
 namespace viennamaterials
 {
 
-enum xml_types
+enum xml_types //TODO ?move to xmldatatypes.hpp? , ?replace with tags?
 {
-  scalar_bool,
-  scalar_int,
-  scalar_float,
-  tensor
+  type_bool,
+  type_int,
+  type_float,
+  type_tensor
 };
 typedef enum xml_types  XmlType;
 typedef enum xml_types  xml_type;
-
-
-typedef bool            xml_bool;
-typedef bool            XmlBool;
-
-typedef int             xml_int;
-typedef int             XmlInt;
-
-typedef numeric         xml_float;
-typedef numeric         XmlFloat;
 
 
 /**
@@ -46,13 +36,21 @@ typedef numeric         XmlFloat;
 class xml_value_entity
 {
 public:
-  virtual       ~xml_value_entity() {};
-  void          set_name(std::string name);
-  std::string   get_name() const;
-  void          set_type(xml_type type);
-  xml_type      get_type();
-  virtual void* get_value_ptr() = 0;
-  virtual void  set_value(void* value) = 0;
+  virtual           ~xml_value_entity() {};
+  void              set_name(std::string name);
+  std::string       get_name() const;
+  void              set_type(xml_type type);
+  xml_type          get_type();
+
+  virtual void      set_value(tag_scalar_bool tag, xml_bool value)    = 0;
+  virtual void      set_value(tag_scalar_int tag, xml_int value)      = 0;
+  virtual void      set_value(tag_scalar_float tag, xml_float value)  = 0;
+//  virtual void      set_value(tag_tensor tag, void value)             = 0; //TODO arg
+
+  virtual xml_bool  get_value(tag_scalar_bool tag)  = 0;
+  virtual xml_int   get_value(tag_scalar_int tag)   = 0;
+  virtual xml_float get_value(tag_scalar_float tag) = 0;
+//  virtual void      get_value(tag_tensor tag)       = 0; //TODO return
 
 private:
   std::string   name;
