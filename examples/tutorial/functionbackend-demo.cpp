@@ -22,6 +22,8 @@
 
 #include "viennamaterials/functionbackendpython.hpp"
 
+#include "viennamaterials/attributeentityfunction.hpp"
+
 int main(int argc, char * argv[])
 {
   if(argc != 2)
@@ -58,27 +60,39 @@ int main(int argc, char * argv[])
 
   //testing area
 
-//  viennamaterials::xml_value_scalar_integer testobj;
-  viennamaterials::xml_value_entity* testobj = new viennamaterials::xml_value_scalar_integer;
+  viennamaterials::xml_value_entity* value_ptr = new viennamaterials::xml_value_scalar_integer;
   std::string name = "test object";
-  testobj->set_name(name);
-  testobj->set_type(viennamaterials::scalar_int);
+  value_ptr->set_name(name);
+  value_ptr->set_type(viennamaterials::type_int);
 
-  std::cout << "name: " << testobj->get_name() << std::endl;
-  std::cout << "type: " << testobj->get_type() << std::endl;
+  std::cout << "name: " << value_ptr->get_name() << std::endl;
+  std::cout << "type: " << value_ptr->get_type() << std::endl;
 
-  int* ptr = new int(12);
-  testobj->set_value(ptr);
+  viennamaterials::tag_scalar_int tag;
+  value_ptr->set_value(tag, 12);
 
-  std::cout << "value: " << *(int*)testobj->get_value_ptr() << std::endl;
+  std::cout << "value: " << value_ptr->get_value(tag) << std::endl;
 
 
   std::string code = "def func(x,y): \n print x*y \n return 2.0";
   std::string func_name = "func";
-  viennamaterials::function_backend_python *demo = new viennamaterials::function_backend_python;
+  viennamaterials::function_backend *demo = new viennamaterials::function_backend_python;
   demo->init(code, func_name);
   demo->evaluate();
   delete demo;
+
+
+
+  viennamaterials::attribute_entity* attr_ptr = new viennamaterials::attribute_entity_function(viennamaterials::function_int);
+  if(attr_ptr->is_function_int()) /// using method name
+    std::cout << "result: " << attr_ptr->eval(tag) << std::endl;
+
+  viennamaterials::tag_function_int func_tag;
+  if(attr_ptr->is_function(func_tag))  /// using tag dispatching
+    std::cout << "result: " << attr_ptr->eval(tag) << std::endl;
+
+  if(attr_ptr->is_type(viennamaterials::function_int))  /// using enum argument
+      std::cout << "result: " << attr_ptr->eval(tag) << std::endl;
 
 
 
