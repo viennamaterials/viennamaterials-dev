@@ -14,6 +14,7 @@
 #define FUNCTIONBACKEND_HPP_
 
 #include <string>
+#include "viennamaterials/xmldatatypes.h"
 
 namespace viennamaterials
 {
@@ -21,9 +22,12 @@ namespace viennamaterials
 class function_backend
 {
 public:
-  virtual         ~function_backend() {};
-  virtual void    init(std::string code, std::string function_name) = 0;
-  virtual double  evaluate() = 0; //FIXME: return object, argument list
+  virtual           ~function_backend() {};
+  virtual void      init(std::string code, std::string function_name) = 0;
+  virtual xml_bool  eval(tag_scalar_bool tag)   = 0; //FIXME: argument list
+  virtual xml_int   eval(tag_scalar_int tag)    = 0; //FIXME: argument list
+  virtual xml_float eval(tag_scalar_float tag)  = 0; //FIXME: argument list
+//  virtual void      evaluate(tag_tensor) = 0; //FIXME: argument list, return
 };
 
 } /* namespace viennamaterials */

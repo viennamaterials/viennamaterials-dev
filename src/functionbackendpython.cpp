@@ -50,7 +50,7 @@ function_backend_python::~function_backend_python()
   Py_Finalize();
 }
 
-double function_backend_python::evaluate()
+double function_backend_python::eval() //XXX testing only
 {
   /* TODO
    * get number of args
@@ -82,6 +82,27 @@ double function_backend_python::evaluate()
   }
 
   return 1.0; //FIXME
+}
+
+xml_bool function_backend_python::eval(tag_scalar_bool tag)
+{
+  eval(); //FIXME: testing
+
+  return true; //FIXME
+}
+
+xml_int function_backend_python::eval(tag_scalar_int tag)
+{
+  eval(); //FIXME: testing
+
+  return 0; //FIXME
+}
+
+xml_float function_backend_python::eval(tag_scalar_float tag)
+{
+  eval(); //FIXME: testing
+
+  return 0.0; //FIXME
 }
 
 } /* namespace viennamaterials */

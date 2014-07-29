@@ -22,15 +22,19 @@ namespace viennamaterials
 class function_backend_python : public function_backend
 {
 public:
-          ~function_backend_python();
-  void    init(std::string code, std::string function_name);
-  double  evaluate(); //FIXME: return object, argument list
+            ~function_backend_python();
+  void      init(std::string code, std::string function_name);
+  xml_bool  eval(tag_scalar_bool tag); //FIXME: argument list
+  xml_int   eval(tag_scalar_int tag); //FIXME: argument list
+  xml_float eval(tag_scalar_float tag); //FIXME: argument list
 
 private:
   PyObject *function_ptr_; /// Pointer to function in python module object
   PyObject *global_ptr_;
   PyObject *local_ptr_;
   PyObject *module_ptr_;
+
+  double    eval(); //XXX testing only
 };
 
 } /* namespace viennamaterials */
