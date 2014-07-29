@@ -25,9 +25,9 @@ namespace viennamaterials
 class xml_value_scalar_integer : public xml_value_entity
 {
 public:
-  void      set_value(tag_scalar_bool tag, xml_bool value);
-  void      set_value(tag_scalar_int tag, xml_int value);
-  void      set_value(tag_scalar_float tag, xml_float value);
+  void      set_value(xml_bool value);
+  void      set_value(xml_int value);
+  void      set_value(xml_float value);
   xml_bool  get_value(tag_scalar_bool tag);
   xml_int   get_value(tag_scalar_int tag);
   xml_float get_value(tag_scalar_float tag);

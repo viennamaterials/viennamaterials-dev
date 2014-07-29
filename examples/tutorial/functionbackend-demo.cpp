@@ -68,9 +68,10 @@ int main(int argc, char * argv[])
   std::cout << "name: " << value_ptr->get_name() << std::endl;
   std::cout << "type: " << value_ptr->get_type() << std::endl;
 
-  viennamaterials::tag_scalar_int tag;
-  value_ptr->set_value(tag, 12);
+  long val = 12;
+  value_ptr->set_value(val);
 
+  viennamaterials::tag_scalar_int tag;
   std::cout << "value: " << value_ptr->get_value(tag) << std::endl;
 
 

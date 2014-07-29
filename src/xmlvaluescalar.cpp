@@ -16,17 +16,17 @@
 namespace viennamaterials
 {
 
-void viennamaterials::xml_value_scalar_integer::set_value(tag_scalar_bool tag, xml_bool value)
+void viennamaterials::xml_value_scalar_integer::set_value(xml_bool value)
 {
   throw func_backend_attr_value_type_error();
 }
 
-void viennamaterials::xml_value_scalar_integer::set_value(tag_scalar_int tag, xml_int value)
+void viennamaterials::xml_value_scalar_integer::set_value(xml_int value)
 {
   this->value = value;
 }
 
-void viennamaterials::xml_value_scalar_integer::set_value(tag_scalar_float tag, xml_float value)
+void viennamaterials::xml_value_scalar_integer::set_value(xml_float value)
 {
   throw func_backend_attr_value_type_error();
 }

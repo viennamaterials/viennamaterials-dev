@@ -42,10 +42,10 @@ public:
   void              set_type(xml_type type);
   xml_type          get_type();
 
-  virtual void      set_value(tag_scalar_bool tag, xml_bool value)    = 0;
-  virtual void      set_value(tag_scalar_int tag, xml_int value)      = 0;
-  virtual void      set_value(tag_scalar_float tag, xml_float value)  = 0;
-//  virtual void      set_value(tag_tensor tag, void value)             = 0; //TODO arg
+  virtual void      set_value(xml_bool value)    = 0;
+  virtual void      set_value(xml_int value)      = 0;
+  virtual void      set_value(xml_float value)  = 0;
+//  virtual void      set_value(void value)             = 0; //TODO arg
 
   virtual xml_bool  get_value(tag_scalar_bool tag)  = 0;
   virtual xml_int   get_value(tag_scalar_int tag)   = 0;
