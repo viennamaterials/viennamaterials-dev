@@ -26,7 +26,7 @@
         <arg>
           <id>1</id>
           <quantity>y-value</quantity>
-          <scalar type='float'>1.0</scalar>
+          <scalar type='float'>0.25</scalar>
         </arg>
         <return>
           <scalar type='float'/>
