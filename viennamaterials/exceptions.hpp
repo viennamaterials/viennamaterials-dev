@@ -24,7 +24,7 @@ namespace viennamaterials
   {
     virtual const char* what() const throw()
     {
-      return std::string("Input material database valiadation could not be loaded").c_str();
+      return std::string("Input material database validation could not be loaded").c_str();
     }
   };
 
