@@ -21,7 +21,6 @@ void function_backend_python::init(std::string const& code, std::string const& f
   /// Initialize the Python Interpreter
   Py_Initialize();
 
-  PyObject *value_ptr;
   global_ptr_ = PyDict_New();
 
   /// Create a new module object
@@ -32,8 +31,7 @@ void function_backend_python::init(std::string const& code, std::string const& f
   local_ptr_ = PyModule_GetDict(module_ptr_);
 
   /// Define the function in the newly created module
-  value_ptr = PyRun_String(code.c_str(), Py_file_input, global_ptr_, local_ptr_);
-  Py_DECREF(value_ptr);
+  PyRun_String(code.c_str(), Py_file_input, global_ptr_, local_ptr_);
 
   /// Get a pointer to the function
   function_ptr_ = PyObject_GetAttrString(module_ptr_, function_name.c_str());
