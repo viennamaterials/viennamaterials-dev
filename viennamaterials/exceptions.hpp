@@ -102,6 +102,22 @@ namespace viennamaterials
     }
   };
 
+  struct func_backend_python_no_function_error: public std::exception
+  {
+    virtual const char* what() const throw()
+    {
+      return std::string("Python function is not callable").c_str();
+    }
+  };
+
+  struct func_backend_type_error: public std::exception
+  {
+    virtual const char* what() const throw()
+    {
+      return std::string("Invalid value type encountered").c_str();
+    }
+  };
+
 
 } // viennamaterials
 
