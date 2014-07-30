@@ -21,10 +21,11 @@ attribute_entity_function::attribute_entity_function()
   entity_type = invalid;
 }
 
-attribute_entity_function::attribute_entity_function(xml_attribute_type entity_type, function_backend *backend)
+attribute_entity_function::attribute_entity_function(xml_attribute_type entity_type, function_backend *backend, std::vector<xml_value_entity*> &args)
 {
   this->entity_type = entity_type;
-  this->backend = backend;
+  this->backend     = backend;
+  this->args        = args;
 }
 
 xml_bool attribute_entity_function::eval(tag_scalar_bool tag)
@@ -32,7 +33,7 @@ xml_bool attribute_entity_function::eval(tag_scalar_bool tag)
   if(entity_type != function_bool)
     throw func_backend_attr_type_error();
 
-  return backend->eval(tag); //FIXME
+  return backend->eval(tag, args);
 }
 
 xml_int attribute_entity_function::eval(tag_scalar_int tag)
@@ -40,7 +41,7 @@ xml_int attribute_entity_function::eval(tag_scalar_int tag)
   if(entity_type != function_int)
     throw func_backend_attr_type_error();
 
-  return backend->eval(tag); //FIXME
+  return backend->eval(tag, args);
 }
 
 xml_float attribute_entity_function::eval(tag_scalar_float tag)
@@ -48,7 +49,7 @@ xml_float attribute_entity_function::eval(tag_scalar_float tag)
   if(entity_type != function_float)
     throw func_backend_attr_type_error();
 
-  return backend->eval(tag); //FIXME
+  return backend->eval(tag, args);
 }
 
 } /* namespace viennamaterials */
