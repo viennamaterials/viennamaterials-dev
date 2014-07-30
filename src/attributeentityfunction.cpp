@@ -23,6 +23,18 @@ attribute_entity_function::attribute_entity_function(xml_attribute_type entity_t
   this->args_        = args;
 }
 
+std::vector<xml_value_entity*> attribute_entity_function::get_dep()
+{
+  return args_;
+}
+
+void attribute_entity_function::set_dep(std::vector<xml_value_entity*> &args)
+{
+  //TODO ? cope with misordered vector?
+  //TODO ? cope with wrong vector (size, elements)?
+  args_ = args;
+}
+
 xml_bool attribute_entity_function::eval(tag_scalar_bool tag)
 {
   if(entity_type_ != function_bool)

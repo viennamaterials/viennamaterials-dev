@@ -24,6 +24,9 @@ class attribute_entity_function: public attribute_entity
 public:
   attribute_entity_function(xml_attribute_type entity_type, function_backend *backend, std::vector<xml_value_entity*> &args);
 
+  std::vector<xml_value_entity*>  get_dep();
+  void                            set_dep(std::vector<xml_value_entity*> &args);
+
   xml_bool  eval(tag_scalar_bool tag);
   xml_int   eval(tag_scalar_int tag);
   xml_float eval(tag_scalar_float tag);
