@@ -25,6 +25,7 @@ namespace viennamaterials
 class xml_value_scalar_integer : public xml_value_entity
 {
 public:
+            xml_value_scalar_integer();
   void      set_value(xml_bool value);
   void      set_value(xml_int value);
   void      set_value(xml_float value);
@@ -42,6 +43,7 @@ private:
 class xml_value_scalar_float : public xml_value_entity
 {
 public:
+            xml_value_scalar_float();
   void      set_value(xml_bool value);
   void      set_value(xml_int value);
   void      set_value(xml_float value);

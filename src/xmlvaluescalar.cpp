@@ -16,6 +16,15 @@
 namespace viennamaterials
 {
 
+/**
+ * Memeber Methods for class xml_value_scalar_integer
+ */
+
+xml_value_scalar_integer::xml_value_scalar_integer()
+{
+  set_type(type_int);
+}
+
 void viennamaterials::xml_value_scalar_integer::set_value(xml_bool value)
 {
   throw func_backend_attr_value_type_error();
@@ -49,8 +58,14 @@ xml_float viennamaterials::xml_value_scalar_integer::get_value(tag_scalar_float 
 
 
 
+/**
+ * Memeber Methods for class xml_value_scalar_float
+ */
 
-
+xml_value_scalar_float::xml_value_scalar_float()
+{
+  set_type(type_float);
+}
 
 void viennamaterials::xml_value_scalar_float::set_value(xml_bool value)
 {
