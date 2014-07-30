@@ -22,6 +22,8 @@
 
 #include "viennamaterials/attributeentityfunction.hpp"
 
+#include "viennamaterials/broker.hpp"
+
 int main(int argc, char * argv[])
 {
   if(argc != 2)
@@ -40,7 +42,7 @@ int main(int argc, char * argv[])
   viennamaterials::library_handle matlib = viennamaterials::generator(filename);
 
 
-  std::string query = "/*/*[id='test-material']/*[id='parameter2']/function";
+  std::string query = "/*/*[id='test-material']/*[id='parameter2']";
 
 
 
@@ -68,7 +70,7 @@ int main(int argc, char * argv[])
    */
 
   /// Define python funtion
-  std::cout << "python backend demo:" << std::endl;
+  std::cout << std::endl << "python backend demo:" << std::endl;
   std::string code = "def func(x,y): \n print x*y \n return 2.2";
   std::string func_name = "func";
 
@@ -95,7 +97,7 @@ int main(int argc, char * argv[])
   /**
    * Attribute entity
    */
-  std::cout << "attribute entity demo:" << std::endl;
+  std::cout << std::endl << "attribute entity demo:" << std::endl;
   viennamaterials::attribute_entity* attr_ptr = new viennamaterials::attribute_entity_function(viennamaterials::function_int, demo, args);
   std::cout << "result: " << attr_ptr->eval(tag_int) << " <-- attribute entity used as int-function" << std::endl;
 
@@ -110,7 +112,28 @@ int main(int argc, char * argv[])
     std::cout << "is_type" << std::endl;
 
 
+
+
+
+  /**
+   * Broker
+   */
+  std::cout << std::endl << "broker demo:" << std::endl;
+  viennamaterials::broker broker_demo(filename);
+  viennamaterials::attribute_entity *attribute = broker_demo.query(query);
+  if(attribute->is_function_float())
+  {
+    double result = attribute->eval(tag_float);
+    std::cout << "eval: " << result << std::endl;
+  }
+
+
+
+
+  delete attr_ptr;
   delete demo;
-  std::cout << "end of program" << std::endl;
+  delete attribute;
+
+  std::cout << std::endl << "end of program" << std::endl;
   return EXIT_SUCCESS;
 }
