@@ -118,6 +118,27 @@ namespace viennamaterials
     }
   };
 
+  struct xml_index_error: public std::exception
+  {
+    virtual const char* what() const throw()
+    {
+      return std::string("Invalid XML index encountered").c_str();
+    }
+  };
+
+  struct broker_error : public std::exception
+  {
+    broker_error(std::string const& info) : info(info) {}
+    ~broker_error() throw() {}
+
+    virtual const char* what() const throw()
+    {
+      return info.c_str();
+    }
+
+    std::string info;
+  };
+
 
 } // viennamaterials
 
