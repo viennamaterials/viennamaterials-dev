@@ -14,8 +14,6 @@
 //
 #include "viennamaterials/platform.hpp"
 
-//#include "viennamaterials/attributefunctionproxy.h"
-
 //WIP:
 #include "viennamaterials/xmlvalueentity.hpp"
 #include "viennamaterials/xmlvaluescalar.hpp"
@@ -46,15 +44,6 @@ int main(int argc, char * argv[])
 
 
   std::string query = "/*/*[id='test-material']/*[id='parameter2']/function";
-
-//  viennamaterials::attribute_function_proxy python_demo;
-//
-//  python_demo.init(matlib, query, viennamaterials::python);
-//
-//  std::vector<viennamaterials::FunctionArgumentBase> args;
-//  python_demo.evaluate(args);
-//
-//  python_demo.deinit();
 
 
 
