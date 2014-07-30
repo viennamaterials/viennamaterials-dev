@@ -19,17 +19,17 @@
             return x*y
         </code>
         <arg>
-          <id>x</id>
+          <id>0</id>
           <quantity>x-value</quantity>
           <scalar type='float'>2.0</scalar>
         </arg>
         <arg>
-          <id>y</id>
+          <id>1</id>
           <quantity>y-value</quantity>
           <scalar type='float'>1.0</scalar>
         </arg>
         <return>
-          <scalar type='int'/>
+          <scalar type='float'/>
         </return>
       </function>
       <unit>A</unit>
