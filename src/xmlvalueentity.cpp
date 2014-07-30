@@ -35,5 +35,14 @@ xml_type xml_value_entity::get_type()
   return type;
 }
 
+void xml_value_entity::set_index(size_t index)
+{
+  this->index = index;
+}
+
+size_t xml_value_entity::get_index()
+{
+  return index;
+}
 
 } /* namespace viennamaterials */
