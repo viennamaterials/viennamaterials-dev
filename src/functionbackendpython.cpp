@@ -48,7 +48,7 @@ function_backend_python::~function_backend_python()
   Py_Finalize();
 }
 
-PyObject* function_backend_python::eval(std::vector<xml_value_entity*> args)
+PyObject* function_backend_python::eval(std::vector<xml_value_entity*> &args)
 {
   if (PyCallable_Check(function_ptr_))
   {

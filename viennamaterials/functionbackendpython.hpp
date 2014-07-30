@@ -34,7 +34,7 @@ private:
   PyObject  *local_ptr_;
   PyObject  *module_ptr_;
 
-  PyObject* eval(std::vector<xml_value_entity*> args);
+  PyObject* eval(std::vector<xml_value_entity*> &args);
 };
 
 } /* namespace viennamaterials */
