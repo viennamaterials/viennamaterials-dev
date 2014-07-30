@@ -57,13 +57,28 @@ public:
   virtual std::string               query (std::string const& native_query) = 0;
 
   /** @brief Access the numeric value pointed to by the native query path */
-  virtual viennamaterials::numeric  query_value  (std::string const& native_query)                = 0;
+  virtual viennamaterials::numeric  query_value  (std::string const& native_query) = 0;
   
   /** @brief Perform a native query of type number */
-  virtual double                    query_xpath_number(std::string const& native_query)           = 0;
+  virtual double                    query_xpath_number(std::string const& native_query) = 0;
 
   /** @brief Perform a native query of type string */
-  virtual std::string               query_xpath_string(std::string const& native_query)           = 0;
+  virtual std::string               query_xpath_string(std::string const& native_query) = 0;
+
+  /** @brief Access the number of elements pointed by the native query path */
+  virtual long                      query_number_of_elements(std::string const& native_query) = 0;
+
+  /** @brief Access the number of attributes of the element pointed by the native query path */
+  virtual long                      query_number_of_attributes(std::string const& native_query) = 0;
+
+  /** @brief Access attribute name at given position of the element pointed by the native query path */
+  virtual std::string               query_attribute_name(std::string const& native_query, long const& position) = 0;
+
+  /** @brief Access attribute value at given position of the element pointed by the native query path */
+  virtual std::string               query_attribute(std::string const& native_query, long const& position) = 0;
+
+  /** @brief Access attribute value from attribute of given name of the element pointed by the native query path */
+  virtual std::string               query_attribute(std::string const& native_query, std::string const& attribute_name) = 0;
 
 };
 
