@@ -54,7 +54,7 @@ public:
 //  virtual void      eval(tag_tensor tag)          = 0; //FIXME: return
 
 protected:
-  xml_attribute_type entity_type;
+  xml_attribute_type entity_type_;
 };
 
 } /* namespace viennamaterials */

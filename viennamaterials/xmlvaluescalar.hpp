@@ -34,7 +34,7 @@ public:
   xml_float get_value(tag_scalar_float tag);
 
 private:
-  xml_int value;
+  xml_int value_;
 };
 
 /**

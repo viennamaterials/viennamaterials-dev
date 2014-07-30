@@ -32,7 +32,7 @@ void viennamaterials::xml_value_scalar_integer::set_value(xml_bool value)
 
 void viennamaterials::xml_value_scalar_integer::set_value(xml_int value)
 {
-  this->value = value;
+  this->value_ = value;
 }
 
 void viennamaterials::xml_value_scalar_integer::set_value(xml_float value)
@@ -47,7 +47,7 @@ xml_bool viennamaterials::xml_value_scalar_integer::get_value(tag_scalar_bool ta
 
 xml_int viennamaterials::xml_value_scalar_integer::get_value(tag_scalar_int tag)
 {
-  return value;
+  return value_;
 }
 
 xml_float viennamaterials::xml_value_scalar_integer::get_value(tag_scalar_float tag)

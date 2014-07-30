@@ -16,7 +16,7 @@
 namespace viennamaterials
 {
 
-void function_backend_python::init(std::string code, std::string function_name)
+void function_backend_python::init(std::string const& code, std::string const& function_name)
 {
   /// Initialize the Python Interpreter
   Py_Initialize();

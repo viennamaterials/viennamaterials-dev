@@ -15,34 +15,34 @@
 namespace viennamaterials
 {
 
-void xml_value_entity::set_name(std::string name)
+void xml_value_entity::set_name(std::string const& name)
 {
-  this->name = name;
+  this->name_ = name;
 }
 
 std::string xml_value_entity::get_name() const
 {
-  return name;
+  return name_;
 }
 
 void xml_value_entity::set_type(xml_type type)
 {
-  this->type = type;
+  this->type_ = type;
 }
 
 xml_type xml_value_entity::get_type()
 {
-  return type;
+  return type_;
 }
 
 void xml_value_entity::set_index(size_t index)
 {
-  this->index = index;
+  this->index_ = index;
 }
 
 size_t xml_value_entity::get_index()
 {
-  return index;
+  return index_;
 }
 
 } /* namespace viennamaterials */

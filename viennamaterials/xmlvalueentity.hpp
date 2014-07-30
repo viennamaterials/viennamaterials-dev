@@ -37,7 +37,7 @@ class xml_value_entity
 {
 public:
   virtual           ~xml_value_entity() {};
-  void              set_name(std::string name);
+  void              set_name(std::string const& name);
   std::string       get_name() const;
   xml_type          get_type();
   //TODO: bool is_bool, is_int, ...
@@ -45,8 +45,8 @@ public:
   size_t            get_index();
 
   virtual void      set_value(xml_bool value)    = 0;
-  virtual void      set_value(xml_int value)      = 0;
-  virtual void      set_value(xml_float value)  = 0;
+  virtual void      set_value(xml_int value)     = 0;
+  virtual void      set_value(xml_float value)   = 0;
 //  virtual void      set_value(void value)             = 0; //TODO arg
 
   virtual xml_bool  get_value(tag_scalar_bool tag)  = 0;
@@ -58,9 +58,9 @@ protected:
   void              set_type(xml_type type);
 
 private:
-  size_t        index; /// Argument index for the function backend
-  std::string   name;  /// Used as identifier for simulator
-  xml_type      type;  /// XML type of this value
+  size_t        index_; /// Argument index for the function backend
+  std::string   name_;  /// Used as identifier for simulator
+  xml_type      type_;  /// XML type of this value
 };
 
 } /* namespace viennamaterials */

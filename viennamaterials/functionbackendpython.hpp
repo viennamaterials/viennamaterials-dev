@@ -23,7 +23,7 @@ class function_backend_python : public function_backend
 {
 public:
             ~function_backend_python();
-  void      init(std::string code, std::string function_name);
+  void      init(std::string const& code, std::string const& function_name);
   xml_bool  eval(tag_scalar_bool tag,   std::vector<xml_value_entity*> &args);
   xml_int   eval(tag_scalar_int tag,    std::vector<xml_value_entity*> &args);
   xml_float eval(tag_scalar_float tag,  std::vector<xml_value_entity*> &args);
