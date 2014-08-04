@@ -21,13 +21,8 @@ namespace viennamaterials
 /// Mapping of basic XML data types to C/C++ types
 
 typedef bool            xml_bool;
-typedef bool            XmlBool;
-
 typedef long            xml_int;
-typedef long            XmlInt;
-
 typedef numeric         xml_float;
-typedef numeric         XmlFloat;
 
 
 
