@@ -51,7 +51,7 @@ int main(int argc, char * argv[])
   /**
    * Xml_value_entity
    */
-  viennamaterials::xml_value_entity* value_ptr = new viennamaterials::xml_value_scalar_integer;
+  viennamaterials::shared_ptr<viennamaterials::xml_value_entity> value_ptr(new viennamaterials::xml_value_scalar_integer);
   std::string name = "test object";
   value_ptr->set_name(name);
 
@@ -74,7 +74,7 @@ int main(int argc, char * argv[])
   std::string code = "def func(x,y): \n print x*y \n return 2.2";
   std::string func_name = "func";
 
-  viennamaterials::function_backend *demo = new viennamaterials::function_backend_python;
+  viennamaterials::function_backend_handle demo(new viennamaterials::function_backend_python);
   demo->init(code, func_name);
 
   /// Define arguments
@@ -98,7 +98,7 @@ int main(int argc, char * argv[])
    * Attribute entity
    */
   std::cout << std::endl << "attribute entity demo:" << std::endl;
-  viennamaterials::attribute_entity* attr_ptr = new viennamaterials::attribute_entity_function(viennamaterials::function_int, demo, args);
+  viennamaterials::shared_ptr<viennamaterials::attribute_entity> attr_ptr(new viennamaterials::attribute_entity_function(viennamaterials::function_int, demo, args));
   std::cout << "result: " << attr_ptr->eval(tag_int) << " <-- attribute entity used as int-function" << std::endl;
 
   if(attr_ptr->is_function_int()) /// using method name
@@ -135,9 +135,6 @@ int main(int argc, char * argv[])
 
 
 
-  delete attr_ptr;
-  delete demo;
-  delete attribute;
 
   std::cout << std::endl << "end of program" << std::endl;
   return EXIT_SUCCESS;

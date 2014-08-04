@@ -92,12 +92,15 @@ attribute_entity* broker::query(std::string const& xpath_query_to_attribute)
 
 
     /// Load function backend
-    function_backend *backend = 0;
+    function_backend_handle backend;
     std::string query_code = query + "/code";
     std::string lang_attribute = "lang";
     std::string call_attribute = "call";
     if(lib_->query_attribute(query_code, lang_attribute).compare("python") == 0)
-      backend = new function_backend_python;
+    {
+      function_backend_handle tmp(new function_backend_python);
+      backend = tmp;
+    }
     else
       throw broker_error("Not supported code language encountered (query: " + query_code + ")");
 
