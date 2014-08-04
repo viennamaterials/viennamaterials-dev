@@ -67,65 +67,6 @@ int main(int argc, char * argv[])
   /** Perform the query and retrieve the string-based result **/
   result_string = matlib->query(query);
   std::cout << "unit string: " << result_string << std::endl;
-  
-
-
-  /** begin of hack-space **/
-  std::cout << std::endl << "#################" << std::endl;
-
-  query = "count(/material[1]/parameter)";
-  double result_double = matlib->query_xpath_number(query);
-  std::cout << "return number: " << result_double << std::endl;
-
-  // query attributes of function element from parameter 1
-  std::cout << "parameter1 function:" << std::endl;
-  std::string element = "/*[id='test-material']/*[id='parameter1']/function";
-  query = element + "/text()";
-  result_string = matlib->query(query);
-  std::cout << "  text: " << result_string << std::endl;
-  query = "count(" + element + "/@*)"; //counts all attributes of function element
-  double number_query = matlib->query_xpath_number(query);
-  std::ostringstream converter;
-  std::cout << "  number of function arguments: " << number_query << std::endl;
-  for (long i = 1; i <= (long)number_query; i++)
-  {
-    converter.str("");
-    converter << i;
-    // query name of attribute
-    query = "name(" + element + "/@*[" + converter.str() + "])";
-//    std::cout << query << std::endl;
-    result_string = matlib->query_xpath_string(query);
-    std::cout << "    " << result_string << " --> ";
-    // query value of attribute
-    query = "string(" + element + "/@*[" + converter.str() + "])";
-    result_string = matlib->query_xpath_string(query);
-    std::cout << result_string << std::endl;
-  }
-
-  // query attributes of function element from parameter 2
-  std::cout << "parameter2 function:" << std::endl;
-  element = "/*[id='test-material']/*[id='parameter2']/function";
-  query = element + "/text()";
-  result_string = matlib->query(query);
-  std::cout << "  text: " << result_string << std::endl;
-  query = "count(" + element + "/@*)"; //counts all attributes of function element
-  number_query = matlib->query_xpath_number(query);
-  std::cout << "  number of function arguments: " << number_query << std::endl;
-  for (long i = 1; i <= (long)number_query; i++)
-  {
-    converter.str("");
-    converter << i;
-    // query name of attribute
-    query = "name(" + element + "/@*[" + converter.str() + "])";
-//    std::cout << query << std::endl;
-    result_string = matlib->query_xpath_string(query);
-    std::cout << "    " << result_string << " --> ";
-    // query value of attribute
-    query = "string(" + element + "/@*[" + converter.str() + "])";
-    result_string = matlib->query_xpath_string(query);
-    std::cout << result_string << std::endl;
-  }
-
 
   return 0;
 }
