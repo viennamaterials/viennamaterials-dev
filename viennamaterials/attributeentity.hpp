@@ -47,8 +47,8 @@ public:
   bool is_function_float();
   bool is_function_tensor();
 
-  virtual std::vector<xml_value_entity*>  get_dep() = 0;
-  virtual void                            set_dep(std::vector<xml_value_entity*> &args) = 0;
+  virtual std::vector<xml_value_entity*>  get_dependencies() = 0;
+  virtual void                            set_dependencies(std::vector<xml_value_entity*> &args) = 0;
 
   virtual xml_bool  eval(tag_scalar_bool tag)     = 0;
   virtual xml_int   eval(tag_scalar_int tag)      = 0;

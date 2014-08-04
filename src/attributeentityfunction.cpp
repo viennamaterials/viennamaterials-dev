@@ -23,12 +23,12 @@ attribute_entity_function::attribute_entity_function(xml_attribute_type entity_t
   this->args_        = args;
 }
 
-std::vector<xml_value_entity*> attribute_entity_function::get_dep()
+std::vector<xml_value_entity*> attribute_entity_function::get_dependencies()
 {
   return args_;
 }
 
-void attribute_entity_function::set_dep(std::vector<xml_value_entity*> &args)
+void attribute_entity_function::set_dependencies(std::vector<xml_value_entity*> &args)
 {
   //TODO ? cope with misordered vector?
   //TODO ? cope with wrong vector (size, elements)?

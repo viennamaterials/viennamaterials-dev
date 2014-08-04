@@ -126,9 +126,9 @@ int main(int argc, char * argv[])
     double result = attribute->eval(tag_float);
     std::cout << "eval: " << result << std::endl;
 
-    std::vector<viennamaterials::xml_value_entity*> func_args = attribute->get_dep();
+    std::vector<viennamaterials::xml_value_entity*> func_args = attribute->get_dependencies();
     func_args[1]->set_value(0.125);
-    attribute->set_dep(func_args);
+    attribute->set_dependencies(func_args);
     std::cout << "eval: " << attribute->eval(tag_float) << std::endl;
   }
 
