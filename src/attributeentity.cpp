@@ -10,7 +10,8 @@
    license:    see file LICENSE in the base directory
 ============================================================================= */
 
-#include "../viennamaterials/attributeentity.hpp"
+#include "viennamaterials/attributeentity.hpp"
+#include "viennamaterials/exceptions.hpp"
 
 namespace viennamaterials
 {
@@ -151,6 +152,33 @@ bool viennamaterials::attribute_entity::is_function_tensor()
   if(entity_type_ == function_tensor)
     return true;
   return false;
+}
+
+template<typename T>
+T viennamaterials::attribute_entity::evaluate_dispatch()
+{
+  throw broker_error("Template type not supported");
+}
+
+template<>
+xml_bool viennamaterials::attribute_entity::evaluate_dispatch<xml_bool>()
+{
+  tag_scalar_bool tag_bool;
+  return this->eval(tag_bool);
+}
+
+template<>
+xml_int viennamaterials::attribute_entity::evaluate_dispatch<xml_int>()
+{
+  tag_scalar_int tag_int;
+  return this->eval(tag_int);
+}
+
+template<>
+xml_float viennamaterials::attribute_entity::evaluate_dispatch<xml_float>()
+{
+  tag_scalar_float tag_float;
+  return this->eval(tag_float);
 }
 
 } /* namespace viennamaterials */

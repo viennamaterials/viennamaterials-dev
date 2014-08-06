@@ -99,7 +99,7 @@ int main(int argc, char * argv[])
    */
   std::cout << std::endl << "attribute entity demo:" << std::endl;
   viennamaterials::shared_ptr<viennamaterials::attribute_entity> attr_ptr(new viennamaterials::attribute_entity_function(viennamaterials::function_int, demo, args));
-  std::cout << "result: " << attr_ptr->eval(tag_int) << " <-- attribute entity used as int-function" << std::endl;
+  std::cout << "result: " << attr_ptr->evaluate<long>() << " <-- attribute entity used as int-function" << std::endl;
 
   if(attr_ptr->is_function_int()) /// using method name
     std::cout << "is_function_int" << std::endl;
@@ -120,16 +120,17 @@ int main(int argc, char * argv[])
    */
   std::cout << std::endl << "broker demo:" << std::endl;
   viennamaterials::broker broker_demo(filename);
-  viennamaterials::attribute_entity *attribute = broker_demo.query(query);
+  viennamaterials::attribute_entity *attribute = broker_demo.query(query);  //TODO smartpointer
   if(attribute->is_function_float())
   {
-    double result = attribute->eval(tag_float);
+    double result = attribute->evaluate<double>();
     std::cout << "eval: " << result << std::endl;
+//    attribute->evaluate<bool>();
 
     std::vector<viennamaterials::xml_value_entity*> func_args = attribute->get_dependencies();
     func_args[1]->set_value(0.125);
     attribute->set_dependencies(func_args);
-    std::cout << "eval: " << attribute->eval(tag_float) << std::endl;
+    std::cout << "eval: " << attribute->evaluate<viennamaterials::xml_float>() << std::endl;
   }
 
 

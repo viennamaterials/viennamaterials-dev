@@ -50,6 +50,13 @@ public:
   virtual std::vector<xml_value_entity*>  get_dependencies() = 0;
   virtual void                            set_dependencies(std::vector<xml_value_entity*> &args) = 0;
 
+  template<typename T>
+  T evaluate();
+
+protected:
+  template<typename T>
+  T evaluate_dispatch();
+
   virtual xml_bool  eval(tag_scalar_bool tag)     = 0;
   virtual xml_int   eval(tag_scalar_int tag)      = 0;
   virtual xml_float eval(tag_scalar_float tag)    = 0;
@@ -58,6 +65,12 @@ public:
 protected:
   xml_attribute_type entity_type_;
 };
+
+template<typename T>
+T viennamaterials::attribute_entity::evaluate()
+{
+  return this->evaluate_dispatch<T>();
+}
 
 } /* namespace viennamaterials */
 #endif /* ATTRIBUTEENTITY_HPP_ */
