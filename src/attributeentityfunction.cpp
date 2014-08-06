@@ -16,19 +16,19 @@
 namespace viennamaterials
 {
 
-attribute_entity_function::attribute_entity_function(xml_attribute_type entity_type, function_backend_handle backend, std::vector<xml_value_entity*> &args)
+attribute_entity_function::attribute_entity_function(xml_attribute_type entity_type, function_backend_handle backend, std::vector<xml_value_entity_handle>& args)
 {
   this->entity_type_ = entity_type;
   this->backend_     = backend;
   this->args_        = args;
 }
 
-std::vector<xml_value_entity*> attribute_entity_function::get_dependencies()
+std::vector<xml_value_entity_handle> attribute_entity_function::get_dependencies()
 {
   return args_;
 }
 
-void attribute_entity_function::set_dependencies(std::vector<xml_value_entity*> &args)
+void attribute_entity_function::set_dependencies(std::vector<xml_value_entity_handle>& args)
 {
   //TODO ? cope with misordered vector?
   //TODO ? cope with wrong vector (size, elements)?

@@ -78,16 +78,19 @@ int main(int argc, char * argv[])
   demo->init(code, func_name);
 
   /// Define arguments
-  std::vector<viennamaterials::xml_value_entity*> args;
-  viennamaterials::xml_value_entity* arg;
-  arg = new viennamaterials::xml_value_scalar_float;
-  arg->set_index(0);
-  arg->set_value(3.0);
-  args.push_back(arg);
-  arg = new viennamaterials::xml_value_scalar_float;
-  arg->set_index(1);
-  arg->set_value(0.5);
-  args.push_back(arg);
+  std::vector<viennamaterials::xml_value_entity_handle> args;
+  {
+    viennamaterials::xml_value_entity_handle arg(new viennamaterials::xml_value_scalar_float);
+    arg->set_index(0);
+    arg->set_value(3.0);
+    args.push_back(arg);
+  }
+  {
+    viennamaterials::xml_value_entity_handle arg(new viennamaterials::xml_value_scalar_float);
+    arg->set_index(1);
+    arg->set_value(0.5);
+    args.push_back(arg);
+  }
 
   viennamaterials::tag_scalar_float tag_float;
   double result = demo->eval(tag_float, args);
@@ -126,7 +129,7 @@ int main(int argc, char * argv[])
     double result = attribute->evaluate<double>();
     std::cout << "eval: " << result << std::endl;
 
-    std::vector<viennamaterials::xml_value_entity*> func_args = attribute->get_dependencies();
+    std::vector<viennamaterials::xml_value_entity_handle> func_args = attribute->get_dependencies();
     func_args[1]->set_value(0.125);
     attribute->set_dependencies(func_args);
     std::cout << "eval: " << attribute->evaluate<viennamaterials::xml_float>() << std::endl;

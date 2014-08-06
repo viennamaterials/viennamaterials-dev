@@ -20,11 +20,15 @@
 namespace viennamaterials
 {
 
+/**
+ * @brief Represents an attribute XML element
+ */
 class attribute_entity
 {
 public:
   virtual ~attribute_entity() {};
 
+  //TODO: DOXIGENIZE
   bool is_type(tag_scalar_bool tag);
   //TODO etc
   bool is_type(xml_attribute_type type);
@@ -47,19 +51,61 @@ public:
   bool is_function_float();
   bool is_function_tensor();
 
-  virtual std::vector<xml_value_entity*>  get_dependencies() = 0;
-  virtual void                            set_dependencies(std::vector<xml_value_entity*> &args) = 0;
+  /**
+   * @brief Get the dependencies of the attribute
+   * @return A vector of smartpointers to objects of type xml_value_entity
+   */
+  virtual std::vector<xml_value_entity_handle>  get_dependencies() = 0;
 
+  /**
+   * @brief Set the dependencies of the attribute
+   * @param A vector of smartpointers to objects of type xml_value_entity
+   */
+  virtual void                                  set_dependencies(std::vector<xml_value_entity_handle>& args) = 0;
+
+  /**
+   * @brief Evaluate the value of the attribute
+   * @tparam T Type of the attribute value
+   * @return The value of the attribute according to the template type
+   */
   template<typename T>
   T evaluate();
 
 protected:
+
+  /**
+   * @brief Dispatcher for the template specializations of evaluate method
+   * @return The value of the attribute according to the template type
+   */
   template<typename T>
   T evaluate_dispatch();
 
+  /**
+   * @brief Evaluate the value of this attribute
+   * @param tag A tag of type tag_scalar_bool
+   * @return The bool value of the attribute
+   */
   virtual xml_bool  eval(tag_scalar_bool tag)     = 0;
+
+  /**
+   * @brief Evaluate the value of this attribute
+   * @param tag A tag of type tag_scalar_int
+   * @return The integer value of the attribute
+   */
   virtual xml_int   eval(tag_scalar_int tag)      = 0;
+
+  /**
+   * @brief Evaluate the value of this attribute
+   * @param tag A tag of type tag_scalar_float
+   * @return The floating point value of the attribute
+   */
   virtual xml_float eval(tag_scalar_float tag)    = 0;
+
+  /**
+   * @brief Evaluate the value of this attribute
+   * @param tag A tag of type tag_tensor
+   * @return The tensor object of the attribute
+   */
 //  virtual void      eval(tag_tensor tag)          = 0; //FIXME: return
 
 protected:

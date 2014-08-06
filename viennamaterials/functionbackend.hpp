@@ -22,7 +22,7 @@ namespace viennamaterials
 {
 
 /**
- * @brief Interface for function backends
+ * @brief Interface class for function backends
  */
 class function_backend
 {
@@ -39,31 +39,31 @@ public:
   /**
    * @brief Executes the function specified during initialization
    * @param tag A Tag of type tag_scalar_bool
-   * @param //TODO args A vector of smartpointers to objects of type xml_value_entity representing the required arguments for function execution
+   * @param args A vector of smartpointers to objects of type xml_value_entity representing the required arguments for function execution
    * @return A xml_bool value representing the result of the executed function
    */
-  virtual xml_bool  eval(tag_scalar_bool tag,   std::vector<xml_value_entity*> &args)  = 0;
+  virtual xml_bool  eval(tag_scalar_bool tag,   std::vector<xml_value_entity_handle>& args)  = 0;
 
   /**
    * @brief Executes the function specified during initialization
    * @param tag A Tag of type tag_scalar_int
-   * @param //TODO args A vector of smartpointers to objects of type xml_value_entity representing the required arguments for function execution
+   * @param args A vector of smartpointers to objects of type xml_value_entity representing the required arguments for function execution
    * @return A xml_int value representing the result of the executed function
    */
-  virtual xml_int   eval(tag_scalar_int tag,    std::vector<xml_value_entity*> &args)  = 0;
+  virtual xml_int   eval(tag_scalar_int tag,    std::vector<xml_value_entity_handle>& args)  = 0;
 
   /**
    * @brief Executes the function specified during initialization
    * @param tag A Tag of type tag_scalar_float
-   * @param //TODO args A vector of smartpointers to objects of type xml_value_entity representing the required arguments for function execution
+   * @param args A vector of smartpointers to objects of type xml_value_entity representing the required arguments for function execution
    * @return A xml_float value representing the result of the executed function
    */
-  virtual xml_float eval(tag_scalar_float tag,  std::vector<xml_value_entity*> &args)  = 0;
+  virtual xml_float eval(tag_scalar_float tag,  std::vector<xml_value_entity_handle>& args)  = 0;
 
   /**
    * @brief Executes the function specified during initialization
    * @param tag A Tag of type tag_tensor
-   * @param //TODO args A vector of smartpointers to objects of type xml_value_entity representing the required arguments for function execution
+   * @param args A vector of smartpointers to objects of type xml_value_entity representing the required arguments for function execution
    * @return A xml_tensor value representing the result of the executed function
    */
 //  virtual void      evaluate(tag_tensor) = 0; //FIXME: argument list, return

@@ -40,7 +40,7 @@ attribute_handle broker::query(std::string const& xpath_query_to_attribute)
 
     /// Load function arguments
     long number_of_arguments = lib_->query_number_of_elements(query + "/arg");
-    std::vector<xml_value_entity*> args;
+    std::vector<xml_value_entity_handle> args;
 
     /// Note: is skipped if number_of_arguments == 0
     /// Note: XML indexing begins with 1
@@ -50,7 +50,7 @@ attribute_handle broker::query(std::string const& xpath_query_to_attribute)
 
       //TODO cope with reference arg
 
-      xml_value_entity *entity_ptr = 0;
+      xml_value_entity_handle entity_ptr;
       std::ostringstream index_string;
       index_string << i;
       std::string query_arg = query + "/arg[" + index_string.str() + "]";
@@ -65,11 +65,13 @@ attribute_handle broker::query(std::string const& xpath_query_to_attribute)
           throw broker_error("Bool scalar not yet implemented");
         }else if(lib_->query_attribute(query_arg_scalar, type_attribute).compare("int") == 0)
         {
-          entity_ptr = new xml_value_scalar_integer;
+          xml_value_entity_handle int_entity(new xml_value_scalar_integer);
+          entity_ptr = int_entity;
           entity_ptr->set_value( convert<xml_int>(lib_->query(query_arg_scalar + "/text()")) );
         }else if(lib_->query_attribute(query_arg_scalar, type_attribute).compare("float") == 0)
         {
-          entity_ptr = new xml_value_scalar_float;
+          xml_value_entity_handle float_entity(new xml_value_scalar_float);
+          entity_ptr = float_entity;
           entity_ptr->set_value( convert<xml_float>(lib_->query(query_arg_scalar + "/text()")) );
         }
 

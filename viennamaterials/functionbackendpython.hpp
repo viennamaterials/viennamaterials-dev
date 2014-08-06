@@ -37,26 +37,26 @@ public:
   /**
    * @brief Executes the function specified during initialization
    * @param tag A Tag of type tag_scalar_bool
-   * @param //TODO args A vector of smartpointers to objects of type xml_value_entity representing the required arguments for function execution
+   * @param args A vector of smartpointers to objects of type xml_value_entity representing the required arguments for function execution
    * @return A xml_bool value representing the result of the executed function
    */
-  xml_bool  eval(tag_scalar_bool tag,   std::vector<xml_value_entity*> &args);
+  xml_bool  eval(tag_scalar_bool tag,   std::vector<xml_value_entity_handle>& args);
 
   /**
    * @brief Executes the function specified during initialization
    * @param tag A Tag of type tag_scalar_int
-   * @param //TODO args A vector of smartpointers to objects of type xml_value_entity representing the required arguments for function execution
+   * @param args A vector of smartpointers to objects of type xml_value_entity representing the required arguments for function execution
    * @return A xml_int value representing the result of the executed function
    */
-  xml_int   eval(tag_scalar_int tag,    std::vector<xml_value_entity*> &args);
+  xml_int   eval(tag_scalar_int tag,    std::vector<xml_value_entity_handle>& args);
 
   /**
    * @brief Executes the function specified during initialization
    * @param tag A Tag of type tag_scalar_float
-   * @param //TODO args A vector of smartpointers to objects of type xml_value_entity representing the required arguments for function execution
+   * @param args A vector of smartpointers to objects of type xml_value_entity representing the required arguments for function execution
    * @return A xml_float value representing the result of the executed function
    */
-  xml_float eval(tag_scalar_float tag,  std::vector<xml_value_entity*> &args);
+  xml_float eval(tag_scalar_float tag,  std::vector<xml_value_entity_handle>& args);
 
 private:
   PyObject  *function_ptr_; /// Pointer to function in python module object
@@ -64,7 +64,12 @@ private:
   PyObject  *local_ptr_;
   PyObject  *module_ptr_;
 
-  PyObject* eval(std::vector<xml_value_entity*> &args);
+  /**
+   * @brief Executes the function specified during initialization
+   * @param args A vector of smartpointers to objects of type xml_value_entity representing the required arguments for function execution
+   * @return A pointer to a PyObject representing the result of the executed function
+   */
+  PyObject* eval(std::vector<xml_value_entity_handle>& args);
 };
 
 } /* namespace viennamaterials */
