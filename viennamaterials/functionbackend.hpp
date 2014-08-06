@@ -36,6 +36,8 @@ public:
    */
   virtual void      init(std::string const& code, std::string const& function_name) = 0;
 
+  //TODO provide template specialization for eval?
+
   /**
    * @brief Executes the function specified during initialization
    * @param tag A Tag of type tag_scalar_bool

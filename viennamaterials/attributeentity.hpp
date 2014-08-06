@@ -75,6 +75,7 @@ protected:
 
   /**
    * @brief Dispatcher for the template specializations of evaluate method
+   * @tparam T Type of the attribute value
    * @return The value of the attribute according to the template type
    */
   template<typename T>
@@ -113,7 +114,7 @@ protected:
 };
 
 template<typename T>
-T viennamaterials::attribute_entity::evaluate()
+T attribute_entity::evaluate()
 {
   return this->evaluate_dispatch<T>();
 }
