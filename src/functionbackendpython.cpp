@@ -65,16 +65,13 @@ PyObject* function_backend_python::eval(std::vector<xml_value_entity_handle>& ar
       switch((*it)->get_type())
       {
         case type_bool:
-          tag_scalar_bool tag_bool;
-          value_py = PyBool_FromLong((*it)->get_value(tag_bool));
+          value_py = PyBool_FromLong((*it)->get_value<xml_bool>());
           break;
         case type_int:
-          tag_scalar_int tag_int;
-          value_py = PyInt_FromLong((*it)->get_value(tag_int));
+          value_py = PyInt_FromLong((*it)->get_value<xml_int>());
           break;
         case type_float:
-          tag_scalar_float tag_float;
-          value_py = PyFloat_FromDouble((*it)->get_value(tag_float));
+          value_py = PyFloat_FromDouble((*it)->get_value<xml_float>());
           break;
         case type_tensor:
           //TODO
