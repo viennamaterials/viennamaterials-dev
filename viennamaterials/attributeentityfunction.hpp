@@ -19,7 +19,7 @@
 namespace viennamaterials
 {
 
-typedef viennamaterials::shared_ptr<viennamaterials::function_backend> function_backend_handle;
+typedef shared_ptr<function_backend> function_backend_handle;
 
 class attribute_entity_function: public attribute_entity
 {
