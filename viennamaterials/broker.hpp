@@ -21,17 +21,33 @@
 namespace viennamaterials
 {
 
+typedef shared_ptr<attribute_entity> attribute_handle;
+
 class broker
 {
 public:
+  /**
+   * @brief Innitiates a broker object by loading a material library object
+   * @param filename A string holding the filename of the material library XML file
+   */
   broker(std::string const& filename);
-//  void              load_file(std::string const& filename);
-  attribute_entity* query(std::string const& xpath_query_to_attribute);
+
+  /**
+   * @brief Loads all relevant data from xml backend and returns a attribute entity handle representing the attribute pointed by the query.
+   * @param xpath_query_to_attribute The XPath query given as string pointing to a attribute XML element
+   * @return A smartpointer pointing to an attribute_entity object
+   */
+  attribute_handle query(std::string const& xpath_query_to_attribute);
 
 private:
   library_handle lib_;
 
 private:
+  /**
+   * @brief Evaluates the type of the attribute pointed by the query
+   * @param xpath_query_to_attribute The XPath query given as string pointing to a attribute XML element
+   * @return The enum xml_attribute_type representation of the attribute
+   */
   xml_attribute_type get_attribute_type(std::string const& xpath_query_to_attribute);
 };
 

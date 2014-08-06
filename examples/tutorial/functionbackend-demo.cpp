@@ -120,12 +120,11 @@ int main(int argc, char * argv[])
    */
   std::cout << std::endl << "broker demo:" << std::endl;
   viennamaterials::broker broker_demo(filename);
-  viennamaterials::attribute_entity *attribute = broker_demo.query(query);  //TODO smartpointer
+  viennamaterials::attribute_handle attribute = broker_demo.query(query);
   if(attribute->is_function_float())
   {
     double result = attribute->evaluate<double>();
     std::cout << "eval: " << result << std::endl;
-//    attribute->evaluate<bool>();
 
     std::vector<viennamaterials::xml_value_entity*> func_args = attribute->get_dependencies();
     func_args[1]->set_value(0.125);

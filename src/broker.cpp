@@ -28,10 +28,7 @@ broker::broker(std::string const& filename)
   lib_ = viennamaterials::generator(filename);
 }
 
-/**
- * This method loads all relevant data from xml backend and returns a new attribute entity representing the attribute pointed by the query.
- */
-attribute_entity* broker::query(std::string const& xpath_query_to_attribute)
+attribute_handle broker::query(std::string const& xpath_query_to_attribute)
 {
   /// Gather data from XML
   xml_attribute_type type = get_attribute_type(xpath_query_to_attribute);
@@ -108,7 +105,7 @@ attribute_entity* broker::query(std::string const& xpath_query_to_attribute)
 
 
     /// Create function attribute entity
-    attribute_entity *entity = new attribute_entity_function(type, backend, args);
+    attribute_handle entity(new attribute_entity_function(type, backend, args));
     return entity;
   }
 
