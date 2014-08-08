@@ -10,13 +10,14 @@
    license:    see file LICENSE in the base directory
 ============================================================================= */
 
-#include "../viennamaterials/broker.hpp"
+#include "viennamaterials/broker.hpp"
 #include "viennamaterials/pugixml.hpp"
 #include "viennamaterials/exceptions.hpp"
 #include "viennamaterials/xmlvaluescalar.hpp"
 #include "viennamaterials/utils/convert.hpp"
 #include "viennamaterials/functionbackendpython.hpp"
 #include "viennamaterials/attributeentityfunction.hpp"
+#include "viennamaterials/attributeentityscalar.hpp"
 #include <vector>
 
 namespace viennamaterials
@@ -58,7 +59,7 @@ attribute_handle broker::query(std::string const& xpath_query_to_attribute)
       if(lib_->query_number_of_elements(query_arg + "/scalar") == 1)
       {
         std::string query_arg_scalar = query_arg + "/scalar";
-        std::string type_attribute = "type";
+        const std::string type_attribute = "type";
         if(lib_->query_attribute(query_arg_scalar, type_attribute).compare("bool") == 0)
         {
           xml_value_entity_handle bool_entity(new xml_value_scalar_boolean);
@@ -101,8 +102,8 @@ attribute_handle broker::query(std::string const& xpath_query_to_attribute)
     /// Load function backend
     function_backend_handle backend;
     std::string query_code = query + "/code";
-    std::string lang_attribute = "lang";
-    std::string call_attribute = "call";
+    const std::string lang_attribute = "lang";
+    const std::string call_attribute = "call";
     if(lib_->query_attribute(query_code, lang_attribute).compare("python") == 0)
     {
       function_backend_handle tmp(new function_backend_python);
@@ -117,10 +118,44 @@ attribute_handle broker::query(std::string const& xpath_query_to_attribute)
     /// Create function attribute entity
     attribute_handle entity(new attribute_entity_function(type, backend, args));
     return entity;
+  }else if(type == scalar_bool || type == scalar_int || type ==  scalar_float)
+  {
+    std::string query_scalar = xpath_query_to_attribute + "/scalar";
+    const std::string type_attribute = "type";
+    if(lib_->query_attribute(query_scalar, type_attribute).compare("bool") == 0)
+    {
+      std::string value = lib_->query(query_scalar + "/text()");
+      std::transform(value.begin(), value.end(), value.begin(), ::tolower);
+      if(value.compare("true") == 0)
+      {
+        /// Create boolean scalar attribute entity holding value true
+        attribute_handle entity(new attribute_entity_scalar_boolean(true));
+        return entity;
+      }
+      else if(value.compare("false") == 0)
+      {
+        /// Create boolean scalar attribute entity holding value false
+        attribute_handle entity(new attribute_entity_scalar_boolean(false));
+        return entity;
+      }
+      else
+        throw broker_error("Invalid boolean value encountered (query: " + query_scalar + ")");
+    }else if(lib_->query_attribute(query_scalar, type_attribute).compare("int") == 0)
+    {
+      /// Create integer scalar attribute entity
+      xml_int value = convert<xml_int>(lib_->query(query_scalar + "/text()"));
+      attribute_handle entity(new attribute_entity_scalar_integer(value));
+      return entity;
+    }else if(lib_->query_attribute(query_scalar, type_attribute).compare("float") == 0)
+    {
+      /// Create floating point scalar attribute entity
+      xml_float value = convert<xml_float>(lib_->query(query_scalar + "/text()"));
+      attribute_handle entity(new attribute_entity_scalar_float(value));
+      return entity;
+    }
   }
 
   //TODO tensor
-  //TODO scalar
 
   throw broker_error("Invalid argument type encountered (query: " + xpath_query_to_attribute + ")");
 }

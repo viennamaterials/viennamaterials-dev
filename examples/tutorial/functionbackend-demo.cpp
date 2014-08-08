@@ -134,6 +134,25 @@ int main(int argc, char * argv[])
     std::cout << "eval: " << attribute->evaluate<viennamaterials::xml_float>() << std::endl;
   }
 
+  /// scalar attribute
+  std::cout << std::endl << "broker demo - scalar:" << std::endl;
+  query = "/*/*[id='test-material']/*[id='parameter1']";
+  viennamaterials::attribute_handle scalar_attribute = broker_demo.query(query);
+  if(scalar_attribute->is_scalar_float())
+  {
+    double result = scalar_attribute->evaluate<double>();
+    std::cout << "eval: " << result << std::endl;
+  }
+  if(scalar_attribute->is_scalar_int())
+  {
+    long result = scalar_attribute->evaluate<long>();
+    std::cout << "eval: " << result << std::endl;
+  }
+  if(scalar_attribute->is_scalar_bool())
+  {
+    bool result = scalar_attribute->evaluate<bool>();
+    std::cout << "eval: " << result << std::endl;
+  }
 
 
 

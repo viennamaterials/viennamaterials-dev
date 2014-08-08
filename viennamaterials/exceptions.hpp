@@ -139,6 +139,19 @@ namespace viennamaterials
     std::string info;
   };
 
+  struct attribute_entity_error : public std::exception
+  {
+    attribute_entity_error(std::string const& info) : info(info) {}
+    ~attribute_entity_error() throw() {}
+
+    virtual const char* what() const throw()
+    {
+      return info.c_str();
+    }
+
+    std::string info;
+  };
+
 
 } // viennamaterials
 
