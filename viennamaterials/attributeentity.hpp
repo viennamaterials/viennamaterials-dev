@@ -111,6 +111,7 @@ protected:
 
 protected:
   xml_attribute_type entity_type_;
+  //TODO unit!!!
 };
 
 template<typename T>

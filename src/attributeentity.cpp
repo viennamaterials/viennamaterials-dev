@@ -16,21 +16,21 @@
 namespace viennamaterials
 {
 
-bool viennamaterials::attribute_entity::is_type(tag_scalar_bool tag)
+bool attribute_entity::is_type(tag_scalar_bool tag)
 {
   if(entity_type_ == scalar_bool)
     return true;
   return false;
 }
 
-bool viennamaterials::attribute_entity::is_type(xml_attribute_type type)
+bool attribute_entity::is_type(xml_attribute_type type)
 {
   if(entity_type_ == type)
     return true;
   return false;
 }
 
-bool viennamaterials::attribute_entity::is_scalar()
+bool attribute_entity::is_scalar()
 {
   if(     entity_type_ == scalar_bool
       ||  entity_type_ == scalar_int
@@ -39,56 +39,56 @@ bool viennamaterials::attribute_entity::is_scalar()
   return false;
 }
 
-bool viennamaterials::attribute_entity::is_scalar(tag_scalar_bool tag)
+bool attribute_entity::is_scalar(tag_scalar_bool tag)
 {
   if(entity_type_ == scalar_bool)
     return true;
   return false;
 }
 
-bool viennamaterials::attribute_entity::is_scalar(tag_scalar_int tag)
+bool attribute_entity::is_scalar(tag_scalar_int tag)
 {
   if(entity_type_ == scalar_int)
     return true;
   return false;
 }
 
-bool viennamaterials::attribute_entity::is_scalar(tag_scalar_float tag)
+bool attribute_entity::is_scalar(tag_scalar_float tag)
 {
   if(entity_type_ == scalar_float)
     return true;
   return false;
 }
 
-bool viennamaterials::attribute_entity::is_scalar_bool()
+bool attribute_entity::is_scalar_bool()
 {
   if(entity_type_ == scalar_bool)
     return true;
   return false;
 }
 
-bool viennamaterials::attribute_entity::is_scalar_int()
+bool attribute_entity::is_scalar_int()
 {
   if(entity_type_ == scalar_int)
     return true;
   return false;
 }
 
-bool viennamaterials::attribute_entity::is_scalar_float()
+bool attribute_entity::is_scalar_float()
 {
   if(entity_type_ == scalar_float)
     return true;
   return false;
 }
 
-bool viennamaterials::attribute_entity::is_tensor()
+bool attribute_entity::is_tensor()
 {
   if(entity_type_ == tensor)
     return true;
   return false;
 }
 
-bool viennamaterials::attribute_entity::is_function()
+bool attribute_entity::is_function()
 {
   if(     entity_type_ == function_bool
       ||  entity_type_ == function_int
@@ -98,56 +98,56 @@ bool viennamaterials::attribute_entity::is_function()
   return false;
 }
 
-bool viennamaterials::attribute_entity::is_function(tag_function_bool tag)
+bool attribute_entity::is_function(tag_function_bool tag)
 {
   if(entity_type_ == function_bool)
     return true;
   return false;
 }
 
-bool viennamaterials::attribute_entity::is_function(tag_function_int tag)
+bool attribute_entity::is_function(tag_function_int tag)
 {
   if(entity_type_ == function_int)
     return true;
   return false;
 }
 
-bool viennamaterials::attribute_entity::is_function(tag_function_float tag)
+bool attribute_entity::is_function(tag_function_float tag)
 {
   if(entity_type_ == function_float)
     return true;
   return false;
 }
 
-bool viennamaterials::attribute_entity::is_function(tag_function_tensor tag)
+bool attribute_entity::is_function(tag_function_tensor tag)
 {
   if(entity_type_ == function_tensor)
     return true;
   return false;
 }
 
-bool viennamaterials::attribute_entity::is_function_bool()
+bool attribute_entity::is_function_bool()
 {
   if(entity_type_ == function_bool)
     return true;
   return false;
 }
 
-bool viennamaterials::attribute_entity::is_function_int()
+bool attribute_entity::is_function_int()
 {
   if(entity_type_ == function_int)
     return true;
   return false;
 }
 
-bool viennamaterials::attribute_entity::is_function_float()
+bool attribute_entity::is_function_float()
 {
   if(entity_type_ == function_float)
     return true;
   return false;
 }
 
-bool viennamaterials::attribute_entity::is_function_tensor()
+bool attribute_entity::is_function_tensor()
 {
   if(entity_type_ == function_tensor)
     return true;
@@ -155,27 +155,27 @@ bool viennamaterials::attribute_entity::is_function_tensor()
 }
 
 template<typename T>
-T viennamaterials::attribute_entity::evaluate_dispatch()
+T attribute_entity::evaluate_dispatch()
 {
   throw broker_error("Template type not supported");
 }
 
 template<>
-xml_bool viennamaterials::attribute_entity::evaluate_dispatch<xml_bool>()
+xml_bool attribute_entity::evaluate_dispatch<xml_bool>()
 {
   tag_scalar_bool tag_bool;
   return this->eval(tag_bool);
 }
 
 template<>
-xml_int viennamaterials::attribute_entity::evaluate_dispatch<xml_int>()
+xml_int attribute_entity::evaluate_dispatch<xml_int>()
 {
   tag_scalar_int tag_int;
   return this->eval(tag_int);
 }
 
 template<>
-xml_float viennamaterials::attribute_entity::evaluate_dispatch<xml_float>()
+xml_float attribute_entity::evaluate_dispatch<xml_float>()
 {
   tag_scalar_float tag_float;
   return this->eval(tag_float);

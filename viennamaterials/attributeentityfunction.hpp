@@ -24,7 +24,7 @@ typedef shared_ptr<function_backend> function_backend_handle;
 /**
  * @brief Represents an attribute XML element holding a function
  */
-class attribute_entity_function: public attribute_entity
+class attribute_entity_function : public attribute_entity
 {
 public:
   /**
