@@ -61,8 +61,16 @@ attribute_handle broker::query(std::string const& xpath_query_to_attribute)
         std::string type_attribute = "type";
         if(lib_->query_attribute(query_arg_scalar, type_attribute).compare("bool") == 0)
         {
-          //TODO scalar bool
-          throw broker_error("Bool scalar not yet implemented");
+          xml_value_entity_handle bool_entity(new xml_value_scalar_boolean);
+          entity_ptr = bool_entity;
+          std::string value = lib_->query(query_arg_scalar + "/text()");
+          std::transform(value.begin(), value.end(), value.begin(), ::tolower);
+          if(value.compare("true"))
+            entity_ptr->set_value(true);
+          else if(value.compare("false"))
+            entity_ptr->set_value(false);
+          else
+            throw broker_error("Invalid boolean value encountered (query: " + query_arg_scalar + ")");
         }else if(lib_->query_attribute(query_arg_scalar, type_attribute).compare("int") == 0)
         {
           xml_value_entity_handle int_entity(new xml_value_scalar_integer);
