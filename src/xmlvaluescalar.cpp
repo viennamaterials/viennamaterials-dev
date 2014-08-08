@@ -17,6 +17,49 @@ namespace viennamaterials
 {
 
 /**
+ * Memeber Methods for class xml_value_scalar_boolean
+ */
+
+xml_value_scalar_boolean::xml_value_scalar_boolean()
+{
+  set_type(type_bool);
+}
+
+void xml_value_scalar_boolean::set_value(xml_bool value)
+{
+  this->value_ = value;
+}
+
+void xml_value_scalar_boolean::set_value(xml_int value)
+{
+  throw func_backend_attr_value_type_error();
+}
+
+void xml_value_scalar_boolean::set_value(xml_float value)
+{
+  throw func_backend_attr_value_type_error();
+}
+
+xml_bool xml_value_scalar_boolean::get_value(tag_scalar_bool tag)
+{
+  return value_;
+}
+
+xml_int xml_value_scalar_boolean::get_value(tag_scalar_int tag)
+{
+  throw func_backend_attr_value_type_error();
+}
+
+xml_float xml_value_scalar_boolean::get_value(tag_scalar_float tag)
+{
+  throw func_backend_attr_value_type_error();
+}
+
+
+
+
+
+/**
  * Memeber Methods for class xml_value_scalar_integer
  */
 
@@ -25,32 +68,32 @@ xml_value_scalar_integer::xml_value_scalar_integer()
   set_type(type_int);
 }
 
-void viennamaterials::xml_value_scalar_integer::set_value(xml_bool value)
+void xml_value_scalar_integer::set_value(xml_bool value)
 {
   throw func_backend_attr_value_type_error();
 }
 
-void viennamaterials::xml_value_scalar_integer::set_value(xml_int value)
+void xml_value_scalar_integer::set_value(xml_int value)
 {
   this->value_ = value;
 }
 
-void viennamaterials::xml_value_scalar_integer::set_value(xml_float value)
+void xml_value_scalar_integer::set_value(xml_float value)
 {
   throw func_backend_attr_value_type_error();
 }
 
-xml_bool viennamaterials::xml_value_scalar_integer::get_value(tag_scalar_bool tag)
+xml_bool xml_value_scalar_integer::get_value(tag_scalar_bool tag)
 {
   throw func_backend_attr_value_type_error();
 }
 
-xml_int viennamaterials::xml_value_scalar_integer::get_value(tag_scalar_int tag)
+xml_int xml_value_scalar_integer::get_value(tag_scalar_int tag)
 {
   return value_;
 }
 
-xml_float viennamaterials::xml_value_scalar_integer::get_value(tag_scalar_float tag)
+xml_float xml_value_scalar_integer::get_value(tag_scalar_float tag)
 {
   throw func_backend_attr_value_type_error();
 }
@@ -67,32 +110,32 @@ xml_value_scalar_float::xml_value_scalar_float()
   set_type(type_float);
 }
 
-void viennamaterials::xml_value_scalar_float::set_value(xml_bool value)
+void xml_value_scalar_float::set_value(xml_bool value)
 {
   throw func_backend_attr_value_type_error();
 }
 
-void viennamaterials::xml_value_scalar_float::set_value(xml_int value)
+void xml_value_scalar_float::set_value(xml_int value)
 {
   throw func_backend_attr_value_type_error();
 }
 
-void viennamaterials::xml_value_scalar_float::set_value(xml_float value)
+void xml_value_scalar_float::set_value(xml_float value)
 {
   this->value = value;
 }
 
-xml_bool viennamaterials::xml_value_scalar_float::get_value(tag_scalar_bool tag)
+xml_bool xml_value_scalar_float::get_value(tag_scalar_bool tag)
 {
   throw func_backend_attr_value_type_error();
 }
 
-xml_int viennamaterials::xml_value_scalar_float::get_value(tag_scalar_int tag)
+xml_int xml_value_scalar_float::get_value(tag_scalar_int tag)
 {
   throw func_backend_attr_value_type_error();
 }
 
-xml_float viennamaterials::xml_value_scalar_float::get_value(tag_scalar_float tag)
+xml_float xml_value_scalar_float::get_value(tag_scalar_float tag)
 {
   return value;
 }
