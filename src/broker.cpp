@@ -66,9 +66,9 @@ attribute_handle broker::query(std::string const& xpath_query_to_attribute)
           entity_ptr = bool_entity;
           std::string value = lib_->query(query_arg_scalar + "/text()");
           std::transform(value.begin(), value.end(), value.begin(), ::tolower);
-          if(value.compare("true"))
+          if(value.compare("true") == 0)
             entity_ptr->set_value(true);
-          else if(value.compare("false"))
+          else if(value.compare("false") == 0)
             entity_ptr->set_value(false);
           else
             throw broker_error("Invalid boolean value encountered (query: " + query_arg_scalar + ")");
