@@ -13,8 +13,8 @@
 #ifndef XMLVALUESCALARINTEGER_HPP_
 #define XMLVALUESCALARINTEGER_HPP_
 
-#include "xmlvalueentity.hpp"
-#include "xmldatatypes.h"
+#include "viennamaterials/xmlvalueentity.hpp"
+#include "viennamaterials/xmldatatypes.h"
 
 namespace viennamaterials
 {

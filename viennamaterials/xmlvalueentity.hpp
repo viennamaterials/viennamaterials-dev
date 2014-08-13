@@ -14,7 +14,7 @@
 #define XMLVALUEENTITY_HPP_
 
 #include <string>
-#include "xmldatatypes.h"
+#include "viennamaterials/xmldatatypes.h"
 
 namespace viennamaterials
 {
@@ -61,7 +61,7 @@ public:
    * @brief Set index of this object. The index is the position in the argument list of a function.
    * @param index The index of this object
    */
-  void              set_index(size_t index);
+  void              set_index(size_t index); //TODO make private, only use in construktor
 
   /**
    * @brief Get index of this object. The index is the position in the argument list of a function.
