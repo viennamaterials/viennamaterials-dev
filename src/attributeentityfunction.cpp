@@ -29,19 +29,6 @@ std::vector<xml_value_entity_handle> attribute_entity_function::get_dependencies
   return args_;
 }
 
-struct arg_comperator
-{
-  explicit arg_comperator(const std::string& name) { name_ = name; }
-  inline bool operator()(const xml_value_entity_handle& obj) const
-  {
-    if(obj->get_name().compare(name_) == 0)
-      return true;
-    return false;
-  }
-private:
-  std::string name_;
-};
-
 void attribute_entity_function::set_dependencies(std::vector<xml_value_entity_handle>& args)
 {
   for(std::vector<xml_value_entity_handle>::iterator function_arg_iter = args_.begin(); function_arg_iter != args_.end(); ++function_arg_iter)

@@ -29,7 +29,7 @@ class attribute_entity_function : public attribute_entity
 public:
   /**
    * @brief Create a function attribute
-   * @param entity_type The function type of given as enum xml_attribute_type
+   * @param entity_type The function type given as enum xml_attribute_type
    * @param backend A smartpointer to the function backend object
    * @param args A vector of smartpointers to objects of type xml_value_entity representing the required arguments for function execution
    */
@@ -71,6 +71,20 @@ public:
 private:
   function_backend_handle backend_;
   std::vector<xml_value_entity_handle> args_;
+};
+
+//TODO doxygen?
+struct arg_comperator
+{
+  explicit arg_comperator(const std::string& name) { name_ = name; }
+  inline bool operator()(const xml_value_entity_handle& obj) const
+  {
+    if(obj->get_name().compare(name_) == 0)
+      return true;
+    return false;
+  }
+private:
+  std::string name_;
 };
 
 } /* namespace viennamaterials */
