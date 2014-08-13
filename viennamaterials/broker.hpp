@@ -21,8 +21,6 @@
 namespace viennamaterials
 {
 
-typedef shared_ptr<attribute_entity> attribute_handle;
-
 class broker
 {
 public:

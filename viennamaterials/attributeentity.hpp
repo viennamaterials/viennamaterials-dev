@@ -120,5 +120,7 @@ T attribute_entity::evaluate()
   return this->evaluate_dispatch<T>();
 }
 
+typedef shared_ptr<attribute_entity> attribute_handle;
+
 } /* namespace viennamaterials */
 #endif /* ATTRIBUTEENTITY_HPP_ */
