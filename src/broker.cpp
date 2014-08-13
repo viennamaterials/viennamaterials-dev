@@ -16,8 +16,8 @@
 #include "viennamaterials/xmlvaluescalar.hpp"
 #include "viennamaterials/utils/convert.hpp"
 #include "viennamaterials/functionbackendpython.hpp"
-#include "viennamaterials/attributeentityfunction.hpp"
 #include "viennamaterials/attributeentityscalar.hpp"
+#include "viennamaterials/attributeentitycluster.hpp"
 #include <vector>
 
 namespace viennamaterials
@@ -41,15 +41,14 @@ attribute_handle broker::query(std::string const& xpath_query_to_attribute)
 
     /// Load function arguments
     long number_of_arguments = lib_->query_number_of_elements(query + "/arg");
-    std::vector<xml_value_entity_handle> args;
+    std::vector<xml_value_entity_handle> args; //TODO rename: ?dependencies?
+    std::vector<shared_ptr<attribute_entity_argument> > referenced_arguments;
 
     /// Note: is skipped if number_of_arguments == 0
     /// Note: XML indexing begins with 1
     for(long i = 1; i <= number_of_arguments; i++)
     {
       /// Handle each argument
-
-      //TODO cope with reference arg
 
       xml_value_entity_handle entity_ptr;
       std::ostringstream index_string;
@@ -89,6 +88,14 @@ attribute_handle broker::query(std::string const& xpath_query_to_attribute)
       {
         //TODO tensor arg
         throw broker_error("Tensor not yet implemented");
+      }else if(lib_->query_number_of_elements(query_arg + "/reference") == 1)
+      {
+        std::string query_referenced_attribute = lib_->query(query_arg + "/reference/text()");
+        attribute_handle referenced_attribute = this->query(query_referenced_attribute); //broker query
+        shared_ptr<attribute_entity_argument> attribute_arg_ptr(
+            new attribute_entity_argument(convert<size_t>(lib_->query(query_arg + "/id/text()")), referenced_attribute));
+        referenced_arguments.push_back(attribute_arg_ptr);
+        continue;
       }else
         throw broker_error("Invalid function argument type encountered (query: " + query_arg + ")");
 
@@ -116,7 +123,8 @@ attribute_handle broker::query(std::string const& xpath_query_to_attribute)
 
 
     /// Create function attribute entity
-    attribute_handle entity(new attribute_entity_function(type, backend, args));
+    attribute_handle entity(new attribute_entity_cluster(type, backend, args, referenced_arguments));
+
     return entity;
   }else if(type == scalar_bool || type == scalar_int || type ==  scalar_float)
   {
