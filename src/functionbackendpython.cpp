@@ -10,7 +10,7 @@
    license:    see file LICENSE in the base directory
 ============================================================================= */
 
-#include "../viennamaterials/functionbackendpython.hpp"
+#include "viennamaterials/functionbackendpython.hpp"
 #include "viennamaterials/exceptions.hpp"
 
 namespace viennamaterials
