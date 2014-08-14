@@ -69,13 +69,14 @@
       <function>
         <code lang='python' call='func'>
           def func(a, condition, b, c, d):
+            print 'Hello! This is the Python backend.'
             if condition:
-              print true
+              print '  bool  ref is: TRUE'
             else:
-              print false
-            print b
-            print c
-            print d
+              print '  bool  ref is: FALSE'
+            print '  int   ref is: {0}'.format(b)
+            print '  float ref is: {0}'.format(c)
+            print '  func  ref is: {0}'.format(d)
             return a*1000
         </code>
         <arg>
