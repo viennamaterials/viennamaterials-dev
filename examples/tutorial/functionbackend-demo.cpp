@@ -71,34 +71,31 @@ int main(int argc, char * argv[])
     attribute->set_dependencies(func_args);
     std::cout << "multiply function (arg set):   " << attribute->evaluate<double>() << std::endl;
   }
-  attribute.reset(); //FIXME
 
   /** Load function with integer return type from material library **/
   query = "/*/*[id='test-material']/*[id='int-function-add']";
-  attribute = broker.query(query);
-  if(attribute->is_function_int())
+  viennamaterials::attribute_handle attribute_2 = broker.query(query);
+  if(attribute_2->is_function_int())
   {
     /// Using default values of function arguments
-    std::cout << "add function (defaults):  " << attribute->evaluate<long>() << std::endl;
+    std::cout << "add function (defaults):  " << attribute_2->evaluate<long>() << std::endl;
 
     /// Set value for second function argument and evaluate
-    std::vector<viennamaterials::xml_value_entity_handle> func_args = attribute->get_dependencies();
+    std::vector<viennamaterials::xml_value_entity_handle> func_args = attribute_2->get_dependencies();
     func_args[0]->set_value((long)8);
-    attribute->set_dependencies(func_args);
-    std::cout << "add function (arg set):   " << attribute->evaluate<long>() << std::endl;
+    attribute_2->set_dependencies(func_args);
+    std::cout << "add function (arg set):   " << attribute_2->evaluate<long>() << std::endl;
   }
-  attribute.reset(); //FIXME
 
   std::cout << "#####" << std::endl;
 
   /** Load function with references from material library **/
   query = "/*/*[id='test-material']/*[id='float-function-references']";
-  attribute = broker.query(query);
-  if(attribute->is_function_float())
+  viennamaterials::attribute_handle attribute_3 = broker.query(query);
+  if(attribute_3->is_function_float())
   {
     /// Using default values of function arguments
-//    std::cout << "function with references (defaults):  " << attribute->evaluate<double>() << std::endl;
-    //FIXME: big troubles: multiple python instances do not work
+    std::cout << "function with references (defaults):  " << attribute_3->evaluate<double>() << std::endl;
   }
 
 
