@@ -110,12 +110,17 @@ namespace viennamaterials
     }
   };
 
-  struct func_backend_type_error: public std::exception
+  struct func_backend_error: public std::exception
   {
+    func_backend_error(std::string const& info) : info(info) {}
+    ~func_backend_error() throw() {}
+
     virtual const char* what() const throw()
     {
-      return std::string("Invalid value type encountered").c_str();
+      return info.c_str();
     }
+
+    std::string info;
   };
 
   struct xml_index_error: public std::exception

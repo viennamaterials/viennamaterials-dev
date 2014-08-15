@@ -53,13 +53,13 @@ PyObject* function_backend_python::eval(std::vector<xml_value_entity_handle>& ar
   if (PyCallable_Check(function_ptr_))
   {
     size_t number_of_args = args.size();
-    //TODO: handle case number_of_args == 0
     //TODO check integrity of index
 
+    PyObject *result_py;
     /// Build a tuple to hold arguments
     PyObject *args_py;
     args_py = PyTuple_New(number_of_args);
-    PyObject *value_py = 0;
+    PyObject *value_py = NULL;
     for(std::vector<xml_value_entity_handle>::iterator it = args.begin(); it != args.end(); ++it)
     {
       switch((*it)->get_type())
@@ -77,19 +77,21 @@ PyObject* function_backend_python::eval(std::vector<xml_value_entity_handle>& ar
           //TODO tensor
           break;
         default:
-          throw func_backend_type_error();
+          throw func_backend_error("Not supported xml_value_entity_type encountered");
           break;
       }
 
       PyTuple_SetItem(args_py, (*it)->get_index(), value_py);
     }
 
-
-    PyObject *result_py;
     result_py = PyObject_CallObject(function_ptr_, args_py);
 
-    Py_DECREF(value_py);
+    if(value_py != NULL)
+      Py_DECREF(value_py);
     Py_DECREF(args_py);
+
+    if(result_py == NULL)
+      throw func_backend_error("Failure in Python function");
     return result_py;
   } else
   {
