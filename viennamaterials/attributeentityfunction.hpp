@@ -22,28 +22,69 @@ namespace viennamaterials
 typedef shared_ptr<function_backend> function_backend_handle;
 
 /**
+ * @brief Represents an attribute entity used as argument for a function attribute entity.
+ *
+ * This class adds index information to an attribute entity object.
+ * The index is used to identify the argument position for the function call in the function backend.
+ */
+class attribute_entity_argument
+{
+public:
+  /**
+   * @brief Create an attribute_entity_argument object
+   * @param index A integer value representing the index (position) of this attribute object in the argument list of the function in the function backend.
+   *              Index 0 identifies the firest argument.
+   * @param attr_obj A smartpointer to an attribute_entity object which is used as argument for the called function in the function backend.
+   */
+  attribute_entity_argument(size_t index, attribute_handle& attr_obj);
+
+  /**
+   * @brief Get the attribute_entity object of this object
+   * @return A smartpointer to the attribute_entity object
+   */
+  attribute_handle get_attribute();
+
+  /**
+   * @brief Get index of this object. The index is the position in the argument list of a function.
+   * @return The index of this object
+   */
+  size_t            get_index();
+
+private:
+  size_t index_; /// Argument index for the function backend
+  attribute_handle attribute_;
+};
+
+/**
  * @brief Represents an attribute XML element holding a function
+ *
+ * This object holds a function backend, zero or more xml_value_entity objects representing dependencis of the this function attribute and
+ * zero or more attribute_entity objects given by <reference> XML element
  */
 class attribute_entity_function : public attribute_entity
 {
 public:
   /**
-   * @brief Create a function attribute
+   * @brief Create a function attribute.
    * @param entity_type The function type given as enum xml_attribute_type
    * @param backend A smartpointer to the function backend object
-   * @param args A vector of smartpointers to objects of type xml_value_entity representing the required arguments for function execution
+   * @param dependencies A vector of smartpointers to objects of type xml_value_entity representing the required arguments for function execution which
+   *                      must be entered by the simulator (frontend)
+   * @param arguments A vector of smartpointers to objects of type attribute_entity_argument representing the required arguments for function execution
+   *                      which are queried from the XML material database
    */
-  attribute_entity_function(xml_attribute_type entity_type, function_backend_handle backend, std::vector<xml_value_entity_handle>& args);
+  attribute_entity_function(xml_attribute_type entity_type, function_backend_handle backend, std::vector<xml_value_entity_handle>& dependencies, std::vector<shared_ptr<attribute_entity_argument> > arguments);
 
   /**
-   * @brief Get the dependencies of the function attribute
-   * @return A vector of smartpointers to objects of type xml_value_entity representing the required arguments for function execution
+   * @brief Get the dependencies of the this attribute function object
+   * @return A vector of smartpointers to objects of type xml_value_entity representing the required arguments to evaluate this object
    */
   std::vector<xml_value_entity_handle>  get_dependencies();
 
   /**
    * @brief Set the dependencies of the function attribute
-   * @param A vector of smartpointers to objects of type xml_value_entity representing the required arguments for function execution
+   * @param args A vector of smartpointers to objects of type xml_value_entity representing the required arguments to evaluate this object.
+   *              The vector given may hold more than the required arguments. The dependencies actually used are identified by the name information.
    */
   void                                  set_dependencies(std::vector<xml_value_entity_handle>& args);
 
@@ -68,23 +109,17 @@ public:
    */
   xml_float                             eval(tag_scalar_float tag);
 
+
 private:
   function_backend_handle backend_;
-  std::vector<xml_value_entity_handle> args_;
-};
+  std::vector<xml_value_entity_handle> dependencies_backend_;
+  std::vector<shared_ptr<attribute_entity_argument> > arguments_;
 
-//TODO doxygen?
-struct arg_comperator
-{
-  explicit arg_comperator(const std::string& name) { name_ = name; }
-  inline bool operator()(const xml_value_entity_handle& obj) const
-  {
-    if(obj->get_name().compare(name_) == 0)
-      return true;
-    return false;
-  }
-private:
-  std::string name_;
+  /**
+   * @brief Evaluate all argument attribute objects and return the results as well as the dependencies of this function attribute object
+   * @return A vector of smartpointers to objects of type xml_value_entity representing all dependencies for the function call in the function backend
+   */
+  std::vector<xml_value_entity_handle>  evaluate_arguments();
 };
 
 } /* namespace viennamaterials */

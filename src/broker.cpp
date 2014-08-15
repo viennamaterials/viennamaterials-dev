@@ -17,7 +17,7 @@
 #include "viennamaterials/utils/convert.hpp"
 #include "viennamaterials/functionbackendpython.hpp"
 #include "viennamaterials/attributeentityscalar.hpp"
-#include "viennamaterials/attributeentitycluster.hpp"
+#include "viennamaterials/attributeentityfunction.hpp"
 #include <vector>
 
 namespace viennamaterials
@@ -123,7 +123,7 @@ attribute_handle broker::query(std::string const& xpath_query_to_attribute)
 
 
     /// Create function attribute entity
-    attribute_handle entity(new attribute_entity_cluster(type, backend, args, referenced_arguments));
+    attribute_handle entity(new attribute_entity_function(type, backend, args, referenced_arguments));
 
     return entity;
   }else if(type == scalar_bool || type == scalar_int || type ==  scalar_float)
