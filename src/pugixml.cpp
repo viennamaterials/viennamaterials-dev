@@ -146,7 +146,7 @@ double pugixml::query_xpath_number(std::string const& native_query)
 std::string pugixml::query_xpath_string(std::string const& native_query)
 {
   pugi::xpath_query query(native_query.c_str());
-  return query.evaluate_string(xml_); //TODO: check pugi::string_t
+  return query.evaluate_string(xml_);
 }
 
 long pugixml::query_number_of_elements(std::string const& native_query)

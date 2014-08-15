@@ -34,14 +34,14 @@ attribute_handle broker::query(std::string const& xpath_query_to_attribute)
   /// Gather data from XML
   xml_attribute_type type = get_attribute_type(xpath_query_to_attribute);
 
-  if(type == function_bool || type == function_int || type == function_float) //TODO function_tensor
+  if(type == function_bool || type == function_int || type == function_float) //TODO tensor: function_tensor
   {
     std::string query = xpath_query_to_attribute + "/function";
     std::string code_language = lib_->query_attribute(query + "/code", "lang");
 
     /// Load function arguments
     long number_of_arguments = lib_->query_number_of_elements(query + "/arg");
-    std::vector<xml_value_entity_handle> args; //TODO rename: ?dependencies?
+    std::vector<xml_value_entity_handle> dependencies;
     std::vector<shared_ptr<attribute_entity_argument> > referenced_arguments;
 
     /// Note: is skipped if number_of_arguments == 0
@@ -102,7 +102,7 @@ attribute_handle broker::query(std::string const& xpath_query_to_attribute)
       entity_ptr->set_index( convert<size_t>(lib_->query(query_arg + "/id/text()")) );
       entity_ptr->set_name(lib_->query(query_arg + "/quantity/text()"));
 
-      args.push_back(entity_ptr);
+      dependencies.push_back(entity_ptr);
     }
 
 
@@ -123,7 +123,7 @@ attribute_handle broker::query(std::string const& xpath_query_to_attribute)
 
 
     /// Create function attribute entity
-    attribute_handle entity(new attribute_entity_function(type, backend, args, referenced_arguments));
+    attribute_handle entity(new attribute_entity_function(type, backend, dependencies, referenced_arguments));
 
     return entity;
   }else if(type == scalar_bool || type == scalar_int || type ==  scalar_float)

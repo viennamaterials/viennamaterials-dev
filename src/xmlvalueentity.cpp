@@ -26,12 +26,12 @@ std::string xml_value_entity::get_name() const
   return name_;
 }
 
-void xml_value_entity::set_type(xml_type type)
+void xml_value_entity::set_type(xml_value_entity_type type)
 {
   this->type_ = type;
 }
 
-xml_type xml_value_entity::get_type()
+xml_value_entity_type xml_value_entity::get_type()
 {
   return type_;
 }

@@ -74,7 +74,7 @@ PyObject* function_backend_python::eval(std::vector<xml_value_entity_handle>& ar
           value_py = PyFloat_FromDouble((*it)->get_value<xml_float>());
           break;
         case type_tensor:
-          //TODO
+          //TODO tensor
           break;
         default:
           throw func_backend_type_error();

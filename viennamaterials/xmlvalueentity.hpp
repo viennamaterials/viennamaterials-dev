@@ -19,15 +19,14 @@
 namespace viennamaterials
 {
 
-enum xml_types //TODO ?move to xmldatatypes.hpp? , ?replace with tags?
+enum xml_value_entity_types
 {
   type_bool,
   type_int,
   type_float,
   type_tensor
 };
-typedef enum xml_types  XmlType;
-typedef enum xml_types  xml_type;
+typedef enum xml_value_entity_types  xml_value_entity_type;
 
 
 /**
@@ -36,61 +35,61 @@ typedef enum xml_types  xml_type;
 class xml_value_entity
 {
 public:
-  virtual           ~xml_value_entity() {};
+  virtual               ~xml_value_entity() {};
 
   /**
    * @brief Set name of this object
    * @param name A string containing the name
    */
-  void              set_name(std::string const& name);
+  void                  set_name(std::string const& name);
 
   /**
    * @brief Get name of this object
    * @return A string containing the name
    */
-  std::string       get_name() const;
+  std::string           get_name() const;
 
   /**
    * @brief Get type of this object
    * @return The type of the object represented by enum xml_type
    */
-  xml_type          get_type();
+  xml_value_entity_type get_type();
   //TODO: bool is_bool, is_int, ...
 
   /**
    * @brief Set index of this object. The index is the position in the argument list of a function.
    * @param index The index of this object
    */
-  void              set_index(size_t index); //TODO make private, only use in construktor
+  void                  set_index(size_t index);
 
   /**
    * @brief Get index of this object. The index is the position in the argument list of a function.
    * @return The index of this object
    */
-  size_t            get_index();
+  size_t                get_index();
 
   /**
    * @brief Set bool value of this object
    * @param value A bool value
    */
-  virtual void      set_value(xml_bool value)    = 0;
+  virtual void          set_value(xml_bool value)    = 0;
 
   /**
    * @brief Set integer value of this object
    * @param value A integer value
    */
-  virtual void      set_value(xml_int value)     = 0;
+  virtual void          set_value(xml_int value)     = 0;
   /**
    * @brief Set floating point value of this object
    * @param value A floating point value
    */
-  virtual void      set_value(xml_float value)   = 0;
+  virtual void          set_value(xml_float value)   = 0;
 
   /**
    * @brief Set tensor value of this object
    * @param value A tensor object
    */
-//  virtual void      set_value(void value)             = 0; //TODO arg
+//  virtual void           set_value(void value)             = 0; //TODO tensor: arg
 
   /**
    * @brief Get value of this object
@@ -136,19 +135,19 @@ protected:
    * @param tag A tag of type tag_tensor
    * @return The tensor object of this object
    */
-//  virtual void      get_value(tag_tensor tag)       = 0; //TODO return
+//  virtual void      get_value(tag_tensor tag)       = 0; //TODO tensor: return
 
 protected:
   /**
    * @brief Set type of this value object
    * @param type The type given as enum xml_type
    */
-  void              set_type(xml_type type);
+  void              set_type(xml_value_entity_type type);
 
 private:
-  size_t        index_; /// Argument index for the function backend
-  std::string   name_;  /// Used as identifier for simulator
-  xml_type      type_;  /// XML type of this value
+  size_t                index_; /// Argument index for the function backend
+  std::string           name_;  /// Used as identifier for simulator
+  xml_value_entity_type type_;  /// XML type of this value
 };
 
 template<typename T>

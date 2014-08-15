@@ -107,7 +107,7 @@ protected:
    * @param tag A tag of type tag_tensor
    * @return The tensor object of the attribute
    */
-//  virtual void      eval(tag_tensor tag)          = 0; //FIXME: return
+//  virtual void      eval(tag_tensor tag)          = 0; //TODO: tensor: return
 
 protected:
   xml_attribute_type entity_type_;

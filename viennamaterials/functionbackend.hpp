@@ -36,8 +36,6 @@ public:
    */
   virtual void      init(std::string const& code, std::string const& function_name) = 0;
 
-  //TODO provide template specialization for eval?
-
   /**
    * @brief Executes the function specified during initialization
    * @param tag A Tag of type tag_scalar_bool
@@ -68,7 +66,7 @@ public:
    * @param args A vector of smartpointers to objects of type xml_value_entity representing the required arguments for function execution
    * @return A xml_tensor value representing the result of the executed function
    */
-//  virtual void      evaluate(tag_tensor) = 0; //FIXME: argument list, return
+//  virtual void      evaluate(tag_tensor) = 0; //TODO: tensor: argument list, return
 };
 
 } /* namespace viennamaterials */
