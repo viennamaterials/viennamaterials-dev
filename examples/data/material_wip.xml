@@ -107,5 +107,19 @@
       <unit>A</unit>
     </attribute>
     
+    <attribute>
+      <id>bool-function-without-args</id>
+      <function>
+        <code lang='python' call='add'>
+          def add():
+            return (1==1)
+        </code>
+        <return>
+          <scalar type='bool'/>
+        </return>
+      </function>
+      <unit>A</unit>
+    </attribute>
+    
   </material>
 </database>

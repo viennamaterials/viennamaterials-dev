@@ -98,9 +98,16 @@ int main(int argc, char * argv[])
     std::cout << "function with references (defaults):  " << attribute_3->evaluate<double>() << std::endl;
   }
 
+  query = "/*/*[id='test-material']/*[id='bool-function-without-args']"; //TODO change to bool function
+  viennamaterials::attribute_handle attribute_4 = broker.query(query);
+  if(attribute_4->is_function_bool())
+  {
+    /// Using default values of function arguments
+    std::cout << "function function without args:  " << attribute_4->evaluate<bool>() << std::endl;
+  }
+
 
   //TODO: limit recursion of function argument (circular dependency)
-
 
 
   std::cout << "########################     End of demo     ########################" << std::endl;
