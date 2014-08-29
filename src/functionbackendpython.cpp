@@ -53,7 +53,6 @@ PyObject* function_backend_python::eval(std::vector<xml_value_entity_handle>& ar
   if (PyCallable_Check(function_ptr_))
   {
     size_t number_of_args = args.size();
-    //TODO check integrity of index
 
     PyObject *result_py;
     /// Build a tuple to hold arguments

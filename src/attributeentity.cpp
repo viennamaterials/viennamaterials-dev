@@ -23,6 +23,56 @@ bool attribute_entity::is_type(tag_scalar_bool tag)
   return false;
 }
 
+bool attribute_entity::is_type(tag_scalar_int tag)
+{
+  if(entity_type_ == scalar_int)
+    return true;
+  return false;
+}
+
+bool attribute_entity::is_type(tag_scalar_float tag)
+{
+  if(entity_type_ == scalar_float)
+    return true;
+  return false;
+}
+
+bool attribute_entity::is_type(tag_tensor tag)
+{
+  if(entity_type_ == tensor)
+    return true;
+  return false;
+}
+
+bool attribute_entity::is_type(tag_function_bool tag)
+{
+  if(entity_type_ == function_bool)
+    return true;
+  return false;
+}
+
+bool attribute_entity::is_type(tag_function_int tag)
+{
+  if(entity_type_ == function_int)
+    return true;
+  return false;
+}
+
+bool attribute_entity::is_type(tag_function_float tag)
+{
+  if(entity_type_ == function_float)
+    return true;
+  return false;
+}
+
+bool attribute_entity::is_type(tag_function_tensor tag)
+{
+  if(entity_type_ == function_tensor)
+    return true;
+  return false;
+}
+
+
 bool attribute_entity::is_type(xml_attribute_type type)
 {
   if(entity_type_ == type)

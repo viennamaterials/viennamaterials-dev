@@ -98,7 +98,7 @@ int main(int argc, char * argv[])
     std::cout << "function with references (defaults):  " << attribute_3->evaluate<double>() << std::endl;
   }
 
-  query = "/*/*[id='test-material']/*[id='bool-function-without-args']"; //TODO change to bool function
+  query = "/*/*[id='test-material']/*[id='bool-function-without-args']";
   viennamaterials::attribute_handle attribute_4 = broker.query(query);
   if(attribute_4->is_function_bool())
   {
@@ -108,6 +108,7 @@ int main(int argc, char * argv[])
 
 
   //TODO: limit recursion of function argument (circular dependency)
+  //TODO: unit conversion? viennamaterials::quantity?
 
 
   std::cout << "########################     End of demo     ########################" << std::endl;

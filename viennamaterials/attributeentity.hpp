@@ -21,34 +21,184 @@ namespace viennamaterials
 {
 
 /**
- * @brief Represents an attribute XML element
+ * @brief Represents an attribute XML element. Used as interface class for specialized attributes.
  */
 class attribute_entity
 {
 public:
   virtual ~attribute_entity() {};
 
-  //TODO: DOXIGENIZE
+  /**
+   * @brief Check if this object represents a boolean scalar
+   * @param A tag of type tag_scalar_bool (tag specialization)
+   * @return True if this object represents a boolean scalar, false otherwise
+   */
   bool is_type(tag_scalar_bool tag);
-  //TODO etc
+
+  /**
+   * @brief Check if this object represents an integer scalar
+   * @param A tag of type tag_scalar_int (tag specialization)
+   * @return True if this object represents an integer scalar, false otherwise
+   */
+  bool is_type(tag_scalar_int tag);
+
+  /**
+   * @brief Check if this object represents a floating point scalar
+   * @param A tag of type tag_scalar_float (tag specialization)
+   * @return True if this object represents a floating point scalar, false otherwise
+   */
+  bool is_type(tag_scalar_float tag);
+
+  /**
+   * @brief Check if this object represents a tensor
+   * @param A tag of type tag_tensor (tag specialization)
+   * @return True if this object represents a tensor, false otherwise
+   */
+  bool is_type(tag_tensor tag);
+
+  /**
+   * @brief Check if this object represents a function attribute with boolean result
+   * @param A tag of type tag_function_bool (tag specialization)
+   * @return True if this object represents a function attribute with boolean result, false otherwise
+   */
+  bool is_type(tag_function_bool tag);
+
+  /**
+   * @brief Check if this object represents a function attribute with integer result
+   * @param A tag of type tag_function_int (tag specialization)
+   * @return True if this object represents a function attribute with integer result, false otherwise
+   */
+  bool is_type(tag_function_int tag);
+
+  /**
+   * @brief Check if this object represents a function attribute with floating point result
+   * @param A tag of type tag_function_float (tag specialization)
+   * @return True if this object represents a function attribute with floating point result, false otherwise
+   */
+  bool is_type(tag_function_float tag);
+
+  /**
+   * @brief Check if this object represents a function attribute with tensor result
+   * @param A tag of type tag_function_tensor (tag specialization)
+   * @return True if this object represents a function attribute with tensor result, false otherwise
+   */
+  bool is_type(tag_function_tensor tag);
+
+  /**
+   * @brief Check if this object represents an attribute of given type
+   * @param The type to be checked given as xml_attribute_type
+   * @return True if this object is of given type, false otherwise
+   */
   bool is_type(xml_attribute_type type);
 
+
+  /**
+   * @brief Check if this object represents a scalar
+   * @return True if this object represents a scalar, false otherwise
+   */
   bool is_scalar();
+
+  /**
+   * @brief Check if this object represents a boolean scalar
+   * @param A tag of type tag_scalar_bool (tag specialization)
+   * @return True if this object represents a boolean scalar, false otherwise
+   */
   bool is_scalar(tag_scalar_bool tag);
+
+  /**
+   * @brief Check if this object represents a integer scalar
+   * @param A tag of type tag_scalar_int (tag specialization)
+   * @return True if this object represents a integer scalar, false otherwise
+   */
   bool is_scalar(tag_scalar_int tag);
+
+  /**
+   * @brief Check if this object represents a floating point scalar
+   * @param A tag of type tag_scalar_float (tag specialization)
+   * @return True if this object represents a floating point scalar, false otherwise
+   */
   bool is_scalar(tag_scalar_float tag);
+
+  /**
+   * @brief Check if this object represents a boolean scalar
+   * @return True if this object represents a boolean scalar, false otherwise
+   */
   bool is_scalar_bool();
+
+  /**
+   * @brief Check if this object represents a integer scalar
+   * @return True if this object represents a integer scalar, false otherwise
+   */
   bool is_scalar_int();
+
+  /**
+   * @brief Check if this object represents a floating point scalar
+   * @return True if this object represents a floating point scalar, false otherwise
+   */
   bool is_scalar_float();
+
+  /**
+   * @brief Check if this object represents a tensor
+   * @return True if this object represents a tensor, false otherwise
+   */
   bool is_tensor();
+
+  /**
+   * @brief Check if this object represents a function
+   * @return True if this object represents a function, false otherwise
+   */
   bool is_function();
+
+  /**
+   * @brief Check if this object represents a function attribute with boolean result
+   * @param A tag of type tag_function_bool (tag specialization)
+   * @return True if this object represents a function attribute with boolean result, false otherwise
+   */
   bool is_function(tag_function_bool tag);
+
+  /**
+   * @brief Check if this object represents a function attribute with integer result
+   * @param A tag of type tag_function_int (tag specialization)
+   * @return True if this object represents a function attribute with integer result, false otherwise
+   */
   bool is_function(tag_function_int tag);
+
+  /**
+   * @brief Check if this object represents a function attribute with floating point result
+   * @param A tag of type tag_function_float (tag specialization)
+   * @return True if this object represents a function attribute with floating point result, false otherwise
+   */
   bool is_function(tag_function_float tag);
+
+  /**
+   * @brief Check if this object represents a function attribute with tensor result
+   * @param A tag of type tag_function_tensor (tag specialization)
+   * @return True if this object represents a function attribute with tensor result, false otherwise
+   */
   bool is_function(tag_function_tensor tag);
+
+  /**
+   * @brief Check if this object represents a function attribute with boolean result
+   * @return True if this object represents a function attribute with boolean result, false otherwise
+   */
   bool is_function_bool();
+
+  /**
+   * @brief Check if this object represents a function attribute with integer result
+   * @return True if this object represents a function attribute with integer result, false otherwise
+   */
   bool is_function_int();
+
+  /**
+   * @brief Check if this object represents a function attribute with floating point result
+   * @return True if this object represents a function attribute with floating point result, false otherwise
+   */
   bool is_function_float();
+
+  /**
+   * @brief Check if this object represents a function attribute with tensor result
+   * @return True if this object represents a function attribute with tensor result, false otherwise
+   */
   bool is_function_tensor();
 
   /**

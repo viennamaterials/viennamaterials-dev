@@ -53,6 +53,7 @@ public:
 
 private:
   xml_bool value_;
+  //TODO unit!!!
 };
 
 /**

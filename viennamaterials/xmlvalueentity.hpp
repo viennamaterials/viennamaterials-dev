@@ -54,7 +54,6 @@ public:
    * @return The type of the object represented by enum xml_type
    */
   xml_value_entity_type get_type();
-  //TODO: bool is_bool, is_int, ...
 
   /**
    * @brief Set index of this object. The index is the position in the argument list of a function.

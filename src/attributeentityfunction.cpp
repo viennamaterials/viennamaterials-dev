@@ -98,8 +98,8 @@ void attribute_entity_function::set_dependencies(std::vector<xml_value_entity_ha
 
   for(std::vector<shared_ptr<attribute_entity_argument> >::iterator arg_iter = arguments_.begin(); arg_iter != arguments_.end(); ++arg_iter)
   {
-    if((*arg_iter)->get_attribute()->get_dependencies().empty() == false)
-      (*arg_iter)->get_attribute()->set_dependencies(args);
+    if((*arg_iter)->get_attribute()->get_dependencies().empty() == false) //if the argument has at least one dependency...
+      (*arg_iter)->get_attribute()->set_dependencies(args); //...set dependency/dependencies
   }
 }
 
