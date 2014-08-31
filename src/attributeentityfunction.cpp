@@ -54,7 +54,23 @@ std::vector<xml_value_entity_handle> attribute_entity_function::get_dependencies
     dependencies_concatenated.insert( dependencies_concatenated.end(), arg_dep.begin(), arg_dep.end() );
   }
 
-  //TODO cope with duplicate entries
+  //cope with duplicate entries
+  for(std::vector<xml_value_entity_handle>::iterator dep_compare_iter = dependencies_concatenated.begin(); dep_compare_iter != dependencies_concatenated.end(); ++dep_compare_iter)
+  {
+    std::vector<xml_value_entity_handle>::iterator dep_search_iter = dep_compare_iter;
+    ++dep_search_iter;
+    while(dep_search_iter != dependencies_concatenated.end())
+    {
+      if( (*dep_compare_iter)->get_name().compare((*dep_search_iter)->get_name()) == 0)
+      {
+        dependencies_concatenated.erase(dep_search_iter);
+      }else
+      {
+        ++dep_search_iter;
+      }
+    }
+  }
+
   return dependencies_concatenated;
 }
 
