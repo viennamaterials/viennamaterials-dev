@@ -69,7 +69,7 @@
       <function>
         <code lang='python' call='func'>
           def func(a, condition, b, c, d):
-            print 'Hello! This is the Python backend.'
+            print ' Hello! This is the Python backend.'
             if condition:
               print '  bool  ref is: TRUE'
             else:
@@ -110,8 +110,8 @@
     <attribute>
       <id>bool-function-without-args</id>
       <function>
-        <code lang='python' call='add'>
-          def add():
+        <code lang='python' call='func'>
+          def func():
             return (1==1)
         </code>
         <return>

@@ -87,23 +87,27 @@ int main(int argc, char * argv[])
     std::cout << "add function (arg set):   " << attribute_2->evaluate<long>() << std::endl;
   }
 
+  /** Load function with boolean return type from material library **/
+  query = "/*/*[id='test-material']/*[id='bool-function-without-args']";
+  viennamaterials::attribute_handle attribute_3 = broker.query(query);
+  if(attribute_3->is_function_bool())
+  {
+    /// Using default values of function arguments
+    std::cout << "bool function without args:  " << attribute_3->evaluate<bool>() << std::endl;
+  }
+
   std::cout << "#####" << std::endl;
 
   /** Load function with references from material library **/
   query = "/*/*[id='test-material']/*[id='float-function-references']";
-  viennamaterials::attribute_handle attribute_3 = broker.query(query);
-  if(attribute_3->is_function_float())
-  {
-    /// Using default values of function arguments
-    std::cout << "function with references (defaults):  " << attribute_3->evaluate<double>() << std::endl;
-  }
-
-  query = "/*/*[id='test-material']/*[id='bool-function-without-args']";
   viennamaterials::attribute_handle attribute_4 = broker.query(query);
-  if(attribute_4->is_function_bool())
+  if(attribute_4->is_function_float())
   {
     /// Using default values of function arguments
-    std::cout << "function function without args:  " << attribute_4->evaluate<bool>() << std::endl;
+    std::cout << "function with references (defaults):  " << attribute_4->evaluate<double>() << std::endl;
+
+    std::vector<viennamaterials::xml_value_entity_handle> func_args = attribute_4->get_dependencies();
+    std::cout << "number of dependencies: " << func_args.size() << std::endl;
   }
 
 
