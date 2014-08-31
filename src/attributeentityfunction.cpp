@@ -50,13 +50,11 @@ std::vector<xml_value_entity_handle> attribute_entity_function::get_dependencies
 
   for(std::vector<shared_ptr<attribute_entity_argument> >::iterator arg_iter = arguments_.begin(); arg_iter != arguments_.end(); ++arg_iter)
   {
-    dependencies_concatenated.insert(
-        dependencies_concatenated.end(),
-        (*arg_iter)->get_attribute()->get_dependencies().begin(),
-        (*arg_iter)->get_attribute()->get_dependencies().end() );
+    std::vector<xml_value_entity_handle> arg_dep = (*arg_iter)->get_attribute()->get_dependencies();
+    dependencies_concatenated.insert( dependencies_concatenated.end(), arg_dep.begin(), arg_dep.end() );
   }
 
-  //TODO cope with double entries
+  //TODO cope with duplicate entries
   return dependencies_concatenated;
 }
 
