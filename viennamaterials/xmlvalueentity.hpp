@@ -68,8 +68,8 @@ public:
   size_t                get_index();
 
   /**
-   * @brief Set bool value of this object
-   * @param value A bool value
+   * @brief Set boolean value of this object
+   * @param value A boolean value
    */
   virtual void          set_value(xml_bool value)    = 0;
 
@@ -92,7 +92,7 @@ public:
 
   /**
    * @brief Get value of this object
-   * @tparam Type of the value of this object
+   * @tparam T Type of the value of this object
    * @return The value of this object according to the template type
    */
   template<typename T>
@@ -109,9 +109,9 @@ protected:
   T get_value_dispatch();
 
   /**
-   * @brief Get bool value of this object
+   * @brief Get boolean value of this object
    * @param tag A tag of type tag_scalar_bool
-   * @return The bool value of this object
+   * @return The boolean value of this object
    */
   virtual xml_bool  get_value(tag_scalar_bool tag)  = 0;
 

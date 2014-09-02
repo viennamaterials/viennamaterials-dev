@@ -65,7 +65,7 @@ int main(int argc, char * argv[])
     /// Using default values of function arguments
     std::cout << "multiply function (defaults):  " << attribute->evaluate<double>() << std::endl;
 
-    /// Set value for second function argument and evaluate
+    /// Set value of second function argument and evaluate
     std::vector<viennamaterials::xml_value_entity_handle> func_args = attribute->get_dependencies();
     func_args[1]->set_value(0.125);
     attribute->set_dependencies(func_args);
@@ -80,7 +80,7 @@ int main(int argc, char * argv[])
     /// Using default values of function arguments
     std::cout << "add function (defaults):  " << attribute_2->evaluate<long>() << std::endl;
 
-    /// Set value for second function argument and evaluate
+    /// Set value of first function argument and evaluate
     std::vector<viennamaterials::xml_value_entity_handle> func_args = attribute_2->get_dependencies();
     func_args[0]->set_value((long)8);
     attribute_2->set_dependencies(func_args);
@@ -111,7 +111,6 @@ int main(int argc, char * argv[])
   }
 
 
-  //TODO: limit recursion of function argument (circular dependency)
   //TODO: unit conversion? viennamaterials::quantity?
 
 

@@ -33,7 +33,7 @@ public:
   /**
    * @brief Create an attribute_entity_argument object
    * @param index A integer value representing the index (position) of this attribute object in the argument list of the function in the function backend.
-   *              Index 0 identifies the firest argument.
+   *              Index 0 identifies the first argument.
    * @param attr_obj A smartpointer to an attribute_entity object which is used as argument for the called function in the function backend.
    */
   attribute_entity_argument(size_t index, attribute_handle& attr_obj);
@@ -58,7 +58,7 @@ private:
 /**
  * @brief Represents an attribute XML element holding a function
  *
- * This object holds a function backend, zero or more xml_value_entity objects representing dependencis of the this function attribute and
+ * This object holds a function backend, zero or more xml_value_entity objects representing dependencies of the this function attribute and
  * zero or more attribute_entity objects given by <reference> XML element
  */
 class attribute_entity_function : public attribute_entity
@@ -89,7 +89,7 @@ public:
   void                                  set_dependencies(std::vector<xml_value_entity_handle>& args);
 
   /**
-   * @brief Evaluate the function of the function backend if this object represents a bool function attribute
+   * @brief Evaluate the function of the function backend if this object represents a boolean function attribute
    * @param tag A tag of type tag_scalar_bool
    * @return The bool result of the function in the function backend
    */

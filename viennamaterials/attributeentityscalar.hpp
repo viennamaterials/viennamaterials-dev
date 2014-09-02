@@ -66,7 +66,7 @@ class attribute_entity_scalar_integer: public attribute_entity
 {
 public:
   /**
-   * @brief Create an interger scalar attribute
+   * @brief Create an integer scalar attribute
    * @param value The value of this attribute object
    */
   attribute_entity_scalar_integer(xml_int value);

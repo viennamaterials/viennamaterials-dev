@@ -25,7 +25,7 @@ class broker
 {
 public:
   /**
-   * @brief Innitiates a broker object by loading a material library object
+   * @brief Initiates a broker object by loading a material library object
    * @param filename A string holding the filename of the material library XML file
    */
   broker(std::string const& filename);

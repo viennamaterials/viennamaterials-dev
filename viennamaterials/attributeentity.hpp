@@ -234,7 +234,7 @@ protected:
   /**
    * @brief Evaluate the value of this attribute
    * @param tag A tag of type tag_scalar_bool
-   * @return The bool value of the attribute
+   * @return The boolean value of the attribute
    */
   virtual xml_bool  eval(tag_scalar_bool tag)     = 0;
 
