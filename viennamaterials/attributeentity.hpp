@@ -219,45 +219,45 @@ public:
    * @return The value of the attribute according to the template type
    */
   template<typename T>
-  T evaluate();
+  T evaluate_value();
 
 protected:
 
   /**
-   * @brief Dispatcher for the template specializations of evaluate method
+   * @brief Dispatcher for the template specializations of evaluate_value method
    * @tparam T Type of the attribute value
    * @return The value of the attribute according to the template type
    */
   template<typename T>
-  T evaluate_dispatch();
+  T evaluate_value_dispatch();
 
   /**
    * @brief Evaluate the value of this attribute
    * @param tag A tag of type tag_scalar_bool
    * @return The boolean value of the attribute
    */
-  virtual xml_bool  eval(tag_scalar_bool tag)     = 0;
+  virtual xml_bool  eval_value(tag_scalar_bool tag)     = 0;
 
   /**
    * @brief Evaluate the value of this attribute
    * @param tag A tag of type tag_scalar_int
    * @return The integer value of the attribute
    */
-  virtual xml_int   eval(tag_scalar_int tag)      = 0;
+  virtual xml_int   eval_value(tag_scalar_int tag)      = 0;
 
   /**
    * @brief Evaluate the value of this attribute
    * @param tag A tag of type tag_scalar_float
    * @return The floating point value of the attribute
    */
-  virtual xml_float eval(tag_scalar_float tag)    = 0;
+  virtual xml_float eval_value(tag_scalar_float tag)    = 0;
 
   /**
    * @brief Evaluate the value of this attribute
    * @param tag A tag of type tag_tensor
    * @return The tensor object of the attribute
    */
-//  virtual void      eval(tag_tensor tag)          = 0; //TODO: tensor: return
+//  virtual void      eval_value(tag_tensor tag)          = 0; //TODO: tensor: return
 
 protected:
   xml_attribute_type entity_type_;
@@ -265,9 +265,9 @@ protected:
 };
 
 template<typename T>
-T attribute_entity::evaluate()
+T attribute_entity::evaluate_value()
 {
-  return this->evaluate_dispatch<T>();
+  return this->evaluate_value_dispatch<T>();
 }
 
 typedef shared_ptr<attribute_entity> attribute_handle;

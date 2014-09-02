@@ -117,7 +117,7 @@ void attribute_entity_function::set_dependencies(std::vector<xml_value_entity_ha
   }
 }
 
-xml_bool attribute_entity_function::eval(tag_scalar_bool tag)
+xml_bool attribute_entity_function::eval_value(tag_scalar_bool tag)
 {
   if(entity_type_ != function_bool)
     throw func_backend_attr_type_error();
@@ -126,7 +126,7 @@ xml_bool attribute_entity_function::eval(tag_scalar_bool tag)
   return backend_->eval(tag, args);
 }
 
-xml_int attribute_entity_function::eval(tag_scalar_int tag)
+xml_int attribute_entity_function::eval_value(tag_scalar_int tag)
 {
   if(entity_type_ != function_int)
     throw func_backend_attr_type_error();
@@ -135,7 +135,7 @@ xml_int attribute_entity_function::eval(tag_scalar_int tag)
   return backend_->eval(tag, args);
 }
 
-xml_float attribute_entity_function::eval(tag_scalar_float tag)
+xml_float attribute_entity_function::eval_value(tag_scalar_float tag)
 {
   if(entity_type_ != function_float)
     throw func_backend_attr_type_error();
@@ -153,19 +153,19 @@ std::vector<xml_value_entity_handle> attribute_entity_function::evaluate_argumen
     if((*arg_iter)->get_attribute()->is_scalar_bool() || (*arg_iter)->get_attribute()->is_function_bool())
     {
       xml_value_entity_handle value(new xml_value_scalar_boolean);
-      value->set_value((*arg_iter)->get_attribute()->evaluate<xml_bool>());
+      value->set_value((*arg_iter)->get_attribute()->evaluate_value<xml_bool>());
       value->set_index((*arg_iter)->get_index());
       backend_args.push_back(value);
     }else if((*arg_iter)->get_attribute()->is_scalar_int() || (*arg_iter)->get_attribute()->is_function_int())
     {
       xml_value_entity_handle value(new xml_value_scalar_integer);
-      value->set_value((*arg_iter)->get_attribute()->evaluate<xml_int>());
+      value->set_value((*arg_iter)->get_attribute()->evaluate_value<xml_int>());
       value->set_index((*arg_iter)->get_index());
       backend_args.push_back(value);
     }else if((*arg_iter)->get_attribute()->is_scalar_float() || (*arg_iter)->get_attribute()->is_function_float())
     {
       xml_value_entity_handle value(new xml_value_scalar_float);
-      value->set_value((*arg_iter)->get_attribute()->evaluate<xml_float>());
+      value->set_value((*arg_iter)->get_attribute()->evaluate_value<xml_float>());
       value->set_index((*arg_iter)->get_index());
       backend_args.push_back(value);
     }else if((*arg_iter)->get_attribute()->is_tensor() || (*arg_iter)->get_attribute()->is_function_tensor())

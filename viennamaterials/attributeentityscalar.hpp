@@ -45,13 +45,13 @@ public:
    * @param tag A tag of type tag_scalar_bool
    * @return The boolean value of this attribute object
    */
-  xml_bool                              eval(tag_scalar_bool tag);
+  xml_bool                              eval_value(tag_scalar_bool tag);
 
   /// @brief Implements a pure virtual method of its base class. This methods throws an exception!
-  xml_int                               eval(tag_scalar_int tag);
+  xml_int                               eval_value(tag_scalar_int tag);
 
   /// @brief Implements a pure virtual method of its base class. This methods throws an exception!
-  xml_float                             eval(tag_scalar_float tag);
+  xml_float                             eval_value(tag_scalar_float tag);
 
 private:
   xml_bool value_;
@@ -82,17 +82,17 @@ public:
   void                                  set_dependencies(std::vector<xml_value_entity_handle>& args);
 
   /// @brief Implements a pure virtual method of its base class. This methods throws an exception!
-  xml_bool                              eval(tag_scalar_bool tag);
+  xml_bool                              eval_value(tag_scalar_bool tag);
 
   /**
    * @brief Get the value of this integer scalar attribute
    * @param tag A tag of type tag_scalar_int
    * @return The integer value of this attribute object
    */
-  xml_int                               eval(tag_scalar_int tag);
+  xml_int                               eval_value(tag_scalar_int tag);
 
   /// @brief Implements a pure virtual method of its base class. This methods throws an exception!
-  xml_float                             eval(tag_scalar_float tag);
+  xml_float                             eval_value(tag_scalar_float tag);
 
 private:
   xml_int value_;
@@ -123,21 +123,21 @@ public:
   void                                  set_dependencies(std::vector<xml_value_entity_handle>& args);
 
   /// @brief Implements a pure virtual method of its base class. This methods throws an exception!
-  xml_bool                              eval(tag_scalar_bool tag);
+  xml_bool                              eval_value(tag_scalar_bool tag);
 
   /**
    * @brief Get the value of this integer scalar attribute
    * @param tag A tag of type tag_scalar_int
    * @return The integer value of this attribute object
    */
-  xml_int                               eval(tag_scalar_int tag);
+  xml_int                               eval_value(tag_scalar_int tag);
 
   /**
    * @brief Get the value of this floating point scalar attribute
    * @param tag A tag of type tag_scalar_float
    * @return The floating point value of this attribute object
    */
-  xml_float                             eval(tag_scalar_float tag);
+  xml_float                             eval_value(tag_scalar_float tag);
 
 private:
   xml_float value_;

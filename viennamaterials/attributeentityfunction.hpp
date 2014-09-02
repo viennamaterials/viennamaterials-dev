@@ -93,21 +93,21 @@ public:
    * @param tag A tag of type tag_scalar_bool
    * @return The bool result of the function in the function backend
    */
-  xml_bool                              eval(tag_scalar_bool tag);
+  xml_bool                              eval_value(tag_scalar_bool tag);
 
   /**
    * @brief Evaluate the function of the function backend if this object represents a integer function attribute
    * @param tag A tag of type tag_scalar_int
    * @return The integer result of the function in the function backend
    */
-  xml_int                               eval(tag_scalar_int tag);
+  xml_int                               eval_value(tag_scalar_int tag);
 
   /**
    * @brief Evaluate the function of the function backend if this object represents a floating point number function attribute
    * @param tag A tag of type tag_scalar_float
    * @return The floating point result of the function in the function backend
    */
-  xml_float                             eval(tag_scalar_float tag);
+  xml_float                             eval_value(tag_scalar_float tag);
 
 
 private:

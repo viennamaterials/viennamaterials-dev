@@ -40,19 +40,19 @@ int main(int argc, char * argv[])
   query = "/*/*[id='test-material']/*[id='bool-scalar']";
   attribute = broker.query(query);
   if(attribute->is_scalar_bool())
-    std::cout << "boolean scalar value:          " << attribute->evaluate<bool>() << std::endl;
+    std::cout << "boolean scalar value:          " << attribute->evaluate_value<bool>() << std::endl;
 
   /** Load integer scalar from material library **/
   query = "/*/*[id='test-material']/*[id='int-scalar']";
   attribute = broker.query(query);
   if(attribute->is_scalar_int())
-    std::cout << "integer scalar value:          " << attribute->evaluate<long>() << std::endl;
+    std::cout << "integer scalar value:          " << attribute->evaluate_value<long>() << std::endl;
 
   /** Load floating point scalar from material library **/
   query = "/*/*[id='test-material']/*[id='float-scalar']";
   attribute = broker.query(query);
   if(attribute->is_scalar_float())
-    std::cout << "floating point scalar value:   " << attribute->evaluate<double>() << std::endl;
+    std::cout << "floating point scalar value:   " << attribute->evaluate_value<double>() << std::endl;
 
 
   std::cout << "######################## Function attributes ########################" << std::endl;
@@ -63,13 +63,13 @@ int main(int argc, char * argv[])
   if(attribute->is_function_float())
   {
     /// Using default values of function arguments
-    std::cout << "multiply function (defaults):  " << attribute->evaluate<double>() << std::endl;
+    std::cout << "multiply function (defaults):  " << attribute->evaluate_value<double>() << std::endl;
 
     /// Set value of second function argument and evaluate
     std::vector<viennamaterials::xml_value_entity_handle> func_args = attribute->get_dependencies();
     func_args[1]->set_value(0.125);
     attribute->set_dependencies(func_args);
-    std::cout << "multiply function (arg set):   " << attribute->evaluate<double>() << std::endl;
+    std::cout << "multiply function (arg set):   " << attribute->evaluate_value<double>() << std::endl;
   }
 
   /** Load function with integer return type from material library **/
@@ -78,13 +78,13 @@ int main(int argc, char * argv[])
   if(attribute_2->is_function_int())
   {
     /// Using default values of function arguments
-    std::cout << "add function (defaults):  " << attribute_2->evaluate<long>() << std::endl;
+    std::cout << "add function (defaults):  " << attribute_2->evaluate_value<long>() << std::endl;
 
     /// Set value of first function argument and evaluate
     std::vector<viennamaterials::xml_value_entity_handle> func_args = attribute_2->get_dependencies();
     func_args[0]->set_value((long)8);
     attribute_2->set_dependencies(func_args);
-    std::cout << "add function (arg set):   " << attribute_2->evaluate<long>() << std::endl;
+    std::cout << "add function (arg set):   " << attribute_2->evaluate_value<long>() << std::endl;
   }
 
   /** Load function with boolean return type from material library **/
@@ -93,7 +93,7 @@ int main(int argc, char * argv[])
   if(attribute_3->is_function_bool())
   {
     /// Using default values of function arguments
-    std::cout << "bool function without args:  " << attribute_3->evaluate<bool>() << std::endl;
+    std::cout << "bool function without args:  " << attribute_3->evaluate_value<bool>() << std::endl;
   }
 
   std::cout << "#####" << std::endl;
@@ -104,7 +104,7 @@ int main(int argc, char * argv[])
   if(attribute_4->is_function_float())
   {
     /// Using default values of function arguments
-    std::cout << "function with references (defaults):  " << attribute_4->evaluate<double>() << std::endl;
+    std::cout << "function with references (defaults):  " << attribute_4->evaluate_value<double>() << std::endl;
 
     std::vector<viennamaterials::xml_value_entity_handle> func_args = attribute_4->get_dependencies();
     std::cout << "number of dependencies: " << func_args.size() << std::endl;

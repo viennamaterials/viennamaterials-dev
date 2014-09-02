@@ -205,30 +205,30 @@ bool attribute_entity::is_function_tensor()
 }
 
 template<typename T>
-T attribute_entity::evaluate_dispatch()
+T attribute_entity::evaluate_value_dispatch()
 {
   throw broker_error("Template type not supported");
 }
 
 template<>
-xml_bool attribute_entity::evaluate_dispatch<xml_bool>()
+xml_bool attribute_entity::evaluate_value_dispatch<xml_bool>()
 {
   tag_scalar_bool tag_bool;
-  return this->eval(tag_bool);
+  return this->eval_value(tag_bool);
 }
 
 template<>
-xml_int attribute_entity::evaluate_dispatch<xml_int>()
+xml_int attribute_entity::evaluate_value_dispatch<xml_int>()
 {
   tag_scalar_int tag_int;
-  return this->eval(tag_int);
+  return this->eval_value(tag_int);
 }
 
 template<>
-xml_float attribute_entity::evaluate_dispatch<xml_float>()
+xml_float attribute_entity::evaluate_value_dispatch<xml_float>()
 {
   tag_scalar_float tag_float;
-  return this->eval(tag_float);
+  return this->eval_value(tag_float);
 }
 
 } /* namespace viennamaterials */

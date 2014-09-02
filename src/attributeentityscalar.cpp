@@ -33,17 +33,17 @@ void attribute_entity_scalar_boolean::set_dependencies(std::vector<xml_value_ent
   throw attribute_entity_error("Setting dependencies of scalar attribute not allowed");
 }
 
-xml_bool attribute_entity_scalar_boolean::eval(tag_scalar_bool tag)
+xml_bool attribute_entity_scalar_boolean::eval_value(tag_scalar_bool tag)
 {
   return this->value_;
 }
 
-xml_int attribute_entity_scalar_boolean::eval(tag_scalar_int tag)
+xml_int attribute_entity_scalar_boolean::eval_value(tag_scalar_int tag)
 {
   throw attribute_entity_error("Invalid evaluate return type for this attribute object - integer value from boolean attribute not supported");
 }
 
-xml_float attribute_entity_scalar_boolean::eval(tag_scalar_float tag)
+xml_float attribute_entity_scalar_boolean::eval_value(tag_scalar_float tag)
 {
   throw attribute_entity_error("Invalid evaluate return type for this attribute object - floating point value from boolean attribute not supported");
 }
@@ -67,17 +67,17 @@ void attribute_entity_scalar_integer::set_dependencies(std::vector<xml_value_ent
   throw attribute_entity_error("Setting dependencies of scalar attribute not allowed");
 }
 
-xml_bool attribute_entity_scalar_integer::eval(tag_scalar_bool tag)
+xml_bool attribute_entity_scalar_integer::eval_value(tag_scalar_bool tag)
 {
   throw attribute_entity_error("Invalid evaluate return type for this attribute object - boolean value from integer attribute not supported");
 }
 
-xml_int attribute_entity_scalar_integer::eval(tag_scalar_int tag)
+xml_int attribute_entity_scalar_integer::eval_value(tag_scalar_int tag)
 {
   return this->value_;
 }
 
-xml_float attribute_entity_scalar_integer::eval(tag_scalar_float tag)
+xml_float attribute_entity_scalar_integer::eval_value(tag_scalar_float tag)
 {
   throw attribute_entity_error("Invalid evaluate return type for this attribute object - floating point value from integer attribute not supported");
 }
@@ -101,17 +101,17 @@ void attribute_entity_scalar_float::set_dependencies(std::vector<xml_value_entit
   throw attribute_entity_error("Setting dependencies of scalar attribute not allowed");
 }
 
-xml_bool attribute_entity_scalar_float::eval(tag_scalar_bool tag)
+xml_bool attribute_entity_scalar_float::eval_value(tag_scalar_bool tag)
 {
   throw attribute_entity_error("Invalid evaluate return type for this attribute object - boolean value from floating point attribute not supported");
 }
 
-xml_int attribute_entity_scalar_float::eval(tag_scalar_int tag)
+xml_int attribute_entity_scalar_float::eval_value(tag_scalar_int tag)
 {
   throw attribute_entity_error("Invalid evaluate return type for this attribute object - integer value from floating point attribute not supported");
 }
 
-xml_float attribute_entity_scalar_float::eval(tag_scalar_float tag)
+xml_float attribute_entity_scalar_float::eval_value(tag_scalar_float tag)
 {
   return this->value_;
 }
