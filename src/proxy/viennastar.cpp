@@ -47,17 +47,29 @@ std::string viennastar_proxy::query_unit(std::string const& q)
   return matlib()->query(base_path);
 }
 
-viennamaterials::numeric viennastar_proxy::query_value(std::string const& q)
+//viennamaterials::numeric viennastar_proxy::query_value(std::string const& q) //XXX
+//{
+//  std::string base_path;
+//  generate_base_path(q, base_path);
+//  base_path += value_path_;
+//  return matlib()->query_value(base_path);
+//}
+
+xml_bool  viennastar_proxy::query_value_bool(std::string const& q) {} //FIXME
+xml_int   viennastar_proxy::query_value_int(std::string const& q) {} //FIXME
+xml_float viennastar_proxy::query_value_float(std::string const& q)
 {
   std::string base_path;
   generate_base_path(q, base_path);
   base_path += value_path_;
-  return matlib()->query_value(base_path);
+  return matlib()->query_value(base_path); //FIXME use template?, use xml function backend?
 }
 
-viennamaterials::quantity viennastar_proxy::query_quantity(std::string const& q)
+viennamaterials::quantity<xml_bool>   viennastar_proxy::query_quantity_bool(std::string const& q) {} //FIXME
+viennamaterials::quantity<xml_int>    viennastar_proxy::query_quantity_int(std::string const& q) {} //FIXME
+viennamaterials::quantity<xml_float>  viennastar_proxy::query_quantity_float(std::string const& q)
 {
-  return quantity(query_value(q), query_unit(q));
+  return quantity<xml_float>(query_value<xml_float>(q), query_unit(q));
 }
 
 void viennastar_proxy::generate_base_path(std::string const& q, std::string & base_path)

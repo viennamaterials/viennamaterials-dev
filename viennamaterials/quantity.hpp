@@ -19,30 +19,36 @@
 
 namespace viennamaterials {
 
+template<typename T>
 struct quantity
 {
 public:
-  quantity();
-  quantity(numeric const& value, std::string const& unit);
+  quantity() {}
+  quantity(T const& value, std::string const& unit) : value_(value), unit_(unit) {}
 
   // provide read/write access
   //
-  numeric     & value();
-  std::string & unit();
+  T     & value() { return value_; }
+  std::string & unit() { return unit_;  }
 
   // provide const read access
   //
-  numeric     const& value() const;
-  std::string const& unit()  const;
+  T     const& value() const { return value_; }
+  std::string const& unit()  const { return unit_;  }
 
 
 private:
-  numeric     value_;
+  T     value_;
   std::string unit_;
 };
 
 } // viennamaterials
 
-std::ostream& operator<<(std::ostream& os, viennamaterials::quantity const& quan);
+template<typename T>
+std::ostream& operator<<(std::ostream& os, viennamaterials::quantity<T> const& quan)
+{
+  os << quan.value() << " " << quan.unit();
+  return os;
+}
 
 #endif

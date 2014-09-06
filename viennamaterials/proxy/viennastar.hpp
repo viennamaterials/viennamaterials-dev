@@ -37,12 +37,18 @@ public:
 
   std::string query_unit     (std::string const& q);
 
-  viennamaterials::numeric     query_value    (std::string const& q);
-
-  viennamaterials::quantity    query_quantity (std::string const& q);
+//  viennamaterials::numeric     query_value    (std::string const& q); //XXX
 
 private:
   void generate_base_path(std::string const& q, std::string & base_path);
+
+  xml_bool  query_value_bool(std::string const& q);
+  xml_int   query_value_int(std::string const& q);
+  xml_float query_value_float(std::string const& q);
+
+  viennamaterials::quantity<xml_bool>   query_quantity_bool(std::string const& q);
+  viennamaterials::quantity<xml_int>    query_quantity_int(std::string const& q);
+  viennamaterials::quantity<xml_float>  query_quantity_float(std::string const& q);
 
   const std::string placeholder_;
   const char        token_;

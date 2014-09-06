@@ -35,7 +35,7 @@ int main(int argc, char * argv[])
   assert(value == 100);
 
   /** You can also directly use ViennaMaterials quantity objects **/
-  viennamaterials::quantity quan(1.0, "V");
+  viennamaterials::quantity<double> quan(1.0, "V");
   std::cout << "converting quantity: " << quan << " --> ";
   units_converter.convert(quan, "mV");
   assert(quan.value() == 1000);

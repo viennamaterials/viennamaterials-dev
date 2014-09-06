@@ -113,6 +113,7 @@ int main(int argc, char * argv[])
 
 
   //TODO: unit conversion? viennamaterials::quantity?
+  //TODO: correct and check asserts in tests!!
 
 
   std::cout << "########################     End of demo     ########################" << std::endl;

@@ -46,7 +46,7 @@ int main(int argc, char * argv[])
   std::cout << "result xml2: " << result_xml2 << std::endl;
 
   /** Access the value of Silicon's bandgap parameter **/
-  double result_value = myproxy->query_value("Si/bandgap");
+  double result_value = myproxy->query_value<double>("Si/bandgap");
   std::cout << "result value: " << result_value << std::endl;
 
   /** Access the unit string of Silicon's bandgap parameter **/
@@ -56,7 +56,7 @@ int main(int argc, char * argv[])
   /** Access the quantity of Silicon's bandgap parameter;
       a quantity's value and unit can be accessed via the
       value() and unit() method respectively. **/
-  viennamaterials::quantity result_quantity = myproxy->query_quantity("Si/bandgap");
+  viennamaterials::quantity<viennamaterials::numeric> result_quantity = myproxy->query_quantity<viennamaterials::numeric>("Si/bandgap");
   std::cout << "result quantity: " << result_quantity << " -> "
             << result_quantity.value() << " (" << result_quantity.unit() << ")" << std::endl;
 

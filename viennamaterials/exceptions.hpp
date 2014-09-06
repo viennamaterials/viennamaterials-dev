@@ -131,7 +131,7 @@ namespace viennamaterials
     }
   };
 
-  struct broker_error : public std::exception
+  struct broker_error : public std::exception //TODO rename
   {
     broker_error(std::string const& info) : info(info) {}
     ~broker_error() throw() {}
@@ -148,6 +148,19 @@ namespace viennamaterials
   {
     attribute_entity_error(std::string const& info) : info(info) {}
     ~attribute_entity_error() throw() {}
+
+    virtual const char* what() const throw()
+    {
+      return info.c_str();
+    }
+
+    std::string info;
+  };
+
+  struct proxy_error : public std::exception
+  {
+    proxy_error(std::string const& info) : info(info) {}
+    ~proxy_error() throw() {}
 
     virtual const char* what() const throw()
     {

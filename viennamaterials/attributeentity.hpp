@@ -221,6 +221,14 @@ public:
   template<typename T>
   T evaluate_value();
 
+  /**
+   * @brief Evaluate the quantity of the attribute
+   * @tparam T Type of the attribute value
+   * @return The quantity of the attribute
+   */
+  template<typename T>
+  T evaluate();
+
 protected:
 
   /**
@@ -230,6 +238,14 @@ protected:
    */
   template<typename T>
   T evaluate_value_dispatch();
+
+  /**
+   * @brief Dispatcher for the template specializations of evaluate method
+   * @tparam T Type of the attribute value
+   * @return The quantity of the attribute
+   */
+  template<typename T>
+  T evaluate_dispatch();
 
   /**
    * @brief Evaluate the value of this attribute
@@ -268,6 +284,12 @@ template<typename T>
 T attribute_entity::evaluate_value()
 {
   return this->evaluate_value_dispatch<T>();
+}
+
+template<typename T>
+T attribute_entity::evaluate()
+{
+  return this->evaluate_dispatch<T>();
 }
 
 typedef shared_ptr<attribute_entity> attribute_handle;

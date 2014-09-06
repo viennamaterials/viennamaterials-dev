@@ -67,7 +67,12 @@ public:
   * @param quan        The quantity to be converted
   * @param target_unit The target unit to which the value has to be converted to
   */
-  void convert(viennamaterials::quantity& quan, std::string const& target_unit);
+  template<typename T>
+  void convert(viennamaterials::quantity<T>& quan, std::string const& target_unit) //FIXME: only for double!!!
+  {
+    this->convert(quan.value(), quan.unit(), target_unit);
+    quan.unit() = target_unit;
+  }
 
 private:
 
