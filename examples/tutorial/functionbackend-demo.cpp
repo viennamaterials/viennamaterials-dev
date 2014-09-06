@@ -82,7 +82,8 @@ int main(int argc, char * argv[])
 
     /// Set value of first function argument and evaluate
     std::vector<viennamaterials::xml_value_entity_handle> func_args = attribute_2->get_dependencies();
-    func_args[0]->set_value((long)8);
+    long my_value = 8;
+    func_args[0]->set_value(my_value);
     attribute_2->set_dependencies(func_args);
     std::cout << "add function (arg set):   " << attribute_2->evaluate_value<long>() << std::endl;
   }
