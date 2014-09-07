@@ -38,7 +38,7 @@ public:
   attribute_handle query(std::string const& xpath_query_to_attribute);
 
 private:
-  library_handle lib_;
+  backend_handle lib_;
 
 private:
   /**

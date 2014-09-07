@@ -16,7 +16,7 @@
 // ViennaMaterials includes
 //
 #include "viennamaterials/forwards.h"
-#include "viennamaterials/library.hpp"
+#include "viennamaterials/backend.hpp"
 #include "viennamaterials/quantity.hpp"
 #include "viennamaterials/xmldatatypes.h"
 #include "viennamaterials/exceptions.hpp"
@@ -26,10 +26,10 @@ namespace viennamaterials {
 struct proxy
 {
 public:
-  proxy(viennamaterials::library_handle& matlib) : matlib_(matlib) {}
+  proxy(viennamaterials::backend_handle& matlib) : matlib_(matlib) {}
   virtual ~proxy() {}
 
-  viennamaterials::library_handle& matlib() { return matlib_; }
+  viennamaterials::backend_handle& matlib() { return matlib_; }
 
   std::string         query_native  (std::string const& q)
   {
@@ -67,7 +67,7 @@ private:
   virtual viennamaterials::quantity<xml_float>  query_quantity_float(std::string const& q) = 0;
 
 private:
-  viennamaterials::library_handle& matlib_;
+  viennamaterials::backend_handle& matlib_;
 };
 
 } // viennamaterials

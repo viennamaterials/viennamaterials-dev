@@ -32,7 +32,7 @@ int main(int argc, char * argv[])
   std::string filename("../../examples/data/test.xml");
 
   /** Import the file and create a material library object **/
-  viennamaterials::library_handle matlib = viennamaterials::generator(filename);
+  viennamaterials::backend_handle matlib = viennamaterials::generator(filename);
 
   /** Setup an arbitrary XPath query **/
   std::string query = "/material[id=\"Si\"]/parameter[id=\"bandgap\"]/value/text()";

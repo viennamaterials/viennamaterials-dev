@@ -19,7 +19,7 @@
 namespace viennamaterials
 {
 
-viennastar_proxy::viennastar_proxy(viennamaterials::library_handle& matlib) :
+viennastar_proxy::viennastar_proxy(viennamaterials::backend_handle& matlib) :
   viennamaterials::proxy(matlib),
   placeholder_    ("%"),
   token_          ('/'),

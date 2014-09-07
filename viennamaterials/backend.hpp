@@ -1,5 +1,5 @@
-#ifndef VIENNAMATERIALS_LIBRARY_HPP
-#define VIENNAMATERIALS_LIBRARY_HPP
+#ifndef VIENNAMATERIALS_BACKEND_HPP
+#define VIENNAMATERIALS_BACKEND_HPP
 
 /* =============================================================================
    Copyright (c) 2013-2014, Institute for Microelectronics, TU Wien
@@ -24,18 +24,18 @@ namespace viennamaterials {
 /**
     @brief Class acts as a base class for dynamic utilization
 */
-class library
+class backend
 {
 
 public:
 
   /** @brief The constructor sets the default placeholder used for processing the accessors */
-  virtual ~library() {}
+  virtual ~backend() {}
 
-  /** @brief Reads an input material file and polpulates the internal database */
+  /** @brief Reads an input material file and populates the internal database */
   virtual bool read(std::string const& filename) = 0;
 
-  /** @brief Reads an input material stream and polpulates the internal database */
+  /** @brief Reads an input material stream and populates the internal database */
   virtual bool read(std::stringstream & stream) = 0;
 
   /** @brief Writes the material database to the output string stream */

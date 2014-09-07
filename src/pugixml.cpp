@@ -22,7 +22,7 @@ namespace viennamaterials {
 
 // Public members
 
-pugixml::pugixml() : library()
+pugixml::pugixml() : backend()
 {
   this->init();
 }

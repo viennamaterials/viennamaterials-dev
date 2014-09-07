@@ -15,11 +15,11 @@
 
 // ViennaMaterials includes
 //
-#include "viennamaterials/library.hpp"
+#include "viennamaterials/backend.hpp"
 
 namespace viennamaterials {
 
-viennamaterials::library_handle generator(std::string const& filename);
+viennamaterials::backend_handle generator(std::string const& filename);
 
 } // viennamaterials
 

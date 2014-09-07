@@ -19,7 +19,7 @@
 
 // ViennaMaterials includes
 //
-#include "viennamaterials/library.hpp"
+#include "viennamaterials/backend.hpp"
 #include "external/pugixml/pugixml.hpp"
 
 namespace viennamaterials {
@@ -28,7 +28,7 @@ namespace viennamaterials {
 /**
     @brief Provides the pugixml backend
 */
-class pugixml : public library
+class pugixml : public backend
 {
 private:
   typedef pugi::xpath_node_set      node_set_type;

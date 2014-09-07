@@ -30,7 +30,7 @@ private:
   typedef std::vector<std::string>    QueryPartsType;
 
 public:
-  viennastar_proxy(viennamaterials::library_handle& matlib);
+  viennastar_proxy(viennamaterials::backend_handle& matlib);
   ~viennastar_proxy();
 
   std::string query          (std::string const& q);

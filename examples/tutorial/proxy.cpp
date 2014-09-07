@@ -31,7 +31,7 @@ int main(int argc, char * argv[])
   std::string filename(argv[1]);
 
   /** Import the file and create a material library object **/
-  viennamaterials::library_handle matlib = viennamaterials::generator(filename);
+  viennamaterials::backend_handle matlib = viennamaterials::generator(filename);
 
   /** Create the 'viennastar' proxy object, which although simplifies the acces
       expects the input xml file to offer a specific structure **/
