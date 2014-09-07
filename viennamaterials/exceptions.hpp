@@ -170,6 +170,19 @@ namespace viennamaterials
     std::string info;
   };
 
+  struct udunits_error : public std::exception
+  {
+    udunits_error(std::string const& info) : info(info) {}
+    ~udunits_error() throw() {}
+
+    virtual const char* what() const throw()
+    {
+      return info.c_str();
+    }
+
+    std::string info;
+  };
+
 
 } // viennamaterials
 
