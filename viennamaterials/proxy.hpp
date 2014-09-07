@@ -38,7 +38,7 @@ public:
 
   virtual std::string               query          (std::string const& q) = 0;
   virtual std::string               query_unit     (std::string const& q) = 0;
-//  virtual viennamaterials::numeric  query_value    (std::string const& q) = 0; //XXX adopt for templates
+
   template<typename T>
   T                                 query_value (std::string const& q)
   {

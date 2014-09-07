@@ -37,8 +37,6 @@ public:
 
   std::string query_unit     (std::string const& q);
 
-//  viennamaterials::numeric     query_value    (std::string const& q); //XXX
-
 private:
   void generate_base_path(std::string const& q, std::string & base_path);
 
