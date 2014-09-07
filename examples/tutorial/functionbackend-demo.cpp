@@ -12,7 +12,7 @@
 
 // ViennaMaterials includes
 //
-#include "viennamaterials/broker.hpp"
+#include "viennamaterials/library.hpp"
 
 int main(int argc, char * argv[])
 {
@@ -29,7 +29,7 @@ int main(int argc, char * argv[])
   std::string filename(argv[1]);
 
   /** Create broker object **/
-  viennamaterials::broker broker(filename);
+  viennamaterials::library broker(filename);
 
   std::string query;
   viennamaterials::attribute_handle attribute;

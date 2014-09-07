@@ -131,10 +131,10 @@ namespace viennamaterials
     }
   };
 
-  struct broker_error : public std::exception //TODO rename
+  struct library_error : public std::exception
   {
-    broker_error(std::string const& info) : info(info) {}
-    ~broker_error() throw() {}
+    library_error(std::string const& info) : info(info) {}
+    ~library_error() throw() {}
 
     virtual const char* what() const throw()
     {

@@ -207,7 +207,7 @@ bool attribute_entity::is_function_tensor()
 template<typename T>
 T attribute_entity::evaluate_value_dispatch()
 {
-  throw broker_error("Template type not supported");
+  throw library_error("Template type not supported");
 }
 
 template<>

@@ -10,7 +10,7 @@
    license:    see file LICENSE in the base directory
 ============================================================================= */
 
-#include "viennamaterials/broker.hpp"
+#include "viennamaterials/library.hpp"
 #include "viennamaterials/pugixml.hpp"
 #include "viennamaterials/exceptions.hpp"
 #include "viennamaterials/xmlvaluescalar.hpp"
@@ -23,13 +23,13 @@
 namespace viennamaterials
 {
 
-broker::broker(std::string const& filename)
+library::library(std::string const& filename)
 {
   /// Create a material library object
   lib_ = viennamaterials::generator(filename);
 }
 
-attribute_handle broker::query(std::string const& xpath_query_to_attribute)
+attribute_handle library::query(std::string const& xpath_query_to_attribute)
 {
   /// Gather data from XML
   xml_attribute_type type = get_attribute_type(xpath_query_to_attribute);
@@ -70,7 +70,7 @@ attribute_handle broker::query(std::string const& xpath_query_to_attribute)
           else if(value.compare("false") == 0)
             entity_ptr->set_value(false);
           else
-            throw broker_error("Invalid boolean value encountered (query: " + query_arg_scalar + ")");
+            throw library_error("Invalid boolean value encountered (query: " + query_arg_scalar + ")");
         }else if(lib_->query_attribute(query_arg_scalar, type_attribute).compare("int") == 0)
         {
           xml_value_entity_handle int_entity(new xml_value_scalar_integer);
@@ -87,7 +87,7 @@ attribute_handle broker::query(std::string const& xpath_query_to_attribute)
       }else if(lib_->query_number_of_elements(query_arg + "/tensor") == 1)
       {
         //TODO tensor arg
-        throw broker_error("Tensor not yet implemented");
+        throw library_error("Tensor not yet implemented");
       }else if(lib_->query_number_of_elements(query_arg + "/reference") == 1)
       {
         std::string query_referenced_attribute = lib_->query(query_arg + "/reference/text()");
@@ -97,7 +97,7 @@ attribute_handle broker::query(std::string const& xpath_query_to_attribute)
         referenced_arguments.push_back(attribute_arg_ptr);
         continue;
       }else
-        throw broker_error("Invalid function argument type encountered (query: " + query_arg + ")");
+        throw library_error("Invalid function argument type encountered (query: " + query_arg + ")");
 
       entity_ptr->set_index( convert<size_t>(lib_->query(query_arg + "/id/text()")) );
       entity_ptr->set_name(lib_->query(query_arg + "/quantity/text()"));
@@ -117,7 +117,7 @@ attribute_handle broker::query(std::string const& xpath_query_to_attribute)
       backend = tmp;
     }
     else
-      throw broker_error("Not supported code language encountered (query: " + query_code + ")");
+      throw library_error("Not supported code language encountered (query: " + query_code + ")");
 
     backend->init(lib_->query(query_code + "/text()"), lib_->query_attribute(query_code, call_attribute));
 
@@ -147,7 +147,7 @@ attribute_handle broker::query(std::string const& xpath_query_to_attribute)
         return entity;
       }
       else
-        throw broker_error("Invalid boolean value encountered (query: " + query_scalar + ")");
+        throw library_error("Invalid boolean value encountered (query: " + query_scalar + ")");
     }else if(lib_->query_attribute(query_scalar, type_attribute).compare("int") == 0)
     {
       /// Create integer scalar attribute entity
@@ -165,10 +165,10 @@ attribute_handle broker::query(std::string const& xpath_query_to_attribute)
 
   //TODO tensor
 
-  throw broker_error("Invalid argument type encountered (query: " + xpath_query_to_attribute + ")");
+  throw library_error("Invalid argument type encountered (query: " + xpath_query_to_attribute + ")");
 }
 
-xml_attribute_type broker::get_attribute_type(std::string const& xpath_query_to_attribute)
+xml_attribute_type library::get_attribute_type(std::string const& xpath_query_to_attribute)
 {
   /**
    * Precedence of attribute types:
@@ -196,7 +196,7 @@ xml_attribute_type broker::get_attribute_type(std::string const& xpath_query_to_
       else if( lib_->query_attribute(query, type_attribute).compare("float") == 0 )
         return function_float;
     }
-    throw broker_error("No valid return type for function attribute found (query: " + query + ")");
+    throw library_error("No valid return type for function attribute found (query: " + query + ")");
 
   }else if(lib_->query_number_of_elements(xpath_query_to_attribute + "/tensor") > 0)
   {
@@ -213,10 +213,10 @@ xml_attribute_type broker::get_attribute_type(std::string const& xpath_query_to_
     else if( lib_->query_attribute(query, type_attribute).compare("float") == 0 )
       return scalar_float;
 
-    throw broker_error("No valid type for scalar attribute found (query: " + query + ")");
+    throw library_error("No valid type for scalar attribute found (query: " + query + ")");
   }
 
-  throw broker_error("No valid attribute type found (query: " + xpath_query_to_attribute + ")");
+  throw library_error("No valid attribute type found (query: " + xpath_query_to_attribute + ")");
 }
 
 } /* namespace viennamaterials */

@@ -49,7 +49,7 @@ size_t xml_value_entity::get_index()
 template<typename T>
 T xml_value_entity::get_value_dispatch()
 {
-  throw broker_error("Template type not supported");
+  throw library_error("Template type not supported");
 }
 
 template<>
