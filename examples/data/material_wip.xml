@@ -12,13 +12,13 @@
     <attribute>
       <id>int-scalar</id>
       <scalar type='int'>22</scalar>
-      <unit>W</unit>
+      <unit>V</unit>
     </attribute>
     
     <attribute>
       <id>bool-scalar</id>
       <scalar type='bool'>true</scalar>
-      <unit>W</unit>
+      <unit></unit>
     </attribute>
     
     <attribute>

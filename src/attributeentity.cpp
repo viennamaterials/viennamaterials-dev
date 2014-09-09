@@ -204,6 +204,11 @@ bool attribute_entity::is_function_tensor()
   return false;
 }
 
+std::string attribute_entity::get_unit() const
+{
+  return unit_;
+}
+
 template<typename T>
 T attribute_entity::evaluate_value_dispatch()
 {

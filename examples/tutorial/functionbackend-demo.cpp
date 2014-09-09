@@ -40,19 +40,19 @@ int main(int argc, char * argv[])
   query = "/*/*[id='test-material']/*[id='bool-scalar']";
   attribute = broker.query(query);
   if(attribute->is_scalar_bool())
-    std::cout << "boolean scalar value:          " << attribute->evaluate_value<bool>() << std::endl;
+    std::cout << "boolean scalar value:          " << attribute->evaluate_value<bool>() << " " << attribute->get_unit() << std::endl;
 
   /** Load integer scalar from material library **/
   query = "/*/*[id='test-material']/*[id='int-scalar']";
   attribute = broker.query(query);
   if(attribute->is_scalar_int())
-    std::cout << "integer scalar value:          " << attribute->evaluate_value<long>() << std::endl;
+    std::cout << "integer scalar value:          " << attribute->evaluate_value<long>() << " " << attribute->get_unit() << std::endl;
 
   /** Load floating point scalar from material library **/
   query = "/*/*[id='test-material']/*[id='float-scalar']";
   attribute = broker.query(query);
   if(attribute->is_scalar_float())
-    std::cout << "floating point scalar value:   " << attribute->evaluate_value<double>() << std::endl;
+    std::cout << "floating point scalar value:   " << attribute->evaluate_value<double>() << " " << attribute->get_unit() << std::endl;
 
 
   std::cout << "######################## Function attributes ########################" << std::endl;
@@ -63,7 +63,7 @@ int main(int argc, char * argv[])
   if(attribute->is_function_float())
   {
     /// Using default values of function arguments
-    std::cout << "multiply function (defaults):  " << attribute->evaluate_value<double>() << std::endl;
+    std::cout << "multiply function (defaults):  " << attribute->evaluate_value<double>() << " " << attribute->get_unit() << std::endl;
 
     /// Set value of second function argument and evaluate
     std::vector<viennamaterials::xml_value_entity_handle> func_args = attribute->get_dependencies();
@@ -114,6 +114,7 @@ int main(int argc, char * argv[])
 
   //TODO: unit conversion? viennamaterials::quantity?
   //TODO: correct and check asserts in tests!!
+  //TODO: xmlvalueentity --> setters as protected and use friend
 
 
   std::cout << "########################     End of demo     ########################" << std::endl;

@@ -16,10 +16,11 @@
 namespace viennamaterials
 {
 
-attribute_entity_scalar_boolean::attribute_entity_scalar_boolean(xml_bool value)
+attribute_entity_scalar_boolean::attribute_entity_scalar_boolean(xml_bool value, std::string const& unit)
 {
-  this->entity_type_ = scalar_bool;
-  this->value_ = value;
+  this->entity_type_  = scalar_bool;
+  this->value_        = value;
+  this->unit_         = unit;
 }
 
 std::vector<xml_value_entity_handle> attribute_entity_scalar_boolean::get_dependencies()
@@ -50,10 +51,11 @@ xml_float attribute_entity_scalar_boolean::eval_value(tag_scalar_float tag)
 
 
 
-attribute_entity_scalar_integer::attribute_entity_scalar_integer(xml_int value)
+attribute_entity_scalar_integer::attribute_entity_scalar_integer(xml_int value, std::string const& unit)
 {
-  this->entity_type_ = scalar_int;
-  this->value_ = value;
+  this->entity_type_  = scalar_int;
+  this->value_        = value;
+  this->unit_         = unit;
 }
 
 std::vector<xml_value_entity_handle> attribute_entity_scalar_integer::get_dependencies()
@@ -84,10 +86,11 @@ xml_float attribute_entity_scalar_integer::eval_value(tag_scalar_float tag)
 
 
 
-attribute_entity_scalar_float::attribute_entity_scalar_float(xml_float value)
+attribute_entity_scalar_float::attribute_entity_scalar_float(xml_float value, std::string const& unit)
 {
-  this->entity_type_ = scalar_float;
-  this->value_ = value;
+  this->entity_type_  = scalar_float;
+  this->value_        = value;
+  this->unit_         = unit;
 }
 
 std::vector<xml_value_entity_handle> attribute_entity_scalar_float::get_dependencies()

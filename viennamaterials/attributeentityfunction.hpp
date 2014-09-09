@@ -66,6 +66,7 @@ class attribute_entity_function : public attribute_entity
 public:
   /**
    * @brief Create a function attribute.
+   * @param unit The unit of this attribute object
    * @param entity_type The function type given as enum xml_attribute_type
    * @param backend A smartpointer to the function backend object
    * @param dependencies A vector of smartpointers to objects of type xml_value_entity representing the required arguments for function execution which
@@ -73,7 +74,7 @@ public:
    * @param arguments A vector of smartpointers to objects of type attribute_entity_argument representing the required arguments for function execution
    *                      which are queried from the XML material database
    */
-  attribute_entity_function(xml_attribute_type entity_type, function_backend_handle backend, std::vector<xml_value_entity_handle>& dependencies, std::vector<shared_ptr<attribute_entity_argument> > arguments);
+  attribute_entity_function(std::string const& unit, xml_attribute_type entity_type, function_backend_handle backend, std::vector<xml_value_entity_handle>& dependencies, std::vector<shared_ptr<attribute_entity_argument> > arguments);
 
   /**
    * @brief Get the dependencies of the this attribute function object

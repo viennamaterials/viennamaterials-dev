@@ -19,9 +19,10 @@ namespace viennamaterials
 {
 
 attribute_entity_function::attribute_entity_function(
-    xml_attribute_type entity_type, function_backend_handle backend, std::vector<xml_value_entity_handle>& dependencies,
-    std::vector<shared_ptr<attribute_entity_argument> > arguments)
+    std::string const& unit, xml_attribute_type entity_type, function_backend_handle backend,
+    std::vector<xml_value_entity_handle>& dependencies, std::vector<shared_ptr<attribute_entity_argument> > arguments)
 {
+  this->unit_                 = unit;
   this->entity_type_          = entity_type;
   this->backend_              = backend;
   this->dependencies_backend_ = dependencies;

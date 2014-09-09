@@ -202,6 +202,12 @@ public:
   bool is_function_tensor();
 
   /**
+   * @brief Get unit of this object
+   * @return A string containing the unit
+   */
+  std::string           get_unit() const;
+
+  /**
    * @brief Get the dependencies of the attribute
    * @return A vector of smartpointers to objects of type xml_value_entity
    */
@@ -276,8 +282,8 @@ protected:
 //  virtual void      eval_value(tag_tensor tag)          = 0; //TODO: tensor: return
 
 protected:
-  xml_attribute_type entity_type_;
-  //TODO unit!!!
+  xml_attribute_type  entity_type_;
+  std::string         unit_;
 };
 
 template<typename T>

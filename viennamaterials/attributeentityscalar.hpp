@@ -27,8 +27,9 @@ public:
   /**
    * @brief Create a boolean scalar attribute
    * @param value The value of this attribute object
+   * @param unit The unit of this attribute object
    */
-  attribute_entity_scalar_boolean(xml_bool value);
+  attribute_entity_scalar_boolean(xml_bool value, std::string const& unit);
 
   /**
    * @brief Get the dependencies of the scalar attribute. Since a scalar has no dependencies, an empty vector is returned.
@@ -68,8 +69,9 @@ public:
   /**
    * @brief Create an integer scalar attribute
    * @param value The value of this attribute object
+   * @param unit The unit of this attribute object
    */
-  attribute_entity_scalar_integer(xml_int value);
+  attribute_entity_scalar_integer(xml_int value, std::string const& unit);
 
   /**
    * @brief Get the dependencies of the scalar attribute. Since a scalar has no dependencies, an empty vector is returned.
@@ -109,8 +111,9 @@ public:
   /**
    * @brief Create an floating point scalar attribute
    * @param value The value of this attribute object
+   * @param unit The unit of this attribute object
    */
-  attribute_entity_scalar_float(xml_float value);
+  attribute_entity_scalar_float(xml_float value, std::string const& unit);
 
   /**
    * @brief Get the dependencies of the scalar attribute. Since a scalar has no dependencies, an empty vector is returned.

@@ -34,6 +34,9 @@ attribute_handle library::query(std::string const& xpath_query_to_attribute)
   /// Gather data from XML
   xml_attribute_type type = get_attribute_type(xpath_query_to_attribute);
 
+  /// Query unit
+  std::string unit = lib_->query(xpath_query_to_attribute + "/unit/text()");
+
   if(type == function_bool || type == function_int || type == function_float) //TODO tensor: function_tensor
   {
     std::string query = xpath_query_to_attribute + "/function";
@@ -121,9 +124,10 @@ attribute_handle library::query(std::string const& xpath_query_to_attribute)
 
     backend->init(lib_->query(query_code + "/text()"), lib_->query_attribute(query_code, call_attribute));
 
+    ///load unit
 
     /// Create function attribute entity
-    attribute_handle entity(new attribute_entity_function(type, backend, dependencies, referenced_arguments));
+    attribute_handle entity(new attribute_entity_function(unit, type, backend, dependencies, referenced_arguments));
 
     return entity;
   }else if(type == scalar_bool || type == scalar_int || type ==  scalar_float)
@@ -137,13 +141,13 @@ attribute_handle library::query(std::string const& xpath_query_to_attribute)
       if(value.compare("true") == 0)
       {
         /// Create boolean scalar attribute entity holding value true
-        attribute_handle entity(new attribute_entity_scalar_boolean(true));
+        attribute_handle entity(new attribute_entity_scalar_boolean(true, unit));
         return entity;
       }
       else if(value.compare("false") == 0)
       {
         /// Create boolean scalar attribute entity holding value false
-        attribute_handle entity(new attribute_entity_scalar_boolean(false));
+        attribute_handle entity(new attribute_entity_scalar_boolean(false, unit));
         return entity;
       }
       else
@@ -152,13 +156,13 @@ attribute_handle library::query(std::string const& xpath_query_to_attribute)
     {
       /// Create integer scalar attribute entity
       xml_int value = convert<xml_int>(lib_->query(query_scalar + "/text()"));
-      attribute_handle entity(new attribute_entity_scalar_integer(value));
+      attribute_handle entity(new attribute_entity_scalar_integer(value, unit));
       return entity;
     }else if(lib_->query_attribute(query_scalar, type_attribute).compare("float") == 0)
     {
       /// Create floating point scalar attribute entity
       xml_float value = convert<xml_float>(lib_->query(query_scalar + "/text()"));
-      attribute_handle entity(new attribute_entity_scalar_float(value));
+      attribute_handle entity(new attribute_entity_scalar_float(value, unit));
       return entity;
     }
   }
