@@ -15,6 +15,7 @@
 
 #include "viennamaterials/xmldatatypes.h"
 #include "viennamaterials/xmlvalueentity.hpp"
+#include "viennamaterials/quantity.hpp"
 #include <vector>
 
 namespace viennamaterials
@@ -233,7 +234,7 @@ public:
    * @return The quantity of the attribute
    */
   template<typename T>
-  T evaluate();
+  quantity<T> evaluate();
 
 protected:
 
@@ -251,7 +252,7 @@ protected:
    * @return The quantity of the attribute
    */
   template<typename T>
-  T evaluate_dispatch();
+  quantity<T> evaluate_dispatch();
 
   /**
    * @brief Evaluate the value of this attribute
@@ -293,9 +294,16 @@ T attribute_entity::evaluate_value()
 }
 
 template<typename T>
-T attribute_entity::evaluate()
+quantity<T> attribute_entity::evaluate()
 {
   return this->evaluate_dispatch<T>();
+}
+
+template<typename T>
+quantity<T> attribute_entity::evaluate_dispatch()
+{
+  quantity<T> result(this->evaluate_value_dispatch<T>(), unit_);
+  return result;
 }
 
 typedef shared_ptr<attribute_entity> attribute_handle;

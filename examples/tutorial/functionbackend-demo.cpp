@@ -46,13 +46,13 @@ int main(int argc, char * argv[])
   query = "/*/*[id='test-material']/*[id='int-scalar']";
   attribute = broker.query(query);
   if(attribute->is_scalar_int())
-    std::cout << "integer scalar value:          " << attribute->evaluate_value<long>() << " " << attribute->get_unit() << std::endl;
+    std::cout << "integer scalar value:          " << attribute->evaluate<long>() << std::endl;
 
   /** Load floating point scalar from material library **/
   query = "/*/*[id='test-material']/*[id='float-scalar']";
   attribute = broker.query(query);
   if(attribute->is_scalar_float())
-    std::cout << "floating point scalar value:   " << attribute->evaluate_value<double>() << " " << attribute->get_unit() << std::endl;
+    std::cout << "floating point scalar value:   " << attribute->evaluate<double>() << std::endl;
 
 
   std::cout << "######################## Function attributes ########################" << std::endl;
@@ -112,7 +112,6 @@ int main(int argc, char * argv[])
   }
 
 
-  //TODO: unit conversion? viennamaterials::quantity?
   //TODO: correct and check asserts in tests!!
   //TODO: xmlvalueentity --> setters as protected and use friend
 
