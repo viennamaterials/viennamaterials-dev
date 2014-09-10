@@ -24,8 +24,9 @@ viennastar_proxy::viennastar_proxy(viennamaterials::backend_handle& matlib) :
   placeholder_    ("%"),
   token_          ('/'),
   sub_path_       ("/*[id=\""+placeholder_+"\"]"),
-  value_path_     ("/value/text()"),
-  unit_path_      ("/unit/text()")
+  value_path_     ("/scalar/text()"),
+  unit_path_      ("/unit/text()"),
+  path_prefix_    ("/database")
 {
 }
 
@@ -99,6 +100,7 @@ void viennastar_proxy::generate_base_path(std::string const& q, std::string & ba
 {
   query_parts_.clear();
   viennamaterials::split(query_parts_, q, token_);
+  base_path = path_prefix_;
   for(QueryPartsType::const_iterator iter = query_parts_.begin();
       iter != query_parts_.end(); iter++)
   {

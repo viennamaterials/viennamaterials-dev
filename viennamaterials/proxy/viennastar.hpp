@@ -53,6 +53,7 @@ private:
   const std::string sub_path_;
   const std::string value_path_;
   const std::string unit_path_;
+  const std::string path_prefix_;
 
   QueryPartsType query_parts_;
 };
