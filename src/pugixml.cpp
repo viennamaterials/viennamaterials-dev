@@ -172,9 +172,7 @@ std::string pugixml::query_attribute_name(std::string const& native_query, long 
   if(is_valid_xml_index(position))
     throw xml_index_error();
 
-  std::ostringstream position_string;
-  position_string << position;
-  std::string query = "name(" + native_query + "/@*[" + position_string.str() + "])";
+  std::string query = "name(" + native_query + "/@*[" + convert<std::string>(position) + "])";
   return query_xpath_string(query);
 }
 
@@ -183,9 +181,7 @@ std::string pugixml::query_attribute(std::string const& native_query, long const
   if(is_valid_xml_index(position))
     throw xml_index_error();
 
-  std::ostringstream position_string;
-  position_string << position;
-  std::string query = "string(" + native_query + "/@*[" + position_string.str() + "])";
+  std::string query = "string(" + native_query + "/@*[" + convert<std::string>(position) + "])";
   return query_xpath_string(query);
 }
 

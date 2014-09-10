@@ -54,9 +54,7 @@ attribute_handle library::query(std::string const& xpath_query_to_attribute)
       /// Handle each argument
 
       xml_value_entity_handle entity_ptr;
-      std::ostringstream index_string;
-      index_string << i;
-      std::string query_arg = query + "/arg[" + index_string.str() + "]";
+      std::string query_arg = query + "/arg[" + convert<std::string>(i) + "]";
 
       if(lib_->query_number_of_elements(query_arg + "/scalar") == 1)
       {
