@@ -1,214 +1,342 @@
-<material>
-  <id>Si</id>
-  <name>Silicon</name>
-  <category>semiconductor</category>
-  <category>indirect</category>
-
-  <!--General material parameters-->
-  <parameter>
-    <id>bandgap</id>
-    <value>1.107</value>
-    <unit>eV</unit>
-  </parameter>
-  <parameter>
-    <id>intrinsic_carrier_concentration</id>
-    <value>1.0E16</value>
-    <unit>1/m3</unit>
-  </parameter>
-  <parameter>
-    <id>relative_permittivity</id>
-    <value>11.8</value>
-    <unit></unit>
-  </parameter>
-
-  <!--Model-specific parameters-->
-  <model>
-    <id>DriftDiffusion</id>
-    <!--General model parameters-->
-    <parameter>
-      <id>some_dd_parameter</id>
-      <value>some_value</value>
-      <unit>some_unit</unit>
-    </parameter>
-    <model>
-      <!--Embedded model-specific parameters-->
-      <id>SRH</id>
-      <category>recombination</category>
-      <parameter>
-        <id>para_srh</id>
-        <value>4.0</value>
-        <unit>cm</unit>
-      </parameter>
-    </model>
-    <model>
-      <id>Lattice</id>
-      <category>scattering</category>
-      <parameter>
-        <id>some_srh_parameter</id>
-        <value>some_value</value>
-        <unit>some_unit</unit>
-      </parameter>
-    </model>
-    <model>
-      <id>IoniziedImpurities</id>
-      <category>scattering</category>
-      <parameter>
-        <id>some_srh_parameter</id>
-        <value>some_value</value>
-        <unit>some_unit</unit>
-      </parameter>
-    </model>
-  </model>
-  <model>
-    <id>HydroDynamic</id>
-  </model>
-  <model>
-    <id>SphericalHarmonics</id>
-  </model>
-</material>
-<material>
-  <id>Ge</id>
-  <name>Germanium</name>
-  <category>semiconductor</category>
-  <category>indirect</category>
-  <parameters>
-    <parameter>
+<database>
+  <material>
+    <id>test-material</id>
+    <category>testing</category>
+    
+    <attribute>
+      <id>float-scalar</id>
+      <scalar type='float'>9.9</scalar>
+      <unit>W</unit>
+    </attribute>
+    
+    <attribute>
+      <id>int-scalar</id>
+      <scalar type='int'>22</scalar>
+      <unit>V</unit>
+    </attribute>
+    
+    <attribute>
+      <id>bool-scalar</id>
+      <scalar type='bool'>true</scalar>
+      <unit></unit>
+    </attribute>
+    
+    <attribute>
+      <id>float-function-multiply</id>
+      <function>
+        <code lang='python' call='func'>
+          def func(x,y):
+            return x*y
+        </code>
+        <arg>
+          <id>0</id>
+          <quantity>x-value</quantity>
+          <scalar type='float'>2.0</scalar>
+        </arg>
+        <arg>
+          <id>1</id>
+          <quantity>y-value</quantity>
+          <scalar type='float'>0.25</scalar>
+        </arg>
+        <return>
+          <scalar type='float'/>
+        </return>
+      </function>
+      <unit>A</unit>
+    </attribute>
+    
+    <attribute>
+      <id>int-function-add</id>
+      <function>
+        <code lang='python' call='add'>
+          def add(x):
+            return x+1000
+        </code>
+        <arg>
+          <id>0</id>
+          <quantity>factor</quantity>
+          <scalar type='int'>2</scalar>
+        </arg>
+        <return>
+          <scalar type='int'/>
+        </return>
+      </function>
+      <unit>A</unit>
+    </attribute>
+    
+    <attribute>
+      <id>float-function-references</id>
+      <function>
+        <code lang='python' call='func'>
+          def func(a, condition, b, c, d):
+            print ' Hello! This is the Python backend.'
+            if condition:
+              print '  bool  ref is: TRUE'
+            else:
+              print '  bool  ref is: FALSE'
+            print '  int   ref is: {0}'.format(b)
+            print '  float ref is: {0}'.format(c)
+            print '  func  ref is: {0}'.format(d)
+            return a*1000
+        </code>
+        <arg>
+          <id>0</id>
+          <quantity>a</quantity>
+          <scalar type='float'>3.0</scalar>
+        </arg>
+        <arg>
+          <id>1</id>
+          <reference>/*/*[id='test-material']/*[id='bool-scalar']</reference>
+        </arg>
+        <arg>
+          <id>2</id>
+          <reference>/*/*[id='test-material']/*[id='int-scalar']</reference>
+        </arg>
+        <arg>
+          <id>3</id>
+          <reference>/*/*[id='test-material']/*[id='float-scalar']</reference>
+        </arg>
+        <arg>
+          <id>4</id>
+          <reference>/*/*[id='test-material']/*[id='int-function-add']</reference>
+        </arg>
+        <return>
+          <scalar type='float'/>
+        </return>
+      </function>
+      <unit>A</unit>
+    </attribute>
+    
+    <attribute>
+      <id>bool-function-without-args</id>
+      <function>
+        <code lang='python' call='func'>
+          def func():
+            return (1==1)
+        </code>
+        <return>
+          <scalar type='bool'/>
+        </return>
+      </function>
+      <unit>A</unit>
+    </attribute>
+    
+  </material>
+  
+  <!-- ########################################################################## -->
+  
+  <material>
+    <id>Si</id>
+    <name>Silicon</name>
+    <category>semiconductor</category>
+    <category>indirect</category>
+  
+    <!--General material parameters-->
+    <attribute>
       <id>bandgap</id>
-      <value>0.67</value>
+      <scalar type='float'>1.107</scalar>
       <unit>eV</unit>
-    </parameter>
-    <parameter>
+    </attribute>
+    <attribute>
       <id>intrinsic_carrier_concentration</id>
-      <value>2.4E13</value>
-      <unit>1/cm3</unit>
-    </parameter>
-    <parameter>
+      <scalar type='float'>1.0E16</scalar>
+      <unit>1/m3</unit>
+    </attribute>
+    <attribute>
       <id>relative_permittivity</id>
-      <value>16</value>
+      <scalar type='float'>11.8</scalar>
       <unit></unit>
-    </parameter>
-    <parameter>
-      <id>mu_n_0</id>
-      <value>0.3800</value>
-      <unit>cm^2/V*s</unit>
-    </parameter>
-    <parameter>
-      <id>mu_p_0</id>
-      <value>0.1800</value>
-      <unit>cm^2/V*s</unit>
-    </parameter>
-    <parameter>
-      <id>alpha_n</id>
-      <value>1.66</value>
-      <unit>1</unit>
-    </parameter>
-    <parameter>
-      <id>alpha_p</id>
-      <value>2.33</value>
-      <unit>1</unit>
-    </parameter>
-  </parameters>
-<!--    <source>http://www.matweb.com/search/DataSheet.aspx?MatGUID=a03ca6b2d6ae431aa5a7e71a129f9a4a</source>-->
-</material>
-<material>
-  <id>GaAs</id>
-  <name>GalliumArsenide</name>
-  <category>semiconductor</category>
-  <category>direct</category>
-  <category>compound</category>
-  <parameters>
-    <parameter>
-      <id>bandgap</id>
-      <value>1.35</value>
-      <unit>eV</unit>
-    </parameter>
-    <parameter>
-      <id>intrinsic_carrier_concentration</id>
-      <value>1.79E6</value>
-      <unit>1/cm3</unit>
-    </parameter>
-    <parameter>
-      <id>relative_permittivity</id>
-      <value>13.2</value>
-      <unit></unit>
-    </parameter>
-    <parameter>
-      <id>mu_n_0</id>
-      <value>0.8500</value>
-      <unit>cm^2/V*s</unit>
-    </parameter>
-    <parameter>
-      <id>mu_p_0</id>
-      <value>0.0400</value>
-      <unit>cm^2/V*s</unit>
-    </parameter>
-    <parameter>
-      <id>alpha_n</id>
-      <value>1</value>
-      <unit>1</unit>
-    </parameter>
-    <parameter>
-      <id>alpha_p</id>
-      <value>2.1</value>
-      <unit>1</unit>
-    </parameter>
-  </parameters>
-<!--    <source>http://www.matweb.com/search/DataSheet.aspx?MatGUID=029a4ff04bdc46d5906b29e0a36dba36&ckck=1</source>-->
-</material>
-<material>
-  <id>SiO2</id>
-  <name>SiliconDioxide</name>
-  <category>oxide</category>
-  <parameters>
-    <parameter>
-      <id>relative_permittivity</id>
-      <value>3.9</value>
-      <unit></unit>
-    </parameter>
-  </parameters>
-<!--    <source>http://www.matweb.com/search/DataSheet.aspx?MatGUID=d5c906beded84f18a394afec8735c2a4</source>-->
-</material>
-<material>
-  <id>InP</id>
-  <name>IndiumPhosphide</name>
-  <category>oxide</category>
-  <parameters>
-    <parameter>
-      <id>relative_permittivity</id>
-      <value>12.4</value>
-      <unit></unit>
-    </parameter>
-  </parameters>
-</material>
-<material>
-  <id>HfO2</id>
-  <name>HafniumDioxide</name>
-  <category>oxide</category>
-  <parameters>
-    <parameter>
-      <id>relative_permittivity</id>
-      <value>15.6</value>
-      <unit></unit>
-    </parameter>
-  </parameters>
-</material>
-<material>
-  <id>Air</id>
-  <name>air</name>
-  <category>air</category>
-  <parameters>
-    <parameter>
-      <id>relative_permittivity</id>
-      <value>1.0</value>
-      <unit></unit>
-    </parameter>
-  </parameters>
-</material>
-<material>
-  <id>Cu</id>
-  <name>Copper</name>
-  <category>metal</category>
-  <parameters>
-  </parameters>
-<!--    <source>http://www.matweb.com/search/DataSheet.aspx?MatGUID=9aebe83845c04c1db5126fada6f76f7e</source>-->
-</material>
+    </attribute>
+  
+    <!--Model-specific parameters-->
+    <group>
+      <id>DriftDiffusion</id>
+      <!--General model parameters-->
+      <attribute>
+        <id>some_dd_parameter</id>
+        <scalar type='float'>some_value</scalar>
+        <unit>some_unit</unit>
+      </attribute>
+      <group>
+        <!--Embedded model-specific parameters-->
+        <id>SRH</id>
+        <category>recombination</category>
+        <attribute>
+          <id>para_srh</id>
+          <scalar type='float'>4.0</scalar>
+          <unit>cm</unit>
+        </attribute>
+      </group>
+      <group>
+        <id>Lattice</id>
+        <category>scattering</category>
+        <attribute>
+          <id>some_srh_parameter</id>
+          <scalar type='float'>some_value</scalar>
+          <unit>some_unit</unit>
+        </attribute>
+      </group>
+      <group>
+        <id>IoniziedImpurities</id>
+        <category>scattering</category>
+        <attribute>
+          <id>some_srh_parameter</id>
+          <scalar type='float'>some_value</scalar>
+          <unit>some_unit</unit>
+        </attribute>
+      </group>
+    </group>
+    <group>
+      <id>HydroDynamic</id>
+    </group>
+    <group>
+      <id>SphericalHarmonics</id>
+    </group>
+  </material>
+  <material>
+    <id>Ge</id>
+    <name>Germanium</name>
+    <category>semiconductor</category>
+    <category>indirect</category>
+    <parameters>
+      <attribute>
+        <id>bandgap</id>
+        <scalar type='float'>0.67</scalar>
+        <unit>eV</unit>
+      </attribute>
+      <attribute>
+        <id>intrinsic_carrier_concentration</id>
+        <scalar type='float'>2.4E13</scalar>
+        <unit>1/cm3</unit>
+      </attribute>
+      <attribute>
+        <id>relative_permittivity</id>
+        <scalar type='float'>16</scalar>
+        <unit></unit>
+      </attribute>
+      <attribute>
+        <id>mu_n_0</id>
+        <scalar type='float'>0.3800</scalar>
+        <unit>cm^2/V*s</unit>
+      </attribute>
+      <attribute>
+        <id>mu_p_0</id>
+        <scalar type='float'>0.1800</scalar>
+        <unit>cm^2/V*s</unit>
+      </attribute>
+      <attribute>
+        <id>alpha_n</id>
+        <scalar type='float'>1.66</scalar>
+        <unit>1</unit>
+      </attribute>
+      <attribute>
+        <id>alpha_p</id>
+        <scalar type='float'>2.33</scalar>
+        <unit>1</unit>
+      </attribute>
+    </parameters>
+  <!--    <source>http://www.matweb.com/search/DataSheet.aspx?MatGUID=a03ca6b2d6ae431aa5a7e71a129f9a4a</source>-->
+  </material>
+  <material>
+    <id>GaAs</id>
+    <name>GalliumArsenide</name>
+    <category>semiconductor</category>
+    <category>direct</category>
+    <category>compound</category>
+    <parameters>
+      <attribute>
+        <id>bandgap</id>
+        <scalar type='float'>1.35</scalar>
+        <unit>eV</unit>
+      </attribute>
+      <attribute>
+        <id>intrinsic_carrier_concentration</id>
+        <scalar type='float'>1.79E6</scalar>
+        <unit>1/cm3</unit>
+      </attribute>
+      <attribute>
+        <id>relative_permittivity</id>
+        <scalar type='float'>13.2</scalar>
+        <unit></unit>
+      </attribute>
+      <attribute>
+        <id>mu_n_0</id>
+        <scalar type='float'>0.8500</scalar>
+        <unit>cm^2/V*s</unit>
+      </attribute>
+      <attribute>
+        <id>mu_p_0</id>
+        <scalar type='float'>0.0400</scalar>
+        <unit>cm^2/V*s</unit>
+      </attribute>
+      <attribute>
+        <id>alpha_n</id>
+        <scalar type='float'>1</scalar>
+        <unit>1</unit>
+      </attribute>
+      <attribute>
+        <id>alpha_p</id>
+        <scalar type='float'>2.1</scalar>
+        <unit>1</unit>
+      </attribute>
+    </parameters>
+  <!--    <source>http://www.matweb.com/search/DataSheet.aspx?MatGUID=029a4ff04bdc46d5906b29e0a36dba36&ckck=1</source>-->
+  </material>
+  <material>
+    <id>SiO2</id>
+    <name>SiliconDioxide</name>
+    <category>oxide</category>
+    <parameters>
+      <attribute>
+        <id>relative_permittivity</id>
+        <scalar type='float'>3.9</scalar>
+        <unit></unit>
+      </attribute>
+    </parameters>
+  <!--    <source>http://www.matweb.com/search/DataSheet.aspx?MatGUID=d5c906beded84f18a394afec8735c2a4</source>-->
+  </material>
+  <material>
+    <id>InP</id>
+    <name>IndiumPhosphide</name>
+    <category>oxide</category>
+    <parameters>
+      <attribute>
+        <id>relative_permittivity</id>
+        <scalar type='float'>12.4</scalar>
+        <unit></unit>
+      </attribute>
+    </parameters>
+  </material>
+  <material>
+    <id>HfO2</id>
+    <name>HafniumDioxide</name>
+    <category>oxide</category>
+    <parameters>
+      <attribute>
+        <id>relative_permittivity</id>
+        <scalar type='float'>15.6</scalar>
+        <unit></unit>
+      </attribute>
+    </parameters>
+  </material>
+  <material>
+    <id>Air</id>
+    <name>air</name>
+    <category>air</category>
+    <parameters>
+      <attribute>
+        <id>relative_permittivity</id>
+        <scalar type='float'>1.0</scalar>
+        <unit></unit>
+      </attribute>
+    </parameters>
+  </material>
+  <material>
+    <id>Cu</id>
+    <name>Copper</name>
+    <category>metal</category>
+    <parameters>
+    </parameters>
+  <!--    <source>http://www.matweb.com/search/DataSheet.aspx?MatGUID=9aebe83845c04c1db5126fada6f76f7e</source>-->
+  </material>
+</database>
