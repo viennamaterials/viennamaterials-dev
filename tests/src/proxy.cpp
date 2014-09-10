@@ -19,7 +19,7 @@
 int main(int argc, char * argv[])
 {
   /** A string-path to a test material xml file **/
-  std::string filename("../../examples/data/test.xml");
+  std::string filename("../../examples/data/material_test.xml");
 
   /** Import the file and create a material library object **/
   viennamaterials::backend_handle matlib = viennamaterials::generator(filename);
@@ -31,20 +31,20 @@ int main(int argc, char * argv[])
   /** Access the xml node of Silicon's bandgap parameter **/
   std::string result_xml = myproxy->query("Si/bandgap");
   assert(result_xml ==
-"<parameter>\n\
+"<attribute>\n\
   <id>bandgap</id>\n\
-  <value>1.107</value>\n\
+  <scalar type=\"float\">1.107</scalar>\n\
   <unit>eV</unit>\n\
-</parameter>");
+</attribute>");
 
   /** Access some nested parameters, this can be arbitrarily 'deep' **/
   std::string result_xml2 = myproxy->query("Si/DriftDiffusion/SRH/para_srh");
   assert(result_xml2 ==
-"<parameter>\n\
+"<attribute>\n\
   <id>para_srh</id>\n\
-  <value>4.0</value>\n\
+  <scalar type=\"float\">4.0</scalar>\n\
   <unit>cm</unit>\n\
-</parameter>");
+</attribute>");
 
   /** Access the value of Silicon's bandgap parameter **/
   double result_value = myproxy->query_value<double>("Si/bandgap");

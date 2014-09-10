@@ -29,20 +29,20 @@
 int main(int argc, char * argv[])
 {
   /** A string-path to a test material xml file **/
-  std::string filename("../../examples/data/test.xml");
+  std::string filename("../../examples/data/material_test.xml");
 
   /** Import the file and create a material library object **/
   viennamaterials::backend_handle matlib = viennamaterials::generator(filename);
 
   /** Setup an arbitrary XPath query **/
-  std::string query = "/material[id=\"Si\"]/parameter[id=\"bandgap\"]/value/text()";
+  std::string query = "/database/material[id=\"Si\"]/attribute[id=\"bandgap\"]/scalar/text()";
 
   /** Perform the query and retrieve the string-based result **/
   std::string result_string = matlib->query(query);
   assert(result_string == "1.107");
 
   /** Setup the same query but use 'wildcards' this time **/
-  query = "/*[id=\"Si\"]/*[id=\"bandgap\"]/value/text()";
+  query = "/*/*[id=\"Si\"]/*[id=\"bandgap\"]/scalar/text()";
 
   /** Perform the query and retrieve the string-based result **/
   result_string = matlib->query(query);
@@ -53,7 +53,7 @@ int main(int argc, char * argv[])
   assert(value == 1.107);
 
   /** Setup the same query instead of accessing the value access the unit **/
-  query = "/*[id=\"Si\"]/*[id=\"bandgap\"]/unit/text()";
+  query = "/*/*[id=\"Si\"]/*[id=\"bandgap\"]/unit/text()";
 
   /** Perform the query and retrieve the string-based result **/
   result_string = matlib->query(query);
