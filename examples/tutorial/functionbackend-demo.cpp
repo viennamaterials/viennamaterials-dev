@@ -111,11 +111,6 @@ int main(int argc, char * argv[])
     std::cout << "number of dependencies: " << func_args.size() << std::endl;
   }
 
-
-  //TODO: correct and check asserts in tests!!
-  //TODO: xmlvalueentity --> setters as protected and use friend
-
-
   std::cout << "########################     End of demo     ########################" << std::endl;
   return EXIT_SUCCESS;
 }
