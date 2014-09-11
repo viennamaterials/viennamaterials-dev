@@ -3,13 +3,13 @@
 ADD_EXECUTABLE(native native.cpp)
 TARGET_LINK_LIBRARIES(native ${LIBRARIES})
 
-ADD_EXECUTABLE(proxy proxy.cpp)
-TARGET_LINK_LIBRARIES(proxy ${LIBRARIES})
+ADD_EXECUTABLE(native_proxy native_proxy.cpp)
+TARGET_LINK_LIBRARIES(native_proxy ${LIBRARIES})
 
-ADD_EXECUTABLE(functionbackend-demo functionbackend-demo.cpp)
-TARGET_LINK_LIBRARIES(functionbackend-demo ${LIBRARIES})
+ADD_EXECUTABLE(material_library material_library.cpp)
+TARGET_LINK_LIBRARIES(material_library ${LIBRARIES})
 
-INSTALL(TARGETS native proxy DESTINATION ${CMAKE_INSTALL_PREFIX}/examples)
+INSTALL(TARGETS native native_proxy material_library DESTINATION ${CMAKE_INSTALL_PREFIX}/examples)
 
 IF(UDUNITS_FOUND)
 ADD_EXECUTABLE(units units.cpp)

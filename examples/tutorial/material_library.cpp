@@ -28,8 +28,8 @@ int main(int argc, char * argv[])
   /** A string-path to a test material xml file **/
   std::string filename(argv[1]);
 
-  /** Create broker object **/
-  viennamaterials::library broker(filename);
+  /** Create matlib object **/
+  viennamaterials::library matlib(filename);
 
   std::string query;
   viennamaterials::attribute_handle attribute;
@@ -38,28 +38,28 @@ int main(int argc, char * argv[])
 
   /** Load boolean scalar from material library **/
   query = "/*/*[id='test-material']/*[id='bool-scalar']";
-  attribute = broker.query(query);
+  attribute = matlib.query(query);
   if(attribute->is_scalar_bool())
     std::cout << "boolean scalar value:          " << attribute->evaluate_value<bool>() << " " << attribute->get_unit() << std::endl;
 
   /** Load integer scalar from material library **/
   query = "/*/*[id='test-material']/*[id='int-scalar']";
-  attribute = broker.query(query);
+  attribute = matlib.query(query);
   if(attribute->is_scalar_int())
     std::cout << "integer scalar value:          " << attribute->evaluate<long>() << std::endl;
 
   /** Load floating point scalar from material library **/
   query = "/*/*[id='test-material']/*[id='float-scalar']";
-  attribute = broker.query(query);
+  attribute = matlib.query(query);
   if(attribute->is_scalar_float())
     std::cout << "floating point scalar value:   " << attribute->evaluate<double>() << std::endl;
 
-
+#ifdef VIENNAMATERIALS_WITH_FUNCTIONBACKEND
   std::cout << "######################## Function attributes ########################" << std::endl;
 
   /** Load function with float return type from material library **/
   query = "/*/*[id='test-material']/*[id='float-function-multiply']";
-  attribute = broker.query(query);
+  attribute = matlib.query(query);
   if(attribute->is_function_float())
   {
     /// Using default values of function arguments
@@ -74,7 +74,7 @@ int main(int argc, char * argv[])
 
   /** Load function with integer return type from material library **/
   query = "/*/*[id='test-material']/*[id='int-function-add']";
-  viennamaterials::attribute_handle attribute_2 = broker.query(query);
+  viennamaterials::attribute_handle attribute_2 = matlib.query(query);
   if(attribute_2->is_function_int())
   {
     /// Using default values of function arguments
@@ -90,7 +90,7 @@ int main(int argc, char * argv[])
 
   /** Load function with boolean return type from material library **/
   query = "/*/*[id='test-material']/*[id='bool-function-without-args']";
-  viennamaterials::attribute_handle attribute_3 = broker.query(query);
+  viennamaterials::attribute_handle attribute_3 = matlib.query(query);
   if(attribute_3->is_function_bool())
   {
     /// Using default values of function arguments
@@ -101,7 +101,7 @@ int main(int argc, char * argv[])
 
   /** Load function with references from material library **/
   query = "/*/*[id='test-material']/*[id='float-function-references']";
-  viennamaterials::attribute_handle attribute_4 = broker.query(query);
+  viennamaterials::attribute_handle attribute_4 = matlib.query(query);
   if(attribute_4->is_function_float())
   {
     /// Using default values of function arguments
@@ -111,6 +111,8 @@ int main(int argc, char * argv[])
     std::cout << "number of dependencies: " << func_args.size() << std::endl;
   }
 
-  std::cout << "########################     End of demo     ########################" << std::endl;
+#endif
+
+
   return EXIT_SUCCESS;
 }
