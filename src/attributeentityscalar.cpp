@@ -23,6 +23,10 @@ attribute_entity_scalar_boolean::attribute_entity_scalar_boolean(xml_bool value,
   this->unit_         = unit;
 }
 
+attribute_entity_scalar_boolean::~attribute_entity_scalar_boolean()
+{
+}
+
 std::vector<xml_value_entity_handle> attribute_entity_scalar_boolean::get_dependencies()
 {
   std::vector<xml_value_entity_handle> empty_vector;
@@ -58,6 +62,10 @@ attribute_entity_scalar_integer::attribute_entity_scalar_integer(xml_int value, 
   this->unit_         = unit;
 }
 
+attribute_entity_scalar_integer::~attribute_entity_scalar_integer()
+{
+}
+
 std::vector<xml_value_entity_handle> attribute_entity_scalar_integer::get_dependencies()
 {
   std::vector<xml_value_entity_handle> empty_vector;
@@ -91,6 +99,10 @@ attribute_entity_scalar_float::attribute_entity_scalar_float(xml_float value, st
   this->entity_type_  = scalar_float;
   this->value_        = value;
   this->unit_         = unit;
+}
+
+attribute_entity_scalar_float::~attribute_entity_scalar_float()
+{
 }
 
 std::vector<xml_value_entity_handle> attribute_entity_scalar_float::get_dependencies()

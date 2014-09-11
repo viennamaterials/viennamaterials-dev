@@ -29,6 +29,10 @@ attribute_entity_function::attribute_entity_function(
   this->arguments_            = arguments;
 }
 
+attribute_entity_function::~attribute_entity_function()
+{
+}
+
 attribute_entity_argument::attribute_entity_argument(size_t index, attribute_handle& attr_obj)
 {
   this->index_      = index;

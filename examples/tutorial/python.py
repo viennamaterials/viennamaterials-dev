@@ -13,25 +13,59 @@ matfile  = str(sys.argv[1])
 unitfile = str(sys.argv[2])
 
 # create a material library by providing the input material file
-matlib = pyviennamaterials.generator(matfile)
+matlib = pyviennamaterials.library(matfile)
 
-# now you can use this object to run native XPath queries
-print "matlib string query:  ", matlib.query("/material[id=\"Si\"]/parameter[id=\"bandgap\"]/value/text()")
-print "matlib numeric query: ", matlib.query_value("/material[id=\"Si\"]/parameter[id=\"bandgap\"]/value/text()")
+# ------------------------------------------------------------------------------
+# query scalar values
+#
+value = matlib.query("/*/*[id='test-material']/*[id='bool-scalar']")
+if value.is_scalar_bool() :
+  print "boolean scalar value: " , value.evaluate_value_bool()
 
-# simplify the syntax by using a proxy, in this case a viennastar_proxy
-proxy = pyviennamaterials.viennastar_proxy(matlib)
+value = matlib.query("/*/*[id='test-material']/*[id='int-scalar']")
+if value.is_scalar_int() :
+  print "int scalar value: " , value.evaluate_value_integer()
 
-# the proxy allows to simplify the query syntax by assuming a specific
-# layout, the 'viennastar' layout
-print "proxy string query:  ", proxy.query("Si/bandgap")
-print "proxy numeric query: ", proxy.query_value("Si/bandgap")
-print "proxy unit query: "   , proxy.query_unit("Si/bandgap")
-quan = proxy.query_quantity("Si/bandgap")
-print "proxy quantity query: ", quan
+value = matlib.query("/*/*[id='test-material']/*[id='float-scalar']")
+if value.is_scalar_float() :
+  print "float scalar value: " , value.evaluate_value_float()
 
-# you can convert values/quantities to new compatible units
-# for instance, convert the bandgab energy in 'eV' to 'J'
-units_converter = pyviennamaterials.udunits(unitfile)
-units_converter.convert(quan, "J")
-print "converted quantity: ", quan
+# ------------------------------------------------------------------------------
+# query functions returning a scalar value
+#
+bool_function_attribute = matlib.query("/*/*[id='test-material']/*[id='bool-function-without-args']")
+if bool_function_attribute.is_function_bool() :
+  print "bool function value: " , bool_function_attribute.evaluate_value_bool()
+
+int_function_attribute = matlib.query("/*/*[id='test-material']/*[id='int-function-add']")
+if int_function_attribute.is_function_int() :
+  print "int function value: " , int_function_attribute.evaluate_value_integer()
+  func_args = int_function_attribute.get_dependencies()
+  func_args[0].set_value(8)
+  int_function_attribute.set_dependencies(func_args)
+  print "int function value new: " , int_function_attribute.evaluate_value_integer()
+
+
+float_function_attribute = matlib.query("/*/*[id='test-material']/*[id='float-function-multiply']")
+if float_function_attribute.is_function_float() :
+  print "float function value: " , float_function_attribute.evaluate_value_float()
+  func_args = float_function_attribute.get_dependencies()
+  func_args[1].set_value(0.125)
+  float_function_attribute.set_dependencies(func_args)
+  print "float function value new: " , float_function_attribute.evaluate_value_float()
+
+float_function_ref_attribute = matlib.query("/*/*[id='test-material']/*[id='float-function-references']")
+if float_function_ref_attribute.is_function_float() :
+  print "float function value reference: " , float_function_ref_attribute.evaluate_value_float()
+
+
+
+# ------------------------------------------------------------------------------
+# query quantities holding a scalar value
+#
+quantity = matlib.query("/*/*[id='test-material']/*[id='int-scalar']")
+if quantity.is_scalar_int() :
+  print "int scalar value: ", quantity.evaluate_integer()
+  quan = quantity.evaluate_integer()
+  print "  quantity-value: ", quan.value()
+  print "  quantity-unit:  ", quan.unit()

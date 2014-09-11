@@ -31,6 +31,8 @@ public:
    */
   attribute_entity_scalar_boolean(xml_bool value, std::string const& unit);
 
+  ~attribute_entity_scalar_boolean();
+
   /**
    * @brief Get the dependencies of the scalar attribute. Since a scalar has no dependencies, an empty vector is returned.
    * @return An empty vector of smartpointers to objects of type xml_value_entity
@@ -73,6 +75,8 @@ public:
    */
   attribute_entity_scalar_integer(xml_int value, std::string const& unit);
 
+  ~attribute_entity_scalar_integer();
+
   /**
    * @brief Get the dependencies of the scalar attribute. Since a scalar has no dependencies, an empty vector is returned.
    * @return An empty vector of smartpointers to objects of type xml_value_entity
@@ -114,6 +118,8 @@ public:
    * @param unit The unit of this attribute object
    */
   attribute_entity_scalar_float(xml_float value, std::string const& unit);
+
+  ~attribute_entity_scalar_float();
 
   /**
    * @brief Get the dependencies of the scalar attribute. Since a scalar has no dependencies, an empty vector is returned.

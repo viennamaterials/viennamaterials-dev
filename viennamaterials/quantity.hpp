@@ -26,14 +26,7 @@ public:
   quantity() {}
   quantity(T const& value, std::string const& unit) : value_(value), unit_(unit) {}
 
-  // provide read/write access
-  //
-  T     & value() { return value_; }
-  std::string & unit() { return unit_;  }
-
-  // provide const read access
-  //
-  T     const& value() const { return value_; }
+  T           const& value() const { return value_; }
   std::string const& unit()  const { return unit_;  }
 
 

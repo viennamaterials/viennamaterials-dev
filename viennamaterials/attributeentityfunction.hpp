@@ -76,6 +76,8 @@ public:
    */
   attribute_entity_function(std::string const& unit, xml_attribute_type entity_type, function_backend_handle backend, std::vector<xml_value_entity_handle>& dependencies, std::vector<shared_ptr<attribute_entity_argument> > arguments);
 
+  ~attribute_entity_function();
+
   /**
    * @brief Get the dependencies of the this attribute function object
    * @return A vector of smartpointers to objects of type xml_value_entity representing the required arguments to evaluate this object

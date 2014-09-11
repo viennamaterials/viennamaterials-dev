@@ -306,7 +306,7 @@ quantity<T> attribute_entity::evaluate_dispatch()
   return result;
 }
 
-typedef shared_ptr<attribute_entity> attribute_handle;
+
 
 } /* namespace viennamaterials */
 #endif /* ATTRIBUTEENTITY_HPP_ */
