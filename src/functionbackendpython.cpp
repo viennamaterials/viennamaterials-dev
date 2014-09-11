@@ -10,6 +10,8 @@
    license:    see file LICENSE in the base directory
 ============================================================================= */
 
+#ifdef VIENNAMATERIALS_WITH_PYTHON
+
 #include "viennamaterials/functionbackendpython.hpp"
 #include "viennamaterials/exceptions.hpp"
 
@@ -130,3 +132,5 @@ xml_float function_backend_python::eval(tag_scalar_float tag, std::vector<xml_va
 }
 
 } /* namespace viennamaterials */
+
+#endif

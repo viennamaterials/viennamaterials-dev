@@ -15,9 +15,13 @@
 #include "viennamaterials/exceptions.hpp"
 #include "viennamaterials/xmlvaluescalar.hpp"
 #include "viennamaterials/utils/convert.hpp"
-#include "viennamaterials/functionbackendpython.hpp"
 #include "viennamaterials/attributeentityscalar.hpp"
 #include "viennamaterials/attributeentityfunction.hpp"
+
+#ifdef VIENNAMATERIALS_WITH_PYTHON
+  #include "viennamaterials/functionbackendpython.hpp"
+#endif
+
 #include <vector>
 
 namespace viennamaterials
@@ -112,12 +116,14 @@ attribute_handle library::query(std::string const& xpath_query_to_attribute)
     std::string query_code = query + "/code";
     const std::string lang_attribute = "lang";
     const std::string call_attribute = "call";
+  #ifdef VIENNAMATERIALS_WITH_PYTHON
     if(lib_->query_attribute(query_code, lang_attribute).compare("python") == 0)
     {
       function_backend_handle tmp(new function_backend_python);
       backend = tmp;
     }
     else
+  #endif
       throw library_error("Not supported code language encountered (query: " + query_code + ")");
 
     backend->init(lib_->query(query_code + "/text()"), lib_->query_attribute(query_code, call_attribute));
