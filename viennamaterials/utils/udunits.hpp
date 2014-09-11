@@ -71,7 +71,12 @@ public:
   * @param target_unit The target unit to which the value has to be converted to
   */
   template<typename T>
-  void convert(viennamaterials::quantity<T>& quan, std::string const& target_unit);
+  viennamaterials::quantity<T> convert(viennamaterials::quantity<T> const& quan, std::string const& target_unit)
+  {
+    T val = quan.value();
+    this->convert(val, quan.unit(), target_unit);
+    return viennamaterials::quantity<T>(val, target_unit);
+  }
 
 private:
 
@@ -107,12 +112,12 @@ private:
 
 
 /// Generic implementation for not supported datatypes
-template<typename T>
-void udunits::convert(viennamaterials::quantity<T>& quan, std::string const& target_unit)
-{
-  std::string type = typeid(quan.value()).name();
-  throw udunits_error("Datatype (" + type + ") not supported for conversion");
-}
+//template<typename T>
+//void udunits::convert(viennamaterials::quantity<T>& quan, std::string const& target_unit)
+//{
+//  std::string type = typeid(quan.value()).name();
+//  throw udunits_error("Datatype (" + type + ") not supported for conversion");
+//}
 
 } // viennamaterials
 

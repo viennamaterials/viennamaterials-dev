@@ -26,12 +26,14 @@ public:
   quantity() {}
   quantity(T const& value, std::string const& unit) : value_(value), unit_(unit) {}
 
+  void set_value(T const& val)            { value_ = val;  }
+  void set_unit (std::string const& unit) { unit_  = unit; }
+
   T           const& value() const { return value_; }
   std::string const& unit()  const { return unit_;  }
 
-
 private:
-  T     value_;
+  T           value_;
   std::string unit_;
 };
 

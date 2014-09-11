@@ -2,6 +2,7 @@
 %include <std_string.i>
 %include <std_vector.i>
 
+
 %module pyviennamaterials
 %{
   #define SWIG_PYTHON_EXTRA_NATIVE_CONTAINERS
