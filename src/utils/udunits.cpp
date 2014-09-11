@@ -39,11 +39,11 @@ namespace viennamaterials {
     cv_free(converter);
   }
 
-  void udunits::convert(viennamaterials::quantity& quan, std::string const& target_unit)
-  {
-    this->convert(quan.value(), quan.unit(), target_unit);
-    quan.unit() = target_unit;
-  }
+//  void udunits::convert(viennamaterials::quantity<xml_float>& quan, std::string const& target_unit)
+//  {
+////    this->convert(quan.value(), quan.unit(), target_unit);
+////    quan.unit() = target_unit;
+//  }
 
   cv_converter* udunits::get_converter(std::string const& source_unit, std::string const& target_unit)
   {

@@ -12,17 +12,28 @@
 
 // ViennaMaterials includes
 //
-#include "viennamaterials/platform.hpp"
+#include "viennamaterials/forwards.h"
+#include "viennamaterials/generator.hpp"
+#include "viennamaterials/pugixml.hpp"
 #include "viennamaterials/proxy/viennastar.hpp"
 
 
 int main(int argc, char * argv[])
 {
+  if(argc != 2)
+  {
+    std::cerr << "Error - Usage: " << argv[0] << " input-material-file.xml" << std::endl;
+    std::cerr << "Example:       " << argv[0] << " data/material_test.xml" << std::endl;
+    std::cerr << "Aborting .." << std::endl;
+    return -1;
+  }
+
+
   /** A string-path to a test material xml file **/
-  std::string filename("../../examples/data/material_test.xml");
+  std::string filename(argv[1]);
 
   /** Import the file and create a material library object **/
-  viennamaterials::library_handle matlib = viennamaterials::generator(filename);
+  viennamaterials::backend_handle matlib = viennamaterials::generator(filename);
 
   /** Create the 'viennastar' proxy object, which although simplifies the acces
       expects the input xml file to offer a specific structure **/
@@ -30,36 +41,26 @@ int main(int argc, char * argv[])
 
   /** Access the xml node of Silicon's bandgap parameter **/
   std::string result_xml = myproxy->query("Si/bandgap");
-  assert(result_xml ==
-"<parameter>\n\
-  <id>bandgap</id>\n\
-  <value>1.107</value>\n\
-  <unit>eV</unit>\n\
-</parameter>");
+  std::cout << "result xml: " << result_xml << std::endl;
 
   /** Access some nested parameters, this can be arbitrarily 'deep' **/
   std::string result_xml2 = myproxy->query("Si/DriftDiffusion/SRH/para_srh");
-  assert(result_xml2 ==
-"<parameter>\n\
-  <id>para_srh</id>\n\
-  <value>4.0</value>\n\
-  <unit>cm</unit>\n\
-</parameter>");
+  std::cout << "result xml2: " << result_xml2 << std::endl;
 
   /** Access the value of Silicon's bandgap parameter **/
-  double result_value = myproxy->query_value("Si/bandgap");
-  assert(result_value == 1.107);
+  double result_value = myproxy->query_value<double>("Si/bandgap");
+  std::cout << "result value: " << result_value << std::endl;
 
   /** Access the unit string of Silicon's bandgap parameter **/
   std::string result_unit = myproxy->query_unit("Si/bandgap");
-  assert(result_unit == "eV");
+  std::cout << "result unit: " << result_unit << std::endl;
 
   /** Access the quantity of Silicon's bandgap parameter;
       a quantity's value and unit can be accessed via the
       value() and unit() method respectively. **/
-  viennamaterials::quantity result_quantity = myproxy->query_quantity("Si/bandgap");
-  assert(result_quantity.value() == 1.107);
-  assert(result_quantity.unit() == "eV");
+  viennamaterials::quantity<viennamaterials::numeric> result_quantity = myproxy->query_quantity<viennamaterials::numeric>("Si/bandgap");
+  std::cout << "result quantity: " << result_quantity << " -> "
+            << result_quantity.value() << " (" << result_quantity.unit() << ")" << std::endl;
 
   return 0;
 }

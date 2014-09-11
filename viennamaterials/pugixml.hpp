@@ -19,7 +19,7 @@
 
 // ViennaMaterials includes
 //
-#include "viennamaterials/library.hpp"
+#include "viennamaterials/backend.hpp"
 #include "external/pugixml/pugixml.hpp"
 
 namespace viennamaterials {
@@ -28,7 +28,7 @@ namespace viennamaterials {
 /**
     @brief Provides the pugixml backend
 */
-class pugixml : public library
+class pugixml : public backend
 {
 private:
   typedef pugi::xpath_node_set      node_set_type;
@@ -60,9 +60,31 @@ public:
 
   /** @brief Access the numeric value pointed to by the native query path */
   viennamaterials::numeric  query_value  (std::string const& native_query);
+  
+  /** @brief Perform a native query of type number */
+  double                    query_xpath_number(std::string const& native_query);
+
+  /** @brief Perform a native query of type string */
+  std::string               query_xpath_string(std::string const& native_query);
+
+  /** @brief Access the number of elements pointed by the native query path */
+  long                      query_number_of_elements(std::string const& native_query);
+
+  /** @brief Access the number of attributes of the element pointed by the native query path */
+  long                      query_number_of_attributes(std::string const& native_query);
+
+  /** @brief Access attribute name at given position of the element pointed by the native query path */
+  std::string               query_attribute_name(std::string const& native_query, long const& position);
+
+  /** @brief Access attribute value at given position of the element pointed by the native query path */
+  std::string               query_attribute(std::string const& native_query, long const& position);
+
+  /** @brief Access attribute value from attribute of given name of the element pointed by the native query path */
+  std::string               query_attribute(std::string const& native_query, std::string const& attribute_name);
 
 private:
   void                      init();
+  bool                      is_valid_xml_index(long index);
 
 private:
   pugi::xml_document    xml_;

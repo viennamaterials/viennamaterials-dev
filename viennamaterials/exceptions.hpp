@@ -24,7 +24,7 @@ namespace viennamaterials
   {
     virtual const char* what() const throw()
     {
-      return std::string("Input material database valiadation could not be loaded").c_str();
+      return std::string("Input material database validation could not be loaded").c_str();
     }
   };
 
@@ -86,6 +86,102 @@ namespace viennamaterials
     std::string info;
   };
 
+  struct func_backend_attr_type_error: public std::exception
+  {
+    virtual const char* what() const throw()
+    {
+      return std::string("Wrong attribute type tag given").c_str();
+    }
+  };
+
+  struct func_backend_attr_value_type_error: public std::exception
+  {
+    virtual const char* what() const throw()
+    {
+      return std::string("Wrong attribute value type tag given").c_str();
+    }
+  };
+
+  struct func_backend_python_no_function_error: public std::exception
+  {
+    virtual const char* what() const throw()
+    {
+      return std::string("Python function is not callable").c_str();
+    }
+  };
+
+  struct func_backend_error: public std::exception
+  {
+    func_backend_error(std::string const& info) : info(info) {}
+    ~func_backend_error() throw() {}
+
+    virtual const char* what() const throw()
+    {
+      return info.c_str();
+    }
+
+    std::string info;
+  };
+
+  struct xml_index_error: public std::exception
+  {
+    virtual const char* what() const throw()
+    {
+      return std::string("Invalid XML index encountered").c_str();
+    }
+  };
+
+  struct library_error : public std::exception
+  {
+    library_error(std::string const& info) : info(info) {}
+    ~library_error() throw() {}
+
+    virtual const char* what() const throw()
+    {
+      return info.c_str();
+    }
+
+    std::string info;
+  };
+
+  struct attribute_entity_error : public std::exception
+  {
+    attribute_entity_error(std::string const& info) : info(info) {}
+    ~attribute_entity_error() throw() {}
+
+    virtual const char* what() const throw()
+    {
+      return info.c_str();
+    }
+
+    std::string info;
+  };
+
+  struct proxy_error : public std::exception
+  {
+    proxy_error(std::string const& info) : info(info) {}
+    ~proxy_error() throw() {}
+
+    virtual const char* what() const throw()
+    {
+      return info.c_str();
+    }
+
+    std::string info;
+  };
+
+  struct udunits_error : public std::exception
+  {
+    udunits_error(std::string const& info) : info(info) {}
+    ~udunits_error() throw() {}
+
+    virtual const char* what() const throw()
+    {
+      return info.c_str();
+    }
+
+    std::string info;
+  };
 
 
 } // viennamaterials

@@ -6,9 +6,12 @@ INCLUDE_DIRECTORIES(".")
 
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
-OPTION(BUILD_EXAMPLES "Build the examples" ON)
-OPTION(BUILD_TESTS    "Build the tests"    ON)
-OPTION(BUILD_PYLIB    "Build the Python library"    OFF)
+OPTION(BUILD_EXAMPLES       "Build the examples"                        ON)
+OPTION(BUILD_TESTS          "Build the tests"                           ON)
+OPTION(BUILD_PYTHON_BACKEND "Build with support for Python expressions" OFF)
+OPTION(BUILD_PYTHON_LIBRARY "Build the Python library"                  OFF)
+OPTION(BUILD_UNITS          "Build with support for physical units"     OFF)
+
 #option(BUILD_DTD_CHECK_SUPPORT "Perform DTD checks of the input XML material data - requires libxml2" OFF)
 
 #set default build type
@@ -26,30 +29,45 @@ SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O3 -g")
 SET(CMAKE_CXX_FLAGS_RELEASE "-O3")
 SET(CMAKE_CXX_FLAGS_DEBUG  "-O0 -g")
 
-FIND_PACKAGE(UDUNITS)
-IF(UDUNITS_FOUND)
-  INCLUDE_DIRECTORIES(${UDUNITS_INCLUDE_DIR})
-  SET(LIBRARIES ${LIBRARIES} ${UDUNITS_LIBRARIES})
-  ADD_DEFINITIONS(-DVIENNAMATERIALS_WITH_UNITS)
-  MESSAGE(STATUS "ViennaMaterials will be built with support for automatic unit conversions!")
-ELSE(UDUNITS_FOUND)
-  MESSAGE(WARNING "ViennaMaterials will be built without support for automatic unit conversions!")
-ENDIF(UDUNITS_FOUND)
+IF(BUILD_UNITS)
+  FIND_PACKAGE(UDUNITS REQUIRED)
+  IF(UDUNITS_FOUND)
+    INCLUDE_DIRECTORIES(${UDUNITS_INCLUDE_DIR})
+    SET(LIBRARIES ${LIBRARIES} ${UDUNITS_LIBRARIES})
+    ADD_DEFINITIONS(-DVIENNAMATERIALS_WITH_UNITS)
+    MESSAGE(STATUS "ViennaMaterials will be built with support for automatic unit conversions!")
+  ENDIF(UDUNITS_FOUND)
+ENDIF(BUILD_UNITS)
 
-IF(BUILD_PYLIB)
-  FIND_PACKAGE(SWIG)
+
+IF(BUILD_PYTHON_BACKEND OR BUILD_PYTHON_LIBRARY)
+  FIND_PACKAGE(PythonLibs REQUIRED)
+  IF(PYTHONLIBS_FOUND)
+    INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_PATH})
+    SET(LIBRARIES ${LIBRARIES} ${PYTHON_LIBRARY})
+    ADD_DEFINITIONS(-DVIENNAMATERIALS_WITH_PYTHON)
+    # suppress Python's long-long Warnings
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-long-long")
+    MESSAGE(STATUS "ViennaMaterials will be built with Python support!")
+  ENDIF(PYTHONLIBS_FOUND)
+ENDIF(BUILD_PYTHON_BACKEND OR BUILD_PYTHON_LIBRARY)
+
+# in the future, add additional backend flags to the condition
+# this definition should be set whenever a function backend is available
+IF(PYTHONLIBS_FOUND)
+  ADD_DEFINITIONS(-DVIENNAMATERIALS_WITH_FUNCTIONBACKEND)
+ENDIF(PYTHONLIBS_FOUND)
+
+
+IF(BUILD_PYTHON_LIBRARY)
+  FIND_PACKAGE(SWIG 2.0 REQUIRED)
   IF(SWIG_FOUND)
     INCLUDE(${SWIG_USE_FILE})
-    FIND_PACKAGE(PythonLibs)
-    INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_PATH})
-    LINK_DIRECTORIES(${PYTHON_LIBRARY_DIR})
-    MESSAGE(STATUS "ViennaMaterials will be built with Python support!")
-  ELSE(SWIG_FOUND)
-    MESSAGE(STATUS "ViennaMaterials will be built without Python support!")
+    MESSAGE(STATUS "ViennaMaterials will be built with a Python interface library!")
   ENDIF(SWIG_FOUND)
-ELSE(BUILD_PYLIB)
-  MESSAGE(STATUS "ViennaMaterials will be built without Python support!")
-ENDIF(BUILD_PYLIB)
+ENDIF(BUILD_PYTHON_LIBRARY)
+
+
 
 INCLUDE_DIRECTORIES(.)
 #ADD_SUBDIRECTORY(external)

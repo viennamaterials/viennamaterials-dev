@@ -26,6 +26,9 @@ extern "C"{
 #include <stdexcept>
 #include "viennamaterials/forwards.h"
 #include "viennamaterials/quantity.hpp"
+#include "viennamaterials/exceptions.hpp"
+#include "viennamaterials/xmldatatypes.h"
+#include <typeinfo>
 
 namespace viennamaterials {
 
@@ -67,7 +70,13 @@ public:
   * @param quan        The quantity to be converted
   * @param target_unit The target unit to which the value has to be converted to
   */
-  void convert(viennamaterials::quantity& quan, std::string const& target_unit);
+  template<typename T>
+  viennamaterials::quantity<T> convert(viennamaterials::quantity<T> const& quan, std::string const& target_unit)
+  {
+    T val = quan.value();
+    this->convert(val, quan.unit(), target_unit);
+    return viennamaterials::quantity<T>(val, target_unit);
+  }
 
 private:
 
@@ -100,6 +109,15 @@ private:
   */
   ut_system*          unit_system_;
 };
+
+
+/// Generic implementation for not supported datatypes
+//template<typename T>
+//void udunits::convert(viennamaterials::quantity<T>& quan, std::string const& target_unit)
+//{
+//  std::string type = typeid(quan.value()).name();
+//  throw udunits_error("Datatype (" + type + ") not supported for conversion");
+//}
 
 } // viennamaterials
 

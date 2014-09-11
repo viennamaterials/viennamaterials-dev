@@ -30,25 +30,30 @@ private:
   typedef std::vector<std::string>    QueryPartsType;
 
 public:
-  viennastar_proxy(viennamaterials::library_handle& matlib);
+  viennastar_proxy(viennamaterials::backend_handle& matlib);
   ~viennastar_proxy();
 
   std::string query          (std::string const& q);
 
   std::string query_unit     (std::string const& q);
 
-  viennamaterials::numeric     query_value    (std::string const& q);
-
-  viennamaterials::quantity    query_quantity (std::string const& q);
-
 private:
   void generate_base_path(std::string const& q, std::string & base_path);
+
+  xml_bool  query_value_bool(std::string const& q);
+  xml_int   query_value_int(std::string const& q);
+  xml_float query_value_float(std::string const& q);
+
+  viennamaterials::quantity<xml_bool>   query_quantity_bool(std::string const& q);
+  viennamaterials::quantity<xml_int>    query_quantity_int(std::string const& q);
+  viennamaterials::quantity<xml_float>  query_quantity_float(std::string const& q);
 
   const std::string placeholder_;
   const char        token_;
   const std::string sub_path_;
   const std::string value_path_;
   const std::string unit_path_;
+  const std::string path_prefix_;
 
   QueryPartsType query_parts_;
 };

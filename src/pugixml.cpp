@@ -22,7 +22,7 @@ namespace viennamaterials {
 
 // Public members
 
-pugixml::pugixml() : library()
+pugixml::pugixml() : backend()
 {
   this->init();
 }
@@ -137,5 +137,58 @@ viennamaterials::numeric pugixml::query_value(std::string const& native_query)
   return viennamaterials::convert<viennamaterials::numeric>(this->query(native_query));
 }
 
+double pugixml::query_xpath_number(std::string const& native_query)
+{
+  pugi::xpath_query query(native_query.c_str());
+  return query.evaluate_number(xml_);
+}
+
+std::string pugixml::query_xpath_string(std::string const& native_query)
+{
+  pugi::xpath_query query(native_query.c_str());
+  return query.evaluate_string(xml_);
+}
+
+long pugixml::query_number_of_elements(std::string const& native_query)
+{
+  std::string query = "count(" + native_query + ")";
+  return query_xpath_number(query);
+}
+
+long pugixml::query_number_of_attributes(std::string const& native_query)
+{
+  std::string query = "count(" + native_query + "/@*)";
+  return query_xpath_number(query);
+}
+
+bool pugixml::is_valid_xml_index(long index){
+  if(index >= 1)
+    return true;
+  return false;
+}
+
+std::string pugixml::query_attribute_name(std::string const& native_query, long const& position)
+{
+  if(is_valid_xml_index(position))
+    throw xml_index_error();
+
+  std::string query = "name(" + native_query + "/@*[" + convert<std::string>(position) + "])";
+  return query_xpath_string(query);
+}
+
+std::string pugixml::query_attribute(std::string const& native_query, long const& position)
+{
+  if(is_valid_xml_index(position))
+    throw xml_index_error();
+
+  std::string query = "string(" + native_query + "/@*[" + convert<std::string>(position) + "])";
+  return query_xpath_string(query);
+}
+
+std::string pugixml::query_attribute(std::string const& native_query, std::string const& attribute_name)
+{
+  std::string query = "string(" + native_query + "/@" + attribute_name + ")";
+  return query_xpath_string(query);
+}
 
 } // viennamaterials
