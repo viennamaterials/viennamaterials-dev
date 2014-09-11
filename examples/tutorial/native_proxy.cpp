@@ -12,7 +12,9 @@
 
 // ViennaMaterials includes
 //
-#include "viennamaterials/platform.hpp"
+#include "viennamaterials/forwards.h"
+#include "viennamaterials/generator.hpp"
+#include "viennamaterials/pugixml.hpp"
 #include "viennamaterials/proxy/viennastar.hpp"
 
 

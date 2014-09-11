@@ -13,7 +13,8 @@
 #ifndef XMLDATATYPES_H_
 #define XMLDATATYPES_H_
 
-#include "viennamaterials/platform.hpp"
+//#include "viennamaterials/platform.hpp"
+#include "viennamaterials/forwards.h"
 
 namespace viennamaterials
 {

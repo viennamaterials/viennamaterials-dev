@@ -17,6 +17,7 @@
 #include "viennamaterials/utils/convert.hpp"
 #include "viennamaterials/attributeentityscalar.hpp"
 #include "viennamaterials/attributeentityfunction.hpp"
+#include "viennamaterials/generator.hpp"
 
 #ifdef VIENNAMATERIALS_WITH_PYTHON
   #include "viennamaterials/functionbackendpython.hpp"

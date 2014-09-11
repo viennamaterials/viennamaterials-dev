@@ -14,7 +14,8 @@
 #define LIBRARY_HPP_
 
 #include <string>
-#include "viennamaterials/platform.hpp"
+//#include "viennamaterials/platform.hpp"
+#include "viennamaterials/forwards.h"
 #include "viennamaterials/attributeentity.hpp"
 #include "viennamaterials/xmldatatypes.h"
 

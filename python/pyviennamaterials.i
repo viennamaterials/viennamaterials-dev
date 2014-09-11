@@ -18,7 +18,6 @@
   #include "viennamaterials/functionbackendpython.hpp"
   #include "viennamaterials/generator.hpp"
   #include "viennamaterials/library.hpp"
-  #include "viennamaterials/platform.hpp"
   #include "viennamaterials/proxy.hpp"
   #include "viennamaterials/pugixml.hpp"
   #include "viennamaterials/quantity.hpp"
