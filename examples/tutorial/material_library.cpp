@@ -28,7 +28,7 @@ int main(int argc, char * argv[])
   /** A string-path to a test material xml file **/
   std::string filename(argv[1]);
 
-  /** Create matlib object **/
+  /** Create library object **/
   viennamaterials::library matlib(filename);
 
   std::string query;
