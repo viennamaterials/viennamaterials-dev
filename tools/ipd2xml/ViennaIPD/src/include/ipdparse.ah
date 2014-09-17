@@ -1,0 +1,57 @@
+/*=======================================================================
+Copyright 1992 -- 2009, Institute for Microelectronics, TU Vienna.
+
+                                 ViennaIPD
+                             -----------------
+
+LICENSE:  see ViennaIPD/LICENSE
+
+AUTHORS:  Members of the Institute for Microelectronics, TU Vienna
+
+=======================================================================*/
+
+typedef union {        /* must use the proper member:       */
+                /* first set in scan.l               */
+  ipdBoolean       b;    /* boolean scanned                   */
+  long           i;    /* INTEGER scanned                   */
+  double         d;    /* REAL scanned                      */
+  char          *s;    /* ID or STRING_PART scanned    */
+  ipdTreeNode_t *tn;   /* stores value, expr                */
+  struct
+  {
+     char *s;
+     int   a;          /* '+' or no '+' to force appending items */
+  } p;                 /* ID or +ID */
+} YYSTYPE;
+#define	BOOLEAN	258
+#define	INTEGER	259
+#define	REAL	260
+#define	STRING_PART	261
+#define	ID	262
+#define	PATH	263
+#define	INCLUDE_FILENAME	264
+#define	INCLUDE	265
+#define	SEMICOLON	266
+#define	EVAL	268
+#define	COLON	269
+#define	ASSIGNMENT	270
+#define	LOGIC_OR	271
+#define	LOGIC_AND	272
+#define	EQ	273
+#define	NE	274
+#define	LT	275
+#define	LE	276
+#define	GT	277
+#define	GE	278
+#define	IPDNOT	279
+#define	COMPLEX	280
+#define	UNARYPLUS	281
+#define	UNARYMINUS	282
+#define	KEY	283
+#define	EXT	284
+#define	AUX	285
+#define	TRACE	286
+#define	ALIAS	287
+
+
+extern YYSTYPE yylval;
