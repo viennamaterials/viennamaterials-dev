@@ -11,6 +11,7 @@ OPTION(BUILD_TESTS          "Build the tests"                           ON)
 OPTION(BUILD_PYTHON_BACKEND "Build with support for Python expressions" OFF)
 OPTION(BUILD_PYTHON_LIBRARY "Build the Python library"                  OFF)
 OPTION(BUILD_UNITS          "Build with support for physical units"     OFF)
+OPTION(BUILD_TOOLS          "Build the tools"                           ON)
 
 #option(BUILD_DTD_CHECK_SUPPORT "Perform DTD checks of the input XML material data - requires libxml2" OFF)
 
@@ -125,3 +126,8 @@ ENDIF()
 IF(SWIG_FOUND)
   ADD_SUBDIRECTORY(python)
 ENDIF(SWIG_FOUND)
+
+IF(BUILD_TOOLS)
+  ADD_SUBDIRECTORY(tools)
+ENDIF()
+  

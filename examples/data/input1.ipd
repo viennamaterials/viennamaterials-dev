@@ -1,0 +1,35 @@
+
+
+// Some values
+a = "A short text.";
+b = 2.2;
+ext c = 2; // variables declared 'ext' can be overwritten by the applicaton
+d = b * c;
+
+// Some sections
+Double
+{
+   ext a = 1;
+   d = 2 * a;
+}
+Threefold : Double
+{
+   d = 3 * a;
+}
+
+// Nested Sections
+Baum
+{
+   Ast1
+   {
+      blatt1 = 1;
+      blatt2 = 2;
+   }
+   Ast2
+   {
+      blatt3 = 3;
+      blatt4 = 4;
+   }
+   blatt5 = 5;
+   blatt6 = 6;
+}

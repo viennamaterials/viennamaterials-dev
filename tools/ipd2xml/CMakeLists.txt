@@ -1,0 +1,5 @@
+
+ADD_SUBDIRECTORY(ViennaIPD)
+
+ADD_EXECUTABLE(ipd2xml ipd2xml.cpp)
+TARGET_LINK_LIBRARIES(ipd2xml viennaipd)
