@@ -4,7 +4,7 @@ import socket
 mySocket = socket.socket ( socket.AF_INET, socket.SOCK_STREAM )
 
 host='localhost'
-port=2729
+port=2730
 buffersize=4096
 
 try:
@@ -19,3 +19,5 @@ mySocket.sendall(query)
 
 result = mySocket.recv(buffersize)
 print "[Client] received answer:", result
+
+#attribute = generate_attribute(result)

@@ -32,11 +32,18 @@ public:
   library(std::string const& filename);
 
   /**
+   * @brief Performs a native query and returns the result as a std::string
+   * @param xpath_query_to_attribute The XPath query given as string pointing to a attribute XML element
+   * @return A string containing the native query result
+   */
+  std::string query_to_string(std::string const& query_expression);
+
+  /**
    * @brief Loads all relevant data from xml backend and returns a attribute entity handle representing the attribute pointed by the query.
    * @param xpath_query_to_attribute The XPath query given as string pointing to a attribute XML element
    * @return A smartpointer pointing to an attribute_entity object
    */
-  attribute_handle query(std::string const& xpath_query_to_attribute);
+  attribute_handle query(std::string const& query_expression);
 
 private:
   backend_handle lib_;

@@ -23,7 +23,7 @@ matlib = pyviennamaterials.library(matfile)
 # http://pymotw.com/2/socket/tcp.html
 
 host='localhost'
-port=2729
+port=2730
 buffersize=4096
 
 # Create a TCP/IP socket
@@ -52,21 +52,7 @@ while True:
 
   print '[Server] received query:', query
   try:
-    query_result = matlib.query(query)
-
-    # here we would need a string representation to be able to transfer it over the network
-
-    # conceptual problem? the entire 'is attribute' approach, should it be re-implemented for the network?
-    # maybe use a native backend here instead of the library?
-    # maybe provide a string return overload for the query?
-    # -> return the xml return string and evaluate it on the client side? no,
-    # or ..
-    # define a small client server language package: value, unit, number of dependencies
-
-
-#    print query_result.evaluate
-#    if query_result.is_scalar_bool():
-#      connection.sendall( query_result.evaluate_value_bool() )
+    connection.sendall( matlib.query_to_string(query) )
   except socket.error, msg:
     print "[Server][Error] querying client request"
   finally:

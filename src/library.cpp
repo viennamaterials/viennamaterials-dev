@@ -34,7 +34,12 @@ library::library(std::string const& filename)
   lib_ = viennamaterials::generator(filename);
 }
 
-attribute_handle library::query(std::string const& xpath_query_to_attribute)
+std::string library::query_to_string(std::string const& query_expression)
+{
+  return lib_->query(query_expression);
+}
+
+attribute_handle library::query(std::string const& query_expression)
 {
   /// Gather data from XML
   xml_attribute_type type = get_attribute_type(xpath_query_to_attribute);
