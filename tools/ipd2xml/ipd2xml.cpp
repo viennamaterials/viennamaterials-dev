@@ -26,7 +26,7 @@
 //
 struct xmlwriter
 {
-  xmlwriter(const char* docid)
+  xmlwriter(const char* note)
   {
     root_tag             = "database";
 //    identifier_tag       = "identifier";
@@ -40,15 +40,19 @@ struct xmlwriter
     attribute_tag               = "attribute";
     value_tag                   = "value";
     scalar_tag                  = "scalar";
-    type_attribute_tag   = "type";
-    type_boolean         = "bool";
-    type_integer         = "int";
-    type_floating        = "float";
+    type_attribute_tag          = "type";
+    type_boolean                = "bool";
+    type_integer                = "int";
+    type_floating               = "float";
     tensor_tag                  = "tensor";
     tensor_row_attribute_tag    = "row";
     tensor_column_attribute_tag = "col";
     tensor_order_attribute_tag  = "order";
     unit_tag                    = "unit";
+    note_tag                    = "note";
+    category_tag                = "category";
+    material_tag                = "material";
+    name_tag                    = "name";
 
     TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );
     doc.LinkEndChild( decl );
@@ -56,8 +60,8 @@ struct xmlwriter
     TiXmlElement * root = new TiXmlElement( root_tag );
     doc.LinkEndChild( root );
 
-    TiXmlElement * rootid = new TiXmlElement( id_tag );
-    rootid->LinkEndChild( new TiXmlText( docid )); //XXX
+    TiXmlElement * rootid = new TiXmlElement( note_tag );
+    rootid->LinkEndChild( new TiXmlText( note )); //XXX
     root->LinkEndChild( rootid );
 
     currentnode = root;
@@ -208,6 +212,42 @@ struct xmlwriter
     return attribute_element;
   }
 
+  void add_note(const char* note)
+  {
+    TiXmlElement* note_element = new TiXmlElement(note_tag);
+    note_element->LinkEndChild(new TiXmlText(note));
+    this->add_element(note_element);
+  }
+
+  void open_material_element(const char* id, const char* name, const char* category)
+  {
+    TiXmlElement* material_element = new TiXmlElement(material_tag);
+
+    TiXmlElement* id_element = new TiXmlElement(id_tag);
+    id_element->LinkEndChild(new TiXmlText(id));
+    material_element->LinkEndChild(id_element);
+
+    if(strlen(name) != 0)
+    {
+      TiXmlElement* name_element = new TiXmlElement(name_tag);
+      name_element->LinkEndChild(new TiXmlText(name));
+      material_element->LinkEndChild(name_element);
+    }
+
+    TiXmlElement* category_element = new TiXmlElement(category_tag);
+    category_element->LinkEndChild(new TiXmlText(category));
+    material_element->LinkEndChild(category_element);
+
+    currentnode->LinkEndChild(material_element);
+    currentnode = material_element;
+    nodecont.push_back(material_element);
+  }
+
+  void close_materials_element()
+  {
+    this->update();
+  }
+
   void update()
   {
     nodecont.pop_back();
@@ -252,6 +292,10 @@ struct xmlwriter
   const char* tensor_column_attribute_tag;
   const char* tensor_order_attribute_tag;
   const char* unit_tag;
+  const char* note_tag;
+  const char* category_tag;
+  const char* material_tag;
+  const char* name_tag;
 
   std::vector< TiXmlElement * > nodecont;
 };
@@ -392,7 +436,7 @@ const char* access_ipd_value(const char* name, ipdTreeNode_t *tn)
 //
 // ----------------------------------------------------------
 //
-void recursive_traverse(ipdIterator_t * iNode, xmlwriter & xmldoc)
+void recursive_traverse_old(ipdIterator_t * iNode, xmlwriter & xmldoc)
 {
   // Traverse the ViennaIPD datastructure using the iterator
   while (ipdIteratorIsValid(iNode))
@@ -430,7 +474,7 @@ void recursive_traverse(ipdIterator_t * iNode, xmlwriter & xmldoc)
       // Step into the subsection
       ipdIteratorDoStep(iSubNode);
 
-      recursive_traverse(iSubNode, xmldoc);
+      recursive_traverse_old(iSubNode, xmldoc);
 
       xmldoc.update();
 
@@ -614,6 +658,90 @@ TiXmlElement* ipd_value_to_xml(const char* name, ipdTreeNode_t *tn, xmlwriter& x
 
   return attribute_element;
 }
+//
+// ----------------------------------------------------------
+//
+void recursive_traverse(ipdIterator_t * iNode, xmlwriter & xmldoc)
+{
+  // Traverse the ViennaIPD datastructure using the iterator
+  while (ipdIteratorIsValid(iNode))
+  {
+    // Get the name of the current item
+    ipdConstString itemName = ipdIteratorGetItemName(iNode);
+
+    // If the current element is a _variable_
+    if (ipdIteratorGetType(iNode) == ipdVARIABLE)
+    {
+      TiXmlElement* attribute = ipd_value_to_xml(iNode->tn->node.sv.name, ipdIteratorEval(iNode), xmldoc);
+      if(attribute != 0)
+        xmldoc.add_element(attribute);
+
+    // If the current element is a _section_
+    }else if (ipdIteratorGetType(iNode) == ipdSECTION) //TODO: xml group and ipd layout
+    {
+      // Create a new iterator which should traverse the subsection
+      ipdIterator_t  *iSubNode = NULL;
+
+      // Set the iterator to origin at this particular section
+      ipdIteratorNewByName(&iSubNode, itemName, ipdANY, ipdANY);
+
+      // Step into the subsection
+      ipdIteratorDoStep(iSubNode);
+
+      recursive_traverse(iSubNode, xmldoc);
+
+      ipdIteratorFree(iSubNode);
+    }
+
+    // Next item
+    ipdIteratorDoNext(iNode);
+  }
+
+}
+
+//
+// ----------------------------------------------------------
+//
+
+//TODO doxygen
+void access_ipd_material(ipdIterator_t * iNode, xmlwriter & xmldoc)
+{
+  // Traverse the ViennaIPD datastructure using the iterator
+  if(ipdIteratorIsValid(iNode))
+  {
+    // Get the name of the current item, the material
+    ipdConstString itemName = ipdIteratorGetItemName(iNode);
+
+    //TODO access material name, class, etc and create xml material element
+
+    if (ipdIteratorGetType(iNode) == ipdSECTION) //IPD material node must be a section
+    {
+      // Create a new iterator which should traverse the subsection, the attributes of the material
+      ipdIterator_t  *iSubNode = NULL;
+
+      // Set the iterator to origin at this particular section
+      ipdIteratorNewByName(&iSubNode, itemName, ipdANY, ipdANY);
+
+      // Step into the subsection
+      ipdIteratorDoStep(iSubNode);
+
+      //TODO extract 'class' and 'materials' but dont extract them in recursive_traverse
+      xmldoc.open_material_element(itemName, "TODO", "TODO"); //FIXME
+
+      recursive_traverse(iSubNode, xmldoc);
+
+      ipdIteratorFree(iSubNode);
+
+      xmldoc.close_materials_element();
+    }else
+    {
+      throw ipd2xml_error("Invalid IPD layout");
+    }
+  }else
+  {
+    throw ipd2xml_error("Invalid IPD iterator passed to access_ipd_material");
+  }
+}
 
 //
 // ----------------------------------------------------------
@@ -643,7 +771,7 @@ void print_ipd_tree_recursive_traverse(ipdIterator_t * iNode, long indent, xmlwr
       if(attribute != 0)
         xmldoc.add_element(attribute);
     // If the current element is a _section_
-    }else if (ipdIteratorGetType(iNode) == ipdSECTION)
+    }else if (ipdIteratorGetType(iNode) == ipdSECTION) //TODO: xml group and ipd layout
     {
       std::cout << "(" << indent/intend_spacing << ")" << indention << "S  " << itemName << std::endl;
 
@@ -657,6 +785,8 @@ void print_ipd_tree_recursive_traverse(ipdIterator_t * iNode, long indent, xmlwr
       ipdIteratorDoStep(iSubNode);
 
       print_ipd_tree_recursive_traverse(iSubNode, indent+intend_spacing, xmldoc);
+
+      ipdIteratorFree(iSubNode);
     }
 
     // Next item
@@ -695,6 +825,44 @@ void do_stuff(void)
 //
 // ----------------------------------------------------------
 //
+void traverse_ipd_layout(ipdIterator_t * iNode, xmlwriter & xmldoc)
+{
+  // Traverse the ViennaIPD datastructure using the iterator
+  while (ipdIteratorIsValid(iNode))
+  {
+    // Get the name of the current item
+    ipdConstString itemName = ipdIteratorGetItemName(iNode);
+
+    if (ipdIteratorGetType(iNode) == ipdSECTION) //must be a section
+    {
+      // Create a new iterator which should traverse the subsection, the materials
+      ipdIterator_t  *iSubNode = NULL;
+
+      // Set the iterator to origin at this particular section
+      ipdIteratorNewByName(&iSubNode, itemName, ipdANY, ipdANY);
+
+      // Step into the subsection
+      ipdIteratorDoStep(iSubNode);
+
+      while(ipdIteratorIsValid(iSubNode))
+      {
+        access_ipd_material(iSubNode, xmldoc);
+        ipdIteratorDoNext(iSubNode);
+      }
+
+      ipdIteratorFree(iSubNode);
+    }else
+    {
+      throw ipd2xml_error("Invalid IPD layout");
+    }
+
+    // Next item
+    ipdIteratorDoNext(iNode);
+  }
+}
+//
+// ----------------------------------------------------------
+//
 
 int main(int argc, char** argv)
 {
@@ -712,7 +880,7 @@ int main(int argc, char** argv)
     outputfile_xml = "tools/ipd2xml/tmp/example.xml";
   }
 
-  xmlwriter xmldoc("modelipd");
+  xmlwriter xmldoc("This database was created by ipd2xml");
 
   // Initialize the Database.
   // Normally we can use the default values, so we don't need parameters.
@@ -724,7 +892,7 @@ int main(int argc, char** argv)
   // Read a file in the database
   ipdReadInputDeck(inputfile_ipd);
 
-#if 0
+#if 1
 
   // Define and initialize a ViennaIPD iterator
   ipdIterator_t  *iNode = NULL;
@@ -734,18 +902,19 @@ int main(int argc, char** argv)
 
   ipdIteratorDoStep(iNode);
 
-  recursive_traverse(iNode, xmldoc);
+  traverse_ipd_layout(iNode, xmldoc);
 
   // Free the iterator
   ipdIteratorFree(iNode);
 #endif
 
-  do_stuff();
+//  do_stuff(); //XXX
 
   // Free the ViennaIPD datastructures
   ipdFreeAll();
 
 //  xmldoc.print(outputfile_xml); //FIXME
+  xmldoc.print_to_console();
 
   return 0;
 }
