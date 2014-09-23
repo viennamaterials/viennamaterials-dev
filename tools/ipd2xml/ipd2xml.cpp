@@ -243,7 +243,39 @@ struct xmlwriter
     nodecont.push_back(material_element);
   }
 
-  void close_materials_element()
+  void close_material_element() //wrapper for update(), use with care
+  {
+    this->update();
+  }
+
+  void open_group_element(const char* id, const char* name, const char* category)
+  {
+    TiXmlElement* group_element = new TiXmlElement(group_tag);
+
+    TiXmlElement* id_element = new TiXmlElement(id_tag);
+    id_element->LinkEndChild(new TiXmlText(id));
+    group_element->LinkEndChild(id_element);
+
+    if(strlen(name) != 0)
+    {
+      TiXmlElement* name_element = new TiXmlElement(name_tag);
+      name_element->LinkEndChild(new TiXmlText(name));
+      group_element->LinkEndChild(name_element);
+    }
+
+    if(strlen(category) != 0)
+    {
+      TiXmlElement* category_element = new TiXmlElement(category_tag);
+      category_element->LinkEndChild(new TiXmlText(category));
+      group_element->LinkEndChild(category_element);
+    }
+
+    currentnode->LinkEndChild(group_element);
+    currentnode = group_element;
+    nodecont.push_back(group_element);
+  }
+
+  void close_group_element() //wrapper for update(), use with care
   {
     this->update();
   }
@@ -677,7 +709,7 @@ void recursive_traverse(ipdIterator_t * iNode, xmlwriter & xmldoc)
         xmldoc.add_element(attribute);
 
     // If the current element is a _section_
-    }else if (ipdIteratorGetType(iNode) == ipdSECTION) //TODO: xml group and ipd layout
+    }else if (ipdIteratorGetType(iNode) == ipdSECTION)
     {
       // Create a new iterator which should traverse the subsection
       ipdIterator_t  *iSubNode = NULL;
@@ -688,7 +720,9 @@ void recursive_traverse(ipdIterator_t * iNode, xmlwriter & xmldoc)
       // Step into the subsection
       ipdIteratorDoStep(iSubNode);
 
+      xmldoc.open_group_element(itemName, "", "");
       recursive_traverse(iSubNode, xmldoc);
+      xmldoc.close_group_element();
 
       ipdIteratorFree(iSubNode);
     }
@@ -727,12 +761,11 @@ void access_ipd_material(ipdIterator_t * iNode, xmlwriter & xmldoc)
 
       //TODO extract 'class' and 'materials' but dont extract them in recursive_traverse
       xmldoc.open_material_element(itemName, "TODO", "TODO"); //FIXME
-
       recursive_traverse(iSubNode, xmldoc);
+      xmldoc.close_material_element();
 
       ipdIteratorFree(iSubNode);
 
-      xmldoc.close_materials_element();
     }else
     {
       throw ipd2xml_error("Invalid IPD layout");
@@ -892,8 +925,6 @@ int main(int argc, char** argv)
   // Read a file in the database
   ipdReadInputDeck(inputfile_ipd);
 
-#if 1
-
   // Define and initialize a ViennaIPD iterator
   ipdIterator_t  *iNode = NULL;
 
@@ -906,7 +937,6 @@ int main(int argc, char** argv)
 
   // Free the iterator
   ipdIteratorFree(iNode);
-#endif
 
 //  do_stuff(); //XXX
 

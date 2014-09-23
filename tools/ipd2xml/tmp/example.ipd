@@ -16,5 +16,14 @@ example_data
   test_material_2
   {
     integer     = 9999;
+    group_1
+    {
+      val_1     = 1;
+      val_2     = 2;
+      group_2
+      {
+        val_3   = 3;
+      }
+    }
   }
 }
