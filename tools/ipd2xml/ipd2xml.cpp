@@ -557,19 +557,21 @@ TiXmlElement* ipd_value_to_xml(const char* name, ipdTreeNode_t *tn, xmlwriter& x
     }
 
     case ipdREAL:
+    case 4098: // rationals .. will be evaluated to floats
     {
       ipdDouble value;
       ipd_success = ipdGetRealByName(name, &value);
       if(ipd_success == ipdFALSE)
       {
         std::string name_str(name);
-        throw ipd2xml_error("Error while accessing real value(" + name_str + ")");
+        throw ipd2xml_error("Error while accessing real/rational value(" + name_str + ")");
       }
       attribute_element = xmldoc.create_scalar(name, value, "");
       break;
     }
 
     case ipdREALQUANTITY:
+    case 4106:
     {
       ipdDouble value;
       ipdChar* unit;
@@ -614,9 +616,9 @@ TiXmlElement* ipd_value_to_xml(const char* name, ipdTreeNode_t *tn, xmlwriter& x
         throw ipd2xml_error("Error while accessing array/matrix/tensor value(" + name_str + ")");
       }
 
-      std::cout << "dimension: " << dimension << std::endl; //XXX
-      for(long i = 0; i < dimension; i++)
-        std::cout << "length: " << length[i] << std::endl; //XXX
+//      std::cout << "dimension: " << dimension << std::endl; //XXX
+//      for(long i = 0; i < dimension; i++)
+//        std::cout << "length: " << length[i] << std::endl; //XXX
 
       if(dimension > 3)
       {
@@ -654,7 +656,7 @@ TiXmlElement* ipd_value_to_xml(const char* name, ipdTreeNode_t *tn, xmlwriter& x
           throw ipd2xml_error("Invalid dimension value of array/matrix/tensor encountered (" + name_str + ")");
       }
 
-      std::cout << "row: " << tensor_rows << " cols: " << tensor_columns << " order: " << tensor_order << std::endl; //XXX
+//      std::cout << "row: " << tensor_rows << " cols: " << tensor_columns << " order: " << tensor_order << std::endl; //XXX
 
       std::stringstream ss;
       ss << unit;
@@ -666,6 +668,7 @@ TiXmlElement* ipd_value_to_xml(const char* name, ipdTreeNode_t *tn, xmlwriter& x
     }
 
     case ipdSTRING:
+    case 2080: // concatenated strings ..
     {
       /*
        * Strings are not supported as attributes in the ViennaMaterials XML layout.
@@ -681,7 +684,7 @@ TiXmlElement* ipd_value_to_xml(const char* name, ipdTreeNode_t *tn, xmlwriter& x
     default:
       std::string type_str("");
       type_str = converter(tn->type);
-      throw ipd2xml_error("Not implemented IPD structure type encountered (" + type_str + ")");
+      throw ipd2xml_error("Not implemented IPD structure type (" + type_str + ") encountered (" + name +")");
       break;
   }
 
@@ -746,8 +749,6 @@ void access_ipd_material(ipdIterator_t * iNode, xmlwriter & xmldoc)
     // Get the name of the current item, the material
     ipdConstString itemName = ipdIteratorGetItemName(iNode);
 
-    //TODO access material name, class, etc and create xml material element
-
     if (ipdIteratorGetType(iNode) == ipdSECTION) //IPD material node must be a section
     {
       // Create a new iterator which should traverse the subsection, the attributes of the material
@@ -766,9 +767,13 @@ void access_ipd_material(ipdIterator_t * iNode, xmlwriter & xmldoc)
 
       ipdIteratorFree(iSubNode);
 
-    }else
+    }else //TODO: return value, abort iteration for this iterator
     {
-      throw ipd2xml_error("Invalid IPD layout");
+      std::string full_name = ipdIteratorGetItemFullName(iNode);
+//      throw ipd2xml_error("Invalid IPD layout (" + full_name + ")");
+#ifdef VERBOSE_MODE
+      std::cout << "INFO: Invalid IPD layout (" + full_name + ")" << std::endl;
+#endif
     }
   }else
   {
@@ -886,7 +891,8 @@ void traverse_ipd_layout(ipdIterator_t * iNode, xmlwriter & xmldoc)
       ipdIteratorFree(iSubNode);
     }else
     {
-      throw ipd2xml_error("Invalid IPD layout");
+      std::string full_name = ipdIteratorGetItemFullName(iNode);
+      throw ipd2xml_error("Invalid IPD layout (" + full_name + ")");
     }
 
     // Next item
@@ -943,8 +949,8 @@ int main(int argc, char** argv)
   // Free the ViennaIPD datastructures
   ipdFreeAll();
 
-//  xmldoc.print(outputfile_xml); //FIXME
-  xmldoc.print_to_console();
+  xmldoc.print(outputfile_xml);
+//  xmldoc.print_to_console(); //XXX
 
   return 0;
 }
