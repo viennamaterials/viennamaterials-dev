@@ -28,17 +28,10 @@ struct xmlwriter
 {
   xmlwriter(const char* note)
   {
-    root_tag             = "database";
-//    identifier_tag       = "identifier";
-//    element_tag          = "element";
-//    data_tag             = "data";
-//    representation_tag   = "representation";
-//    double_tag           = "double";
-    
+    root_tag                    = "database";
     id_tag                      = "id";
     group_tag                   = "group";
     attribute_tag               = "attribute";
-    value_tag                   = "value";
     scalar_tag                  = "scalar";
     type_attribute_tag          = "type";
     type_boolean                = "bool";
@@ -61,45 +54,11 @@ struct xmlwriter
     doc.LinkEndChild( root );
 
     TiXmlElement * rootid = new TiXmlElement( note_tag );
-    rootid->LinkEndChild( new TiXmlText( note )); //XXX
+    rootid->LinkEndChild( new TiXmlText( note ));
     root->LinkEndChild( rootid );
 
     currentnode = root;
     nodecont.push_back( root );
-  }
-
-  void add_section(const char* tag)
-  {
-    //std::cout << "# add_section: " << tag << std::endl;
-
-    TiXmlElement * element = new TiXmlElement( group_tag );
-    currentnode->LinkEndChild( element );
-
-    TiXmlElement * elementid = new TiXmlElement( id_tag );
-    elementid->LinkEndChild( new TiXmlText( tag ));
-    element->LinkEndChild( elementid );
-
-    currentnode = element;
-    nodecont.push_back( element );
-  }
-
-  void add_variable(const char* tag, const char* value)
-  {
-    //std::cout << "# add_variable: " << tag << " : " << value << std::endl;
-
-    TiXmlElement * data = new TiXmlElement( attribute_tag );
-    currentnode->LinkEndChild( data );
-
-    TiXmlElement * dataid = new TiXmlElement( id_tag );
-    dataid->LinkEndChild( new TiXmlText( tag ));
-    data->LinkEndChild( dataid );
-
-    TiXmlElement * repres = new TiXmlElement( value_tag );
-    data->LinkEndChild( repres );
-
-    TiXmlElement * double_ = new TiXmlElement( double_tag );
-    double_->LinkEndChild( new TiXmlText( value ));
-    repres->LinkEndChild( double_ );
   }
 
   void add_element(TiXmlElement* element)
@@ -312,8 +271,6 @@ struct xmlwriter
   const char* id_tag;
   const char* group_tag;
   const char* attribute_tag;
-  const char* value_tag; //XXX
-  const char* double_tag; //XXX
   const char* scalar_tag;
   const char* type_attribute_tag;
   const char* type_boolean;
@@ -331,199 +288,6 @@ struct xmlwriter
 
   std::vector< TiXmlElement * > nodecont;
 };
-//
-// ----------------------------------------------------------
-//
-const char* access_ipd_value(const char* name, ipdTreeNode_t *tn)
-{
-  int l, b, v, len, dim;
-  int *rlen;
-  double re, im, *matrix;
-  char *unit, *str;
-  const char* munit;
-
-  str = unit = NULL;
-
-  std::string retval("");
-
-  //std::cout << name
-  //          << " - valtype: " << ipdGetValueType(tn)
-  //          << " - type: " << ipdGetType(tn) << std::endl;
-
-  switch (tn->type)
-  {
-    case ipdINTEGER:
-      v = ipdGetIntegerByName(name, &l);
-#ifdef CONVOUTPUT
-      std::cout << "int: " << l << "  vs.  " << converter(l) << std::endl;
-#endif
-      if(v) retval = converter(l);
-      else std::cout << "error @ ipdINTEGER - name: " << name << std::endl;
-      break;
-    case ipdREAL:
-      v = ipdGetRealByName(name, &re);
-#ifdef CONVOUTPUT
-      std::cout << "real: " << re << "  vs.  " << converter(re) << std::endl;
-#endif
-      if(v) retval = converter(re);
-      else std::cout << "error @ ipdREAL - name: " << name << std::endl;
-      break;
-    case ipdCOMPLEX:
-      v = ipdGetComplexByName(name, &re, &im);
-#ifdef CONVOUTPUT
-      std::cout << "complex: " << re << " " << im << "  vs.  " << converter(re) << " " << converter(im) << std::endl;
-#endif
-      if(v) retval = converter(re) + " i" + converter(im);
-      else std::cout << "error @ ipdCOMPLEX - name: " << name << std::endl;
-      break;
-    case ipdREALQUANTITY:
-      v = ipdGetRealQuantityByName(name, &re, &unit);
-#ifdef CONVOUTPUT
-      std::cout << "real quan: " << re << " " << unit << "  vs.  " << converter(re) << " " << converter(unit) << std::endl;
-#endif
-      if(v && (unit)) retval = converter(re) + " " + converter(unit);
-      else std::cout << "error @ ipdREALQUANTITY - name: " << name << std::endl;
-      break;
-    case ipdCOMPLEXQUANTITY:
-      v = ipdGetComplexQuantityByName(name, &re, &im, &unit);
-#ifdef CONVOUTPUT
-      std::cout << "real comp quan: " << re << " " << im << " " << unit << "  vs.  " << converter(re) << " " << converter(im) << " " << converter(unit) << std::endl;
-#endif
-      if(v) retval = converter(re) + " i" + converter(im) + " " + converter(unit);
-      else std::cout << "error @ ipdCOMPLEXQUANTITY - name: " << name << std::endl;
-      break;
-    case ipdSTRING:
-      v = ipdGetStringByName(name, &str);
-#ifdef CONVOUTPUT
-      std::cout << "string: " << str << "  vs.  " << converter(str) << std::endl;
-#endif
-      if(v)
-      {
-        if(str)
-          retval = converter(str);
-      }
-      else std::cout << "error @ ipdSTRING - name: " << name << std::endl;
-      break;
-    case ipdBOOLEAN:
-      v = ipdGetBooleanByName(name, &b);
-#ifdef CONVOUTPUT
-      std::cout << "bool: " << b << "  vs.  " << converter(b) << std::endl;
-#endif
-      if(v) retval = converter(b);
-      else std::cout << "error @ ipdBOOLEAN - name: " << name << std::endl;
-      break;
-
-    case 192: // array
-      v = ipdGetSloppyRealMatrixByName(name, &dim, &rlen, &matrix, &munit);
-      if(v)
-      {
-        len = 1;
-        int i;
-        for (i = 0; i < dim; i++)
-          len = len * rlen[i];
-        retval = "[ ";
-        for (i = 0; i < len; i++)
-          retval += converter(matrix[i]) + " ";
-        std::stringstream ss;
-        ss << munit;
-        retval += "] " + ss.str();
-
-        //free(rlen);
-        free(matrix);
-      }
-      else std::cout << "error @ 192 - name: " << name << std::endl;
-      break;
-
-    case 2080: // concatenated strings ..
-      //std::cout << "name-2080: " << name << " type: " << tn->type << std::endl;
-      v = ipdGetStringByName(name, &str);
-      if(v && (str)) retval = converter(str);
-      else std::cout << "error @ 2080 - name: " << name << std::endl;
-      break;
-
-    case 4098: // rationals .. will be evaluated to floats
-      //std::cout << "name-4098: " << name << " type: " << tn->type << std::endl;
-      v = ipdGetRealByName(name, &re);
-      if(v) retval = converter(re);
-      else std::cout << "error @ 4098 - name: " << name << std::endl;
-      break;
-
-    case 4106: //
-      //std::cout << "name-4106: " << name << " type: " << tn->type << std::endl;
-      v = ipdGetRealQuantityByName(name, &re, &unit);
-      if(v && (unit)) retval = converter(re) + " " + converter(unit);
-      else std::cout << "error @ 4106 - name: " << name << std::endl;
-      break;
-
-    default:
-
-      std::cout << "error @ ipd db access - node type not recognized: "<< name
-      << " - type: " << ipdGetType(tn) << std::endl;
-      retval = "not-accessible";
-      break;
-  }
-
-  return retval.c_str();
-}
-//
-// ----------------------------------------------------------
-//
-void recursive_traverse_old(ipdIterator_t * iNode, xmlwriter & xmldoc)
-{
-  // Traverse the ViennaIPD datastructure using the iterator
-  while (ipdIteratorIsValid(iNode))
-  {
-    // Get the name of the current item
-    ipdConstString itemName = ipdIteratorGetItemName(iNode);
-
-    // If the current element is a _variable_
-    if (ipdIteratorGetType(iNode) == ipdVARIABLE)
-    {
-      // Print the name of the variable
-      //printf("variable: %s\n", itemName);
-
-      std::string valuestring("");
-
-      valuestring = access_ipd_value(iNode->tn->node.sv.name, ipdIteratorEval(iNode));
-
-      xmldoc.add_variable( itemName, valuestring.c_str() );
-    }
-
-    // If the current element is a _section_
-    else if (ipdIteratorGetType(iNode) == ipdSECTION)
-    {
-      xmldoc.add_section( itemName );
-
-      // Print the name of the section
-      //printf("section: %s\n", itemName);
-
-      // Create a new iterator which should traverse the subsection
-      ipdIterator_t  *iSubNode = NULL;
-
-      // Set the iterator to origin at this particular section
-      ipdIteratorNewByName(&iSubNode, itemName, ipdANY, ipdANY);
-
-      // Step into the subsection
-      ipdIteratorDoStep(iSubNode);
-
-      recursive_traverse_old(iSubNode, xmldoc);
-
-      xmldoc.update();
-
-    }
-
-    // Next item
-    ipdIteratorDoNext(iNode);
-
-  }
-}
-
-/*
- * ############################################################################
- * ############################################################################
- * ############################################################################
- */
-
 //
 // ----------------------------------------------------------
 //
@@ -616,10 +380,6 @@ TiXmlElement* ipd_value_to_xml(const char* name, ipdTreeNode_t *tn, xmlwriter& x
         throw ipd2xml_error("Error while accessing array/matrix/tensor value(" + name_str + ")");
       }
 
-//      std::cout << "dimension: " << dimension << std::endl; //XXX
-//      for(long i = 0; i < dimension; i++)
-//        std::cout << "length: " << length[i] << std::endl; //XXX
-
       if(dimension > 3)
       {
         /*
@@ -655,8 +415,6 @@ TiXmlElement* ipd_value_to_xml(const char* name, ipdTreeNode_t *tn, xmlwriter& x
           std::string name_str(name);
           throw ipd2xml_error("Invalid dimension value of array/matrix/tensor encountered (" + name_str + ")");
       }
-
-//      std::cout << "row: " << tensor_rows << " cols: " << tensor_columns << " order: " << tensor_order << std::endl; //XXX
 
       std::stringstream ss;
       ss << unit;
@@ -735,7 +493,6 @@ void recursive_traverse(ipdIterator_t * iNode, xmlwriter & xmldoc)
   }
 
 }
-
 //
 // ----------------------------------------------------------
 //
@@ -781,85 +538,6 @@ void access_ipd_material(ipdIterator_t * iNode, xmlwriter & xmldoc)
   }
 }
 
-//
-// ----------------------------------------------------------
-//
-
-static const long intend_spacing = 2;
-
-void print_ipd_tree_recursive_traverse(ipdIterator_t * iNode, long indent, xmlwriter & xmldoc)
-{
-  std::string indention("");
-  for(long i = 0; i < indent; i++)
-    indention.append(" ");
-
-  // Traverse the ViennaIPD datastructure using the iterator
-  while (ipdIteratorIsValid(iNode))
-  {
-    // Get the name of the current item
-    ipdConstString itemName = ipdIteratorGetItemName(iNode);
-
-    // If the current element is a _variable_
-    if (ipdIteratorGetType(iNode) == ipdVARIABLE)
-    {
-      std::cout << "(" << indent/intend_spacing << ")" << indention << "V  " << itemName << ": " <<
-        access_ipd_value(iNode->tn->node.sv.name, ipdIteratorEval(iNode)) << std::endl;
-
-      TiXmlElement* attribute = ipd_value_to_xml(iNode->tn->node.sv.name, ipdIteratorEval(iNode), xmldoc);
-      if(attribute != 0)
-        xmldoc.add_element(attribute);
-    // If the current element is a _section_
-    }else if (ipdIteratorGetType(iNode) == ipdSECTION) //TODO: xml group and ipd layout
-    {
-      std::cout << "(" << indent/intend_spacing << ")" << indention << "S  " << itemName << std::endl;
-
-      // Create a new iterator which should traverse the subsection
-      ipdIterator_t  *iSubNode = NULL;
-
-      // Set the iterator to origin at this particular section
-      ipdIteratorNewByName(&iSubNode, itemName, ipdANY, ipdANY);
-
-      // Step into the subsection
-      ipdIteratorDoStep(iSubNode);
-
-      print_ipd_tree_recursive_traverse(iSubNode, indent+intend_spacing, xmldoc);
-
-      ipdIteratorFree(iSubNode);
-    }
-
-    // Next item
-    ipdIteratorDoNext(iNode);
-  }
-}
-//
-// ----------------------------------------------------------
-//
-void print_ipd_tree(void)
-{
-  // Define and initialize a ViennaIPD iterator
-  ipdIterator_t  *iNode = NULL;
-
-  // Create a new iterator which operates on the root level
-  ipdIteratorNewAtRootSection(&iNode, ipdANY);
-
-  ipdIteratorDoStep(iNode);
-
-  xmlwriter xmldoc("modelipd");
-  print_ipd_tree_recursive_traverse(iNode, 0, xmldoc);
-
-  // Free the iterator
-  ipdIteratorFree(iNode);
-
-
-  xmldoc.print_to_console();
-}
-//
-// ----------------------------------------------------------
-//
-void do_stuff(void)
-{
-  print_ipd_tree();
-}
 //
 // ----------------------------------------------------------
 //
@@ -944,13 +622,11 @@ int main(int argc, char** argv)
   // Free the iterator
   ipdIteratorFree(iNode);
 
-//  do_stuff(); //XXX
-
   // Free the ViennaIPD datastructures
   ipdFreeAll();
 
-  xmldoc.print(outputfile_xml);
-//  xmldoc.print_to_console(); //XXX
+//  xmldoc.print(outputfile_xml);
+  xmldoc.print_to_console(); //XXX
 
   return 0;
 }
