@@ -13,291 +13,301 @@
 
 #include "tools/ipd2xml/ipd2xml.hpp"
 #include <iostream>
-#include <vector>
-#include "tools/ipd2xml/ViennaIPD/src/include/ipd.h"
-#include "tools/ipd2xml/tinyxml/tinyxml.h"
-
-#include "viennamaterials/xmldatatypes.h"
 
 
-//#define CONVOUTPUT
+int main(int argc, char** argv)
+{
+
+  const char* inputfile_ipd;
+  const char* outputfile_xml;
+
+  if(argc == 3)
+  {
+    inputfile_ipd = argv[1];
+    outputfile_xml = argv[2];
+  }else
+  {
+    inputfile_ipd = "tools/ipd2xml/tmp/example.ipd";
+    outputfile_xml = "tools/ipd2xml/tmp/example.xml";
+  }
+
+  xmlwriter xmldoc("This database was created by ipd2xml");
+
+  // Initialize the Database.
+  // Normally we can use the default values, so we don't need parameters.
+  ipdInit(NULL, NULL);
+
+  // Let's create a database
+  ipdCreateBase("NameOfTheDatabase", 0);
+
+  // Read a file in the database
+  ipdReadInputDeck(inputfile_ipd);
+
+  // Define and initialize a ViennaIPD iterator
+  ipdIterator_t  *iNode = NULL;
+
+  // Create a new iterator which operates on the root level
+  ipdIteratorNewAtRootSection(&iNode, ipdANY);
+
+  ipdIteratorDoStep(iNode);
+
+  traverse_ipd_layout(iNode, xmldoc);
+
+  // Free the iterator
+  ipdIteratorFree(iNode);
+
+  // Free the ViennaIPD datastructures
+  ipdFreeAll();
+
+  xmldoc.print(outputfile_xml);
+//  xmldoc.print_to_console(); //XXX
+
+  return 0;
+}
 //
 // ----------------------------------------------------------
 //
-struct xmlwriter
+
+xmlwriter::xmlwriter(const char* note)
 {
-  xmlwriter(const char* note)
+  root_tag                    = "database";
+  id_tag                      = "id";
+  group_tag                   = "group";
+  attribute_tag               = "attribute";
+  scalar_tag                  = "scalar";
+  type_attribute_tag          = "type";
+  type_boolean                = "bool";
+  type_integer                = "int";
+  type_floating               = "float";
+  tensor_tag                  = "tensor";
+  tensor_row_attribute_tag    = "row";
+  tensor_column_attribute_tag = "col";
+  tensor_order_attribute_tag  = "order";
+  unit_tag                    = "unit";
+  note_tag                    = "note";
+  category_tag                = "category";
+  material_tag                = "material";
+  name_tag                    = "name";
+
+  TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );
+  doc.LinkEndChild( decl );
+
+  TiXmlElement * root = new TiXmlElement( root_tag );
+  doc.LinkEndChild( root );
+
+  TiXmlElement * rootid = new TiXmlElement( note_tag );
+  rootid->LinkEndChild( new TiXmlText( note ));
+  root->LinkEndChild( rootid );
+
+  currentnode = root;
+  nodecont.push_back( root );
+}
+
+void xmlwriter::add_element(TiXmlElement* element)
+{
+  currentnode->LinkEndChild(element);
+}
+
+TiXmlElement* xmlwriter::create_scalar(const char* id, const viennamaterials::xml_bool& value, const char* unit)
+{
+  TiXmlElement* attribute_element = new TiXmlElement(attribute_tag);
+
+  TiXmlElement* id_element = new TiXmlElement(id_tag);
+  id_element->LinkEndChild(new TiXmlText(id));
+  attribute_element->LinkEndChild(id_element);
+
+  TiXmlElement* scalar_element = new TiXmlElement(scalar_tag);
+  scalar_element->SetAttribute(type_attribute_tag, type_boolean);
+  if(value == true)
+    scalar_element->LinkEndChild(new TiXmlText("true"));
+  else
+    scalar_element->LinkEndChild(new TiXmlText("false"));
+  attribute_element->LinkEndChild(scalar_element);
+
+  TiXmlElement* unit_element = new TiXmlElement(unit_tag);
+  unit_element->LinkEndChild(new TiXmlText(unit));
+  attribute_element->LinkEndChild(unit_element);
+
+  return attribute_element;
+}
+
+TiXmlElement* xmlwriter::create_scalar(const char* id, const viennamaterials::xml_int& value, const char* unit)
+{
+  TiXmlElement* attribute_element = new TiXmlElement(attribute_tag);
+
+  TiXmlElement* id_element = new TiXmlElement(id_tag);
+  id_element->LinkEndChild(new TiXmlText(id));
+  attribute_element->LinkEndChild(id_element);
+
+  TiXmlElement* scalar_element = new TiXmlElement(scalar_tag);
+  scalar_element->SetAttribute(type_attribute_tag, type_integer);
+  scalar_element->LinkEndChild( new TiXmlText(converter(value).c_str()) );
+  attribute_element->LinkEndChild(scalar_element);
+
+  TiXmlElement* unit_element = new TiXmlElement(unit_tag);
+  unit_element->LinkEndChild(new TiXmlText(unit));
+  attribute_element->LinkEndChild(unit_element);
+
+  return attribute_element;
+}
+
+TiXmlElement* xmlwriter::create_scalar(const char* id, const viennamaterials::xml_float& value, const char* unit)
+{
+  TiXmlElement* attribute_element = new TiXmlElement(attribute_tag);
+
+  TiXmlElement* id_element = new TiXmlElement(id_tag);
+  id_element->LinkEndChild(new TiXmlText(id));
+  attribute_element->LinkEndChild(id_element);
+
+  TiXmlElement* scalar_element = new TiXmlElement(scalar_tag);
+  scalar_element->SetAttribute(type_attribute_tag, type_floating);
+  scalar_element->LinkEndChild( new TiXmlText(converter(value).c_str()) );
+  attribute_element->LinkEndChild(scalar_element);
+
+  TiXmlElement* unit_element = new TiXmlElement(unit_tag);
+  unit_element->LinkEndChild(new TiXmlText(unit));
+  attribute_element->LinkEndChild(unit_element);
+
+  return attribute_element;
+}
+
+TiXmlElement* xmlwriter::create_tensor(const char* id, const double& tensor_rows, const double& tensor_columns, const double& tensor_order, const double* values, const char* unit)
+{
+  TiXmlElement* attribute_element = new TiXmlElement(attribute_tag);
+
+  TiXmlElement* id_element = new TiXmlElement(id_tag);
+  id_element->LinkEndChild(new TiXmlText(id));
+  attribute_element->LinkEndChild(id_element);
+
+  TiXmlElement* tensor_element = new TiXmlElement(tensor_tag);
+  tensor_element->SetAttribute(tensor_row_attribute_tag, tensor_rows);
+  tensor_element->SetAttribute(tensor_column_attribute_tag, tensor_columns);
+  tensor_element->SetAttribute(tensor_order_attribute_tag, tensor_order);
+  tensor_element->SetAttribute(type_attribute_tag, type_floating);
+  attribute_element->LinkEndChild(tensor_element);
+
+  TiXmlElement* unit_element = new TiXmlElement(unit_tag);
+  unit_element->LinkEndChild(new TiXmlText(unit));
+  attribute_element->LinkEndChild(unit_element);
+
+  long row, column, order;
+  long value_item = 0;
+  for(order = 1; order <= tensor_order; order++)
   {
-    root_tag                    = "database";
-    id_tag                      = "id";
-    group_tag                   = "group";
-    attribute_tag               = "attribute";
-    scalar_tag                  = "scalar";
-    type_attribute_tag          = "type";
-    type_boolean                = "bool";
-    type_integer                = "int";
-    type_floating               = "float";
-    tensor_tag                  = "tensor";
-    tensor_row_attribute_tag    = "row";
-    tensor_column_attribute_tag = "col";
-    tensor_order_attribute_tag  = "order";
-    unit_tag                    = "unit";
-    note_tag                    = "note";
-    category_tag                = "category";
-    material_tag                = "material";
-    name_tag                    = "name";
-
-    TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );
-    doc.LinkEndChild( decl );
-
-    TiXmlElement * root = new TiXmlElement( root_tag );
-    doc.LinkEndChild( root );
-
-    TiXmlElement * rootid = new TiXmlElement( note_tag );
-    rootid->LinkEndChild( new TiXmlText( note ));
-    root->LinkEndChild( rootid );
-
-    currentnode = root;
-    nodecont.push_back( root );
-  }
-
-  void add_element(TiXmlElement* element)
-  {
-    currentnode->LinkEndChild(element);
-  }
-
-  TiXmlElement* create_scalar(const char* id, const viennamaterials::xml_bool& value, const char* unit)
-  {
-    TiXmlElement* attribute_element = new TiXmlElement(attribute_tag);
-
-    TiXmlElement* id_element = new TiXmlElement(id_tag);
-    id_element->LinkEndChild(new TiXmlText(id));
-    attribute_element->LinkEndChild(id_element);
-
-    TiXmlElement* scalar_element = new TiXmlElement(scalar_tag);
-    scalar_element->SetAttribute(type_attribute_tag, type_boolean);
-    if(value == true)
-      scalar_element->LinkEndChild(new TiXmlText("true"));
-    else
-      scalar_element->LinkEndChild(new TiXmlText("false"));
-    attribute_element->LinkEndChild(scalar_element);
-
-    TiXmlElement* unit_element = new TiXmlElement(unit_tag);
-    unit_element->LinkEndChild(new TiXmlText(unit));
-    attribute_element->LinkEndChild(unit_element);
-
-    return attribute_element;
-  }
-
-  TiXmlElement* create_scalar(const char* id, const viennamaterials::xml_int& value, const char* unit)
-  {
-    TiXmlElement* attribute_element = new TiXmlElement(attribute_tag);
-
-    TiXmlElement* id_element = new TiXmlElement(id_tag);
-    id_element->LinkEndChild(new TiXmlText(id));
-    attribute_element->LinkEndChild(id_element);
-
-    TiXmlElement* scalar_element = new TiXmlElement(scalar_tag);
-    scalar_element->SetAttribute(type_attribute_tag, type_integer);
-    scalar_element->LinkEndChild( new TiXmlText(converter(value).c_str()) );
-    attribute_element->LinkEndChild(scalar_element);
-
-    TiXmlElement* unit_element = new TiXmlElement(unit_tag);
-    unit_element->LinkEndChild(new TiXmlText(unit));
-    attribute_element->LinkEndChild(unit_element);
-
-    return attribute_element;
-  }
-
-  TiXmlElement* create_scalar(const char* id, const viennamaterials::xml_float& value, const char* unit)
-  {
-    TiXmlElement* attribute_element = new TiXmlElement(attribute_tag);
-
-    TiXmlElement* id_element = new TiXmlElement(id_tag);
-    id_element->LinkEndChild(new TiXmlText(id));
-    attribute_element->LinkEndChild(id_element);
-
-    TiXmlElement* scalar_element = new TiXmlElement(scalar_tag);
-    scalar_element->SetAttribute(type_attribute_tag, type_floating);
-    scalar_element->LinkEndChild( new TiXmlText(converter(value).c_str()) );
-    attribute_element->LinkEndChild(scalar_element);
-
-    TiXmlElement* unit_element = new TiXmlElement(unit_tag);
-    unit_element->LinkEndChild(new TiXmlText(unit));
-    attribute_element->LinkEndChild(unit_element);
-
-    return attribute_element;
-  }
-
-  TiXmlElement* create_tensor(const char* id, const double& tensor_rows, const double& tensor_columns, const double& tensor_order, const double* values, const char* unit)
-  {
-    TiXmlElement* attribute_element = new TiXmlElement(attribute_tag);
-
-    TiXmlElement* id_element = new TiXmlElement(id_tag);
-    id_element->LinkEndChild(new TiXmlText(id));
-    attribute_element->LinkEndChild(id_element);
-
-    TiXmlElement* tensor_element = new TiXmlElement(tensor_tag);
-    tensor_element->SetAttribute(tensor_row_attribute_tag, tensor_rows);
-    tensor_element->SetAttribute(tensor_column_attribute_tag, tensor_columns);
-    tensor_element->SetAttribute(tensor_order_attribute_tag, tensor_order);
-    tensor_element->SetAttribute(type_attribute_tag, type_floating);
-    attribute_element->LinkEndChild(tensor_element);
-
-    TiXmlElement* unit_element = new TiXmlElement(unit_tag);
-    unit_element->LinkEndChild(new TiXmlText(unit));
-    attribute_element->LinkEndChild(unit_element);
-
-    long row, column, order;
-    long value_item = 0;
-    for(order = 1; order <= tensor_order; order++)
+    for(row = 1; row <= tensor_rows; row++)
     {
-      for(row = 1; row <= tensor_rows; row++)
+      for(column = 1; column <= tensor_columns; column++)
       {
-        for(column = 1; column <= tensor_columns; column++)
-        {
-          TiXmlElement* scalar_element = new TiXmlElement(scalar_tag);
-          scalar_element->SetAttribute(tensor_row_attribute_tag, row);
-          scalar_element->SetAttribute(tensor_column_attribute_tag, column);
-          scalar_element->SetAttribute(tensor_order_attribute_tag, order);
-          scalar_element->LinkEndChild( new TiXmlText(converter(values[value_item]).c_str()) );
-          tensor_element->LinkEndChild(scalar_element);
+        TiXmlElement* scalar_element = new TiXmlElement(scalar_tag);
+        scalar_element->SetAttribute(tensor_row_attribute_tag, row);
+        scalar_element->SetAttribute(tensor_column_attribute_tag, column);
+        scalar_element->SetAttribute(tensor_order_attribute_tag, order);
+        scalar_element->LinkEndChild( new TiXmlText(converter(values[value_item]).c_str()) );
+        tensor_element->LinkEndChild(scalar_element);
 
-          value_item++;
-        }
+        value_item++;
       }
     }
-
-    return attribute_element;
   }
 
-  void add_note(const char* note)
+  return attribute_element;
+}
+
+void xmlwriter::add_note(const char* note)
+{
+  TiXmlElement* note_element = new TiXmlElement(note_tag);
+  note_element->LinkEndChild(new TiXmlText(note));
+  this->add_element(note_element);
+}
+
+void xmlwriter::open_material_element(const char* id, const char* name, const char* category)
+{
+  TiXmlElement* material_element = new TiXmlElement(material_tag);
+
+  TiXmlElement* id_element = new TiXmlElement(id_tag);
+  id_element->LinkEndChild(new TiXmlText(id));
+  material_element->LinkEndChild(id_element);
+
+  if(strlen(name) != 0)
   {
-    TiXmlElement* note_element = new TiXmlElement(note_tag);
-    note_element->LinkEndChild(new TiXmlText(note));
-    this->add_element(note_element);
+    TiXmlElement* name_element = new TiXmlElement(name_tag);
+    name_element->LinkEndChild(new TiXmlText(name));
+    material_element->LinkEndChild(name_element);
   }
 
-  void open_material_element(const char* id, const char* name, const char* category)
+  TiXmlElement* category_element = new TiXmlElement(category_tag);
+  category_element->LinkEndChild(new TiXmlText(category));
+  material_element->LinkEndChild(category_element);
+
+  currentnode->LinkEndChild(material_element);
+  currentnode = material_element;
+  nodecont.push_back(material_element);
+}
+
+void xmlwriter::close_material_element() //wrapper for update(), use with care
+{
+  this->update();
+}
+
+void xmlwriter::open_group_element(const char* id, const char* name, const char* category)
+{
+  TiXmlElement* group_element = new TiXmlElement(group_tag);
+
+  TiXmlElement* id_element = new TiXmlElement(id_tag);
+  id_element->LinkEndChild(new TiXmlText(id));
+  group_element->LinkEndChild(id_element);
+
+  if(strlen(name) != 0)
   {
-    TiXmlElement* material_element = new TiXmlElement(material_tag);
+    TiXmlElement* name_element = new TiXmlElement(name_tag);
+    name_element->LinkEndChild(new TiXmlText(name));
+    group_element->LinkEndChild(name_element);
+  }
 
-    TiXmlElement* id_element = new TiXmlElement(id_tag);
-    id_element->LinkEndChild(new TiXmlText(id));
-    material_element->LinkEndChild(id_element);
-
-    if(strlen(name) != 0)
-    {
-      TiXmlElement* name_element = new TiXmlElement(name_tag);
-      name_element->LinkEndChild(new TiXmlText(name));
-      material_element->LinkEndChild(name_element);
-    }
-
+  if(strlen(category) != 0)
+  {
     TiXmlElement* category_element = new TiXmlElement(category_tag);
     category_element->LinkEndChild(new TiXmlText(category));
-    material_element->LinkEndChild(category_element);
-
-    currentnode->LinkEndChild(material_element);
-    currentnode = material_element;
-    nodecont.push_back(material_element);
+    group_element->LinkEndChild(category_element);
   }
 
-  void close_material_element() //wrapper for update(), use with care
-  {
-    this->update();
-  }
+  currentnode->LinkEndChild(group_element);
+  currentnode = group_element;
+  nodecont.push_back(group_element);
+}
 
-  void open_group_element(const char* id, const char* name, const char* category)
-  {
-    TiXmlElement* group_element = new TiXmlElement(group_tag);
+void xmlwriter::close_group_element() //wrapper for update(), use with care
+{
+  this->update();
+}
 
-    TiXmlElement* id_element = new TiXmlElement(id_tag);
-    id_element->LinkEndChild(new TiXmlText(id));
-    group_element->LinkEndChild(id_element);
+void xmlwriter::update()
+{
+  nodecont.pop_back();
+  currentnode = nodecont[nodecont.size()-1];
+}
 
-    if(strlen(name) != 0)
-    {
-      TiXmlElement* name_element = new TiXmlElement(name_tag);
-      name_element->LinkEndChild(new TiXmlText(name));
-      group_element->LinkEndChild(name_element);
-    }
+void xmlwriter::print(std::string filename)
+{
+  this->print(filename.c_str());
+}
 
-    if(strlen(category) != 0)
-    {
-      TiXmlElement* category_element = new TiXmlElement(category_tag);
-      category_element->LinkEndChild(new TiXmlText(category));
-      group_element->LinkEndChild(category_element);
-    }
+void xmlwriter::print(const char* filename)
+{
+  doc.SaveFile( filename );
+}
 
-    currentnode->LinkEndChild(group_element);
-    currentnode = group_element;
-    nodecont.push_back(group_element);
-  }
-
-  void close_group_element() //wrapper for update(), use with care
-  {
-    this->update();
-  }
-
-  void update()
-  {
-    nodecont.pop_back();
-    currentnode = nodecont[nodecont.size()-1];
-  }
-
-  void print(std::string filename)
-  {
-    this->print(filename.c_str());
-  }
-
-  void print(const char* filename)
-  {
-    doc.SaveFile( filename );
-  }
-
-  void print_to_console(void)
-  {
-    TiXmlPrinter printer;
-    printer.SetIndent("  ");
-    doc.Accept(&printer);
-    std::cout << printer.CStr() << std::endl;
-  }
-
-  TiXmlDocument doc;
-
-  TiXmlElement * currentnode;
-
-  const char* root_tag;
-  const char* id_tag;
-  const char* group_tag;
-  const char* attribute_tag;
-  const char* scalar_tag;
-  const char* type_attribute_tag;
-  const char* type_boolean;
-  const char* type_integer;
-  const char* type_floating;
-  const char* tensor_tag;
-  const char* tensor_row_attribute_tag;
-  const char* tensor_column_attribute_tag;
-  const char* tensor_order_attribute_tag;
-  const char* unit_tag;
-  const char* note_tag;
-  const char* category_tag;
-  const char* material_tag;
-  const char* name_tag;
-
-  std::vector< TiXmlElement * > nodecont;
-};
+void xmlwriter::print_to_console(void)
+{
+  TiXmlPrinter printer;
+  printer.SetIndent("  ");
+  doc.Accept(&printer);
+  std::cout << printer.CStr() << std::endl;
+}
 //
 // ----------------------------------------------------------
 //
-/*
- * @brief This method performs the transformation from IPD data structure to ViennaMaterials XML data layout
- * @param name The name of the value to be accessed
- * @param tn IPD tree node structure containing the evaluated value
- * @param xmldoc A reference to an object of type xmlwriter
- * @return XML element object containing the value in the ViennaMaterials XML layout
- */
+
 TiXmlElement* ipd_value_to_xml(const char* name, ipdTreeNode_t *tn, xmlwriter& xmldoc)
 {
   TiXmlElement* attribute_element = 0;
@@ -454,7 +464,8 @@ TiXmlElement* ipd_value_to_xml(const char* name, ipdTreeNode_t *tn, xmlwriter& x
 //
 // ----------------------------------------------------------
 //
-void recursive_traverse(ipdIterator_t * iNode, xmlwriter & xmldoc)
+
+void recursive_traverse(ipdIterator_t * iNode, xmlwriter& xmldoc)
 {
   // Traverse the ViennaIPD datastructure using the iterator
   while (ipdIteratorIsValid(iNode))
@@ -497,8 +508,7 @@ void recursive_traverse(ipdIterator_t * iNode, xmlwriter & xmldoc)
 // ----------------------------------------------------------
 //
 
-//TODO doxygen
-void access_ipd_material(ipdIterator_t * iNode, xmlwriter & xmldoc)
+void access_ipd_material(ipdIterator_t * iNode, xmlwriter& xmldoc)
 {
   // Traverse the ViennaIPD datastructure using the iterator
   if(ipdIteratorIsValid(iNode))
@@ -537,11 +547,11 @@ void access_ipd_material(ipdIterator_t * iNode, xmlwriter & xmldoc)
     throw ipd2xml_error("Invalid IPD iterator passed to access_ipd_material");
   }
 }
-
 //
 // ----------------------------------------------------------
 //
-void traverse_ipd_layout(ipdIterator_t * iNode, xmlwriter & xmldoc)
+
+void traverse_ipd_layout(ipdIterator_t * iNode, xmlwriter& xmldoc)
 {
   // Traverse the ViennaIPD datastructure using the iterator
   while (ipdIteratorIsValid(iNode))
@@ -577,58 +587,3 @@ void traverse_ipd_layout(ipdIterator_t * iNode, xmlwriter & xmldoc)
     ipdIteratorDoNext(iNode);
   }
 }
-//
-// ----------------------------------------------------------
-//
-
-int main(int argc, char** argv)
-{
-
-  const char* inputfile_ipd;
-  const char* outputfile_xml;
-
-  if(argc == 3)
-  {
-    inputfile_ipd = argv[1];
-    outputfile_xml = argv[2];
-  }else
-  {
-    inputfile_ipd = "tools/ipd2xml/tmp/example.ipd";
-    outputfile_xml = "tools/ipd2xml/tmp/example.xml";
-  }
-
-  xmlwriter xmldoc("This database was created by ipd2xml");
-
-  // Initialize the Database.
-  // Normally we can use the default values, so we don't need parameters.
-  ipdInit(NULL, NULL);
-
-  // Let's create a database
-  ipdCreateBase("NameOfTheDatabase", 0);
-
-  // Read a file in the database
-  ipdReadInputDeck(inputfile_ipd);
-
-  // Define and initialize a ViennaIPD iterator
-  ipdIterator_t  *iNode = NULL;
-
-  // Create a new iterator which operates on the root level
-  ipdIteratorNewAtRootSection(&iNode, ipdANY);
-
-  ipdIteratorDoStep(iNode);
-
-  traverse_ipd_layout(iNode, xmldoc);
-
-  // Free the iterator
-  ipdIteratorFree(iNode);
-
-  // Free the ViennaIPD datastructures
-  ipdFreeAll();
-
-//  xmldoc.print(outputfile_xml);
-  xmldoc.print_to_console(); //XXX
-
-  return 0;
-}
-
-
