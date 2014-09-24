@@ -3,6 +3,9 @@
 ADD_EXECUTABLE(native native.cpp)
 TARGET_LINK_LIBRARIES(native ${LIBRARIES})
 
+ADD_EXECUTABLE(bench bench.cpp)
+TARGET_LINK_LIBRARIES(bench ${LIBRARIES})
+
 ADD_EXECUTABLE(native_proxy native_proxy.cpp)
 TARGET_LINK_LIBRARIES(native_proxy ${LIBRARIES})
 
