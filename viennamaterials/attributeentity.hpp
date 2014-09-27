@@ -58,6 +58,13 @@ public:
   bool is_type(tag_tensor tag);
 
   /**
+   * @brief Check if this object represents a string
+   * @param A tag of type tag_string (tag specialization)
+   * @return True if this object represents a string, false otherwise
+   */
+  bool is_type(tag_string tag);
+
+  /**
    * @brief Check if this object represents a function attribute with boolean result
    * @param A tag of type tag_function_bool (tag specialization)
    * @return True if this object represents a function attribute with boolean result, false otherwise
@@ -143,6 +150,12 @@ public:
    * @return True if this object represents a tensor, false otherwise
    */
   bool is_tensor();
+
+  /**
+   * @brief Check if this object represents a string
+   * @return True if this object represents a string, false otherwise
+   */
+  bool is_string();
 
   /**
    * @brief Check if this object represents a function
@@ -281,6 +294,13 @@ protected:
    * @return The tensor object of the attribute
    */
 //  virtual void      eval_value(tag_tensor tag)          = 0; //TODO: tensor: return
+
+  /**
+   * @brief Evaluate the value of this attribute
+   * @param tag A tag of type tag_string
+   * @return The string value of the attribute
+   */
+  virtual xml_string eval_value(tag_string tag)         = 0;
 
 protected:
   xml_attribute_type  entity_type_;

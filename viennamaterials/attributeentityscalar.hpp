@@ -56,6 +56,9 @@ public:
   /// @brief Implements a pure virtual method of its base class. This methods throws an exception!
   xml_float                             eval_value(tag_scalar_float tag);
 
+  /// @brief Implements a pure virtual method of its base class. This methods throws an exception!
+  xml_string                            eval_value(tag_string tag);
+
 private:
   xml_bool value_;
 };
@@ -100,6 +103,9 @@ public:
   /// @brief Implements a pure virtual method of its base class. This methods throws an exception!
   xml_float                             eval_value(tag_scalar_float tag);
 
+  /// @brief Implements a pure virtual method of its base class. This methods throws an exception!
+  xml_string                            eval_value(tag_string tag);
+
 private:
   xml_int value_;
 };
@@ -134,11 +140,7 @@ public:
   /// @brief Implements a pure virtual method of its base class. This methods throws an exception!
   xml_bool                              eval_value(tag_scalar_bool tag);
 
-  /**
-   * @brief Get the value of this integer scalar attribute
-   * @param tag A tag of type tag_scalar_int
-   * @return The integer value of this attribute object
-   */
+  /// @brief Implements a pure virtual method of its base class. This methods throws an exception!
   xml_int                               eval_value(tag_scalar_int tag);
 
   /**
@@ -147,6 +149,9 @@ public:
    * @return The floating point value of this attribute object
    */
   xml_float                             eval_value(tag_scalar_float tag);
+
+  /// @brief Implements a pure virtual method of its base class. This methods throws an exception!
+  xml_string                            eval_value(tag_string tag);
 
 private:
   xml_float value_;

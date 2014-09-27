@@ -54,6 +54,13 @@ int main(int argc, char * argv[])
   if(attribute->is_scalar_float())
     std::cout << "floating point scalar value:   " << attribute->evaluate_value<double>() << std::endl;
 
+  std::cout << "########################  String attributes  ########################" << std::endl;
+
+  query = "/*/*[id='test-material']/*[id='string']";
+  attribute = matlib.query(query);
+  if(attribute->is_string())
+    std::cout << "string value:   " << attribute->evaluate_value<std::string>() << std::endl;
+
 #ifdef VIENNAMATERIALS_WITH_FUNCTIONBACKEND
   std::cout << "######################## Function attributes ########################" << std::endl;
 

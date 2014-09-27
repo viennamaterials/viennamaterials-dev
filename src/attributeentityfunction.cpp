@@ -149,6 +149,11 @@ xml_float attribute_entity_function::eval_value(tag_scalar_float tag)
   return backend_->eval(tag, args);
 }
 
+xml_string attribute_entity_function::eval_value(tag_string tag)
+{
+  throw func_backend_attr_type_error();
+}
+
 std::vector<xml_value_entity_handle> attribute_entity_function::evaluate_arguments()
 {
   std::vector<xml_value_entity_handle> backend_args = dependencies_backend_;

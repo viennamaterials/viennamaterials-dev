@@ -17,6 +17,7 @@
 #include "viennamaterials/utils/convert.hpp"
 #include "viennamaterials/attributeentityscalar.hpp"
 #include "viennamaterials/attributeentityfunction.hpp"
+#include "viennamaterials/attributeentitystring.hpp"
 #include "viennamaterials/generator.hpp"
 
 #ifdef VIENNAMATERIALS_WITH_PYTHON
@@ -40,12 +41,12 @@ attribute_handle library::query(std::string const& xpath_query_to_attribute)
   xml_attribute_type type = get_attribute_type(xpath_query_to_attribute);
 
   /// Query unit
-  std::string unit = lib_->query(xpath_query_to_attribute + "/unit/text()");
+  const std::string unit = lib_->query(xpath_query_to_attribute + "/unit/text()");
 
   if(type == function_bool || type == function_int || type == function_float) //TODO tensor: function_tensor
   {
-    std::string query = xpath_query_to_attribute + "/function";
-    std::string code_language = lib_->query_attribute(query + "/code", "lang");
+    const std::string query = xpath_query_to_attribute + "/function";
+    const std::string code_language = lib_->query_attribute(query + "/code", "lang");
 
     /// Load function arguments
     long number_of_arguments = lib_->query_number_of_elements(query + "/arg");
@@ -59,11 +60,11 @@ attribute_handle library::query(std::string const& xpath_query_to_attribute)
       /// Handle each argument
 
       xml_value_entity_handle entity_ptr;
-      std::string query_arg = query + "/arg[" + convert<std::string>(i) + "]";
+      const std::string query_arg = query + "/arg[" + convert<std::string>(i) + "]";
 
       if(lib_->query_number_of_elements(query_arg + "/scalar") == 1)
       {
-        std::string query_arg_scalar = query_arg + "/scalar";
+        const std::string query_arg_scalar = query_arg + "/scalar";
         const std::string type_attribute = "type";
         if(lib_->query_attribute(query_arg_scalar, type_attribute).compare("bool") == 0)
         {
@@ -96,7 +97,7 @@ attribute_handle library::query(std::string const& xpath_query_to_attribute)
         throw library_error("Tensor not yet implemented");
       }else if(lib_->query_number_of_elements(query_arg + "/reference") == 1)
       {
-        std::string query_referenced_attribute = lib_->query(query_arg + "/reference/text()");
+        const std::string query_referenced_attribute = lib_->query(query_arg + "/reference/text()");
         attribute_handle referenced_attribute = this->query(query_referenced_attribute); //broker query
         shared_ptr<attribute_entity_argument> attribute_arg_ptr(
             new attribute_entity_argument(convert<size_t>(lib_->query(query_arg + "/id/text()")), referenced_attribute));
@@ -114,7 +115,7 @@ attribute_handle library::query(std::string const& xpath_query_to_attribute)
 
     /// Load function backend
     function_backend_handle backend;
-    std::string query_code = query + "/code";
+    const std::string query_code = query + "/code";
     const std::string lang_attribute = "lang";
     const std::string call_attribute = "call";
   #ifdef VIENNAMATERIALS_WITH_PYTHON
@@ -137,7 +138,7 @@ attribute_handle library::query(std::string const& xpath_query_to_attribute)
     return entity;
   }else if(type == scalar_bool || type == scalar_int || type ==  scalar_float)
   {
-    std::string query_scalar = xpath_query_to_attribute + "/scalar";
+    const std::string query_scalar = xpath_query_to_attribute + "/scalar";
     const std::string type_attribute = "type";
     if(lib_->query_attribute(query_scalar, type_attribute).compare("bool") == 0)
     {
@@ -170,6 +171,14 @@ attribute_handle library::query(std::string const& xpath_query_to_attribute)
       attribute_handle entity(new attribute_entity_scalar_float(value, unit));
       return entity;
     }
+  }else if(type ==  string)
+  {
+    const std::string query_string = xpath_query_to_attribute + "/string";
+
+    /// Create string attribute entity
+    const xml_string value = lib_->query_xpath_string(query_string + "/text()");
+    attribute_handle entity(new attribute_entity_string(value, unit));
+    return entity;
   }
 
   //TODO tensor
@@ -181,12 +190,12 @@ xml_attribute_type library::get_attribute_type(std::string const& xpath_query_to
 {
   /**
    * Precedence of attribute types:
-   *  Function is prefered over scalar or tensor.
-   *  Tensor is prefered over scalar.
-   *  First function element is prefered if two or more functions are defined.
+   *  Function is preferred over scalar or tensor.
+   *  Tensor is preferred over scalar.
+   *  First function element is preferred if two or more functions are defined.
    */
 
-  std::string type_attribute = "type";
+  const std::string type_attribute = "type";
 
   if(lib_->query_number_of_elements(xpath_query_to_attribute + "/function") > 0)
   {
@@ -210,8 +219,8 @@ xml_attribute_type library::get_attribute_type(std::string const& xpath_query_to
   }else if(lib_->query_number_of_elements(xpath_query_to_attribute + "/tensor") > 0)
   {
     return tensor;
-  }
-  else if(lib_->query_number_of_elements(xpath_query_to_attribute + "/scalar") > 0)
+
+  }else if(lib_->query_number_of_elements(xpath_query_to_attribute + "/scalar") > 0)
   {
     std::string query = xpath_query_to_attribute + "/scalar";
 
@@ -223,7 +232,12 @@ xml_attribute_type library::get_attribute_type(std::string const& xpath_query_to
       return scalar_float;
 
     throw library_error("No valid type for scalar attribute found (query: " + query + ")");
+
+  }else if(lib_->query_number_of_elements(xpath_query_to_attribute + "/string") > 0)
+  {
+    return string;
   }
+
 
   throw library_error("No valid attribute type found (query: " + xpath_query_to_attribute + ")");
 }

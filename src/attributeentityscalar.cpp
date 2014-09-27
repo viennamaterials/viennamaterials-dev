@@ -53,6 +53,11 @@ xml_float attribute_entity_scalar_boolean::eval_value(tag_scalar_float tag)
   throw attribute_entity_error("Invalid evaluate return type for this attribute object - floating point value from boolean attribute not supported");
 }
 
+xml_string attribute_entity_scalar_boolean::eval_value(tag_string tag)
+{
+  throw attribute_entity_error("Invalid evaluate return type for this attribute object - string value from boolean attribute not supported");
+}
+
 
 
 attribute_entity_scalar_integer::attribute_entity_scalar_integer(xml_int value, std::string const& unit)
@@ -92,6 +97,11 @@ xml_float attribute_entity_scalar_integer::eval_value(tag_scalar_float tag)
   throw attribute_entity_error("Invalid evaluate return type for this attribute object - floating point value from integer attribute not supported");
 }
 
+xml_string attribute_entity_scalar_integer::eval_value(tag_string tag)
+{
+  throw attribute_entity_error("Invalid evaluate return type for this attribute object - string value from integer attribute not supported");
+}
+
 
 
 attribute_entity_scalar_float::attribute_entity_scalar_float(xml_float value, std::string const& unit)
@@ -129,6 +139,11 @@ xml_int attribute_entity_scalar_float::eval_value(tag_scalar_int tag)
 xml_float attribute_entity_scalar_float::eval_value(tag_scalar_float tag)
 {
   return this->value_;
+}
+
+xml_string attribute_entity_scalar_float::eval_value(tag_string tag)
+{
+  throw attribute_entity_error("Invalid evaluate return type for this attribute object - string value from floating point attribute not supported");
 }
 
 } /* namespace viennamaterials */

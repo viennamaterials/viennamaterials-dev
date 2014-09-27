@@ -44,6 +44,13 @@ bool attribute_entity::is_type(tag_tensor tag)
   return false;
 }
 
+bool attribute_entity::is_type(tag_string tag)
+{
+  if(entity_type_ == string)
+    return true;
+  return false;
+}
+
 bool attribute_entity::is_type(tag_function_bool tag)
 {
   if(entity_type_ == function_bool)
@@ -134,6 +141,13 @@ bool attribute_entity::is_scalar_float()
 bool attribute_entity::is_tensor()
 {
   if(entity_type_ == tensor)
+    return true;
+  return false;
+}
+
+bool attribute_entity::is_string()
+{
+  if(entity_type_ == string)
     return true;
   return false;
 }
@@ -234,6 +248,13 @@ xml_float attribute_entity::evaluate_value_dispatch<xml_float>()
 {
   tag_scalar_float tag_float;
   return this->eval_value(tag_float);
+}
+
+template<>
+xml_string attribute_entity::evaluate_value_dispatch<xml_string>()
+{
+  tag_string tag_string;
+  return this->eval_value(tag_string);
 }
 
 } /* namespace viennamaterials */

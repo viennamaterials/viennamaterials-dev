@@ -112,6 +112,9 @@ public:
    */
   xml_float                             eval_value(tag_scalar_float tag);
 
+  /// @brief Implements a pure virtual method of its base class. This methods throws an exception!
+  xml_string                            eval_value(tag_string tag);
+
 
 private:
   function_backend_handle backend_;

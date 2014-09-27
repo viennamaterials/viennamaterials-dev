@@ -18,7 +18,13 @@
     <attribute>
       <id>bool-scalar</id>
       <scalar type='bool'>true</scalar>
-      <unit></unit>
+      <unit/>
+    </attribute>
+    
+    <attribute>
+      <id>string</id>
+      <string>hello world</string>
+      <unit/>
     </attribute>
     
     <attribute>

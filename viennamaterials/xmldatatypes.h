@@ -24,6 +24,7 @@ namespace viennamaterials
 typedef bool            xml_bool;
 typedef long            xml_int;
 typedef numeric         xml_float;
+typedef std::string     xml_string;
 
 
 
@@ -32,10 +33,12 @@ typedef numeric         xml_float;
 struct tag_xml_attribute_type {};
 
 struct tag_scalar_bool      : tag_xml_attribute_type {};
-struct tag_scalar_int {};
+struct tag_scalar_int       : tag_xml_attribute_type {};
 struct tag_scalar_float     : tag_xml_attribute_type {};
 
 struct tag_tensor           : tag_xml_attribute_type {};
+
+struct tag_string           : tag_xml_attribute_type {};
 
 struct tag_function_bool    : tag_xml_attribute_type {};
 struct tag_function_int     : tag_xml_attribute_type {};
@@ -52,6 +55,7 @@ enum xml_attribute_types
   scalar_int,
   scalar_float,
   tensor,
+  string,
   function_bool,
   function_int,
   function_float,
