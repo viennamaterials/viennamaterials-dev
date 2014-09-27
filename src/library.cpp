@@ -136,41 +136,42 @@ attribute_handle library::query(std::string const& xpath_query_to_attribute)
     attribute_handle entity(new attribute_entity_function(unit, type, backend, dependencies, referenced_arguments));
 
     return entity;
-  }else if(type == scalar_bool || type == scalar_int || type ==  scalar_float)
+  }else if(type == scalar_bool)
   {
     const std::string query_scalar = xpath_query_to_attribute + "/scalar";
-    const std::string type_attribute = "type";
-    if(lib_->query_attribute(query_scalar, type_attribute).compare("bool") == 0)
+
+    std::string value = lib_->query(query_scalar + "/text()");
+    std::transform(value.begin(), value.end(), value.begin(), ::tolower);
+    if(value.compare("true") == 0)
     {
-      std::string value = lib_->query(query_scalar + "/text()");
-      std::transform(value.begin(), value.end(), value.begin(), ::tolower);
-      if(value.compare("true") == 0)
-      {
-        /// Create boolean scalar attribute entity holding value true
-        attribute_handle entity(new attribute_entity_scalar_boolean(true, unit));
-        return entity;
-      }
-      else if(value.compare("false") == 0)
-      {
-        /// Create boolean scalar attribute entity holding value false
-        attribute_handle entity(new attribute_entity_scalar_boolean(false, unit));
-        return entity;
-      }
-      else
-        throw library_error("Invalid boolean value encountered (query: " + query_scalar + ")");
-    }else if(lib_->query_attribute(query_scalar, type_attribute).compare("int") == 0)
-    {
-      /// Create integer scalar attribute entity
-      xml_int value = convert<xml_int>(lib_->query(query_scalar + "/text()"));
-      attribute_handle entity(new attribute_entity_scalar_integer(value, unit));
-      return entity;
-    }else if(lib_->query_attribute(query_scalar, type_attribute).compare("float") == 0)
-    {
-      /// Create floating point scalar attribute entity
-      xml_float value = convert<xml_float>(lib_->query(query_scalar + "/text()"));
-      attribute_handle entity(new attribute_entity_scalar_float(value, unit));
+      /// Create boolean scalar attribute entity holding value true
+      attribute_handle entity(new attribute_entity_scalar_boolean(true, unit));
       return entity;
     }
+    else if(value.compare("false") == 0)
+    {
+      /// Create boolean scalar attribute entity holding value false
+      attribute_handle entity(new attribute_entity_scalar_boolean(false, unit));
+      return entity;
+    }
+    else
+      throw library_error("Invalid boolean value encountered (query: " + query_scalar + ")");
+  }else if(type == scalar_int)
+  {
+    const std::string query_scalar = xpath_query_to_attribute + "/scalar";
+
+    /// Create integer scalar attribute entity
+    xml_int value = convert<xml_int>(lib_->query(query_scalar + "/text()"));
+    attribute_handle entity(new attribute_entity_scalar_integer(value, unit));
+    return entity;
+  }else if(type == scalar_float)
+  {
+    const std::string query_scalar = xpath_query_to_attribute + "/scalar";
+
+    /// Create floating point scalar attribute entity
+    xml_float value = convert<xml_float>(lib_->query(query_scalar + "/text()"));
+    attribute_handle entity(new attribute_entity_scalar_float(value, unit));
+    return entity;
   }else if(type ==  string)
   {
     const std::string query_string = xpath_query_to_attribute + "/string";
