@@ -36,10 +36,15 @@ struct ipd2xml_error : public std::exception
   std::string info;
 };
 
+
+/// @brief precision for stringstream used in converter method
+#define STRINGSTREAM_PRECISION 15
+
 template < typename T >
 std::string converter(T t)
 {
    std::stringstream ss;
+   ss.precision(STRINGSTREAM_PRECISION);
    ss << t;
    return ss.str();
 }
