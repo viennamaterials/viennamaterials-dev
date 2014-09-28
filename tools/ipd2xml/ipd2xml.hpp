@@ -57,6 +57,7 @@ struct xmlwriter
   TiXmlElement* create_scalar(const char* id, const viennamaterials::xml_int& value, const char* unit);
   TiXmlElement* create_scalar(const char* id, const viennamaterials::xml_float& value, const char* unit);
   TiXmlElement* create_tensor(const char* id, const double& tensor_rows, const double& tensor_columns, const double& tensor_order, const double* values, const char* unit);
+  TiXmlElement* create_string(const char* id, const viennamaterials::xml_string& value);
   void add_note(const char* note);
   void open_material_element(const char* id, const char* name, const char* category);
   void close_material_element(); //wrapper for update(), use with care
@@ -90,6 +91,7 @@ struct xmlwriter
   const char* category_tag;
   const char* material_tag;
   const char* name_tag;
+  const char* string_tag;
 
   std::vector< TiXmlElement * > nodecont;
 };

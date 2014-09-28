@@ -88,6 +88,7 @@ xmlwriter::xmlwriter(const char* note)
   category_tag                = "category";
   material_tag                = "material";
   name_tag                    = "name";
+  string_tag                  = "string";
 
   TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );
   doc.LinkEndChild( decl );
@@ -213,6 +214,25 @@ TiXmlElement* xmlwriter::create_tensor(const char* id, const double& tensor_rows
   return attribute_element;
 }
 
+TiXmlElement* xmlwriter::create_string(const char* id, const viennamaterials::xml_string& value)
+{
+  TiXmlElement* attribute_element = new TiXmlElement(attribute_tag);
+
+  TiXmlElement* id_element = new TiXmlElement(id_tag);
+  id_element->LinkEndChild(new TiXmlText(id));
+  attribute_element->LinkEndChild(id_element);
+
+  TiXmlElement* string_element = new TiXmlElement(string_tag);
+  if(value.size() > 0)
+    string_element->LinkEndChild( new TiXmlText(value.c_str()) );
+  attribute_element->LinkEndChild(string_element);
+
+  TiXmlElement* unit_element = new TiXmlElement(unit_tag);
+  attribute_element->LinkEndChild(unit_element);
+
+  return attribute_element;
+}
+
 void xmlwriter::add_note(const char* note)
 {
   TiXmlElement* note_element = new TiXmlElement(note_tag);
@@ -312,7 +332,7 @@ TiXmlElement* ipd_value_to_xml(const char* name, ipdTreeNode_t *tn, xmlwriter& x
 {
   TiXmlElement* attribute_element = 0;
 
-  ipdBoolean ipd_success;
+  ipdBoolean ipd_success = ipdFALSE;
 
   switch (tn->type)
   {
@@ -438,14 +458,19 @@ TiXmlElement* ipd_value_to_xml(const char* name, ipdTreeNode_t *tn, xmlwriter& x
     case ipdSTRING:
     case 2080: // concatenated strings ..
     {
-      /*
-       * Strings are not supported as attributes in the ViennaMaterials XML layout.
-       * Thus, string variables in IPD input files are ignored!
-       */
-#ifdef VERBOSE_MODE
-      std::cout << "INFO: IPD string variable ignored (" << name << ")" << std::endl;
-#endif
-      attribute_element = 0;
+      ipdChar* string = 0;
+      ipd_success = ipdGetStringByName(name, &string);
+      if(ipd_success == ipdFALSE)
+      {
+        std::string name_str(name);
+        throw ipd2xml_error("Error while accessing string value(" + name_str + ")");
+      }
+
+      //for an empty string in IPD file, ipdGetStringByName returns a zero pointer
+      viennamaterials::xml_string value = "";
+      if(string != 0)
+        value = string;
+      attribute_element = xmldoc.create_string(name, value);
       break;
     }
 
