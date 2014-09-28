@@ -49,8 +49,9 @@ std::string converter(T t)
 //
 
 //TODO doxygen
-struct xmlwriter
+class xmlwriter
 {
+public:
   xmlwriter(const char* note);
   void add_element(TiXmlElement* element);
   TiXmlElement* create_scalar(const char* id, const viennamaterials::xml_bool& value, const char* unit);
@@ -68,7 +69,10 @@ struct xmlwriter
   void print(const char* filename);
   void print_to_console(void);
 
+private:
+  TiXmlElement* create_unit(const char* unit);
 
+private:
   TiXmlDocument doc;
 
   TiXmlElement * currentnode;

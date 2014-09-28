@@ -125,9 +125,7 @@ TiXmlElement* xmlwriter::create_scalar(const char* id, const viennamaterials::xm
     scalar_element->LinkEndChild(new TiXmlText("false"));
   attribute_element->LinkEndChild(scalar_element);
 
-  TiXmlElement* unit_element = new TiXmlElement(unit_tag);
-  unit_element->LinkEndChild(new TiXmlText(unit));
-  attribute_element->LinkEndChild(unit_element);
+  attribute_element->LinkEndChild(this->create_unit(unit));
 
   return attribute_element;
 }
@@ -145,9 +143,7 @@ TiXmlElement* xmlwriter::create_scalar(const char* id, const viennamaterials::xm
   scalar_element->LinkEndChild( new TiXmlText(converter(value).c_str()) );
   attribute_element->LinkEndChild(scalar_element);
 
-  TiXmlElement* unit_element = new TiXmlElement(unit_tag);
-  unit_element->LinkEndChild(new TiXmlText(unit));
-  attribute_element->LinkEndChild(unit_element);
+  attribute_element->LinkEndChild(this->create_unit(unit));
 
   return attribute_element;
 }
@@ -165,9 +161,7 @@ TiXmlElement* xmlwriter::create_scalar(const char* id, const viennamaterials::xm
   scalar_element->LinkEndChild( new TiXmlText(converter(value).c_str()) );
   attribute_element->LinkEndChild(scalar_element);
 
-  TiXmlElement* unit_element = new TiXmlElement(unit_tag);
-  unit_element->LinkEndChild(new TiXmlText(unit));
-  attribute_element->LinkEndChild(unit_element);
+  attribute_element->LinkEndChild(this->create_unit(unit));
 
   return attribute_element;
 }
@@ -187,9 +181,7 @@ TiXmlElement* xmlwriter::create_tensor(const char* id, const double& tensor_rows
   tensor_element->SetAttribute(type_attribute_tag, type_floating);
   attribute_element->LinkEndChild(tensor_element);
 
-  TiXmlElement* unit_element = new TiXmlElement(unit_tag);
-  unit_element->LinkEndChild(new TiXmlText(unit));
-  attribute_element->LinkEndChild(unit_element);
+  attribute_element->LinkEndChild(this->create_unit(unit));
 
   long row, column, order;
   long value_item = 0;
@@ -227,8 +219,7 @@ TiXmlElement* xmlwriter::create_string(const char* id, const viennamaterials::xm
     string_element->LinkEndChild( new TiXmlText(value.c_str()) );
   attribute_element->LinkEndChild(string_element);
 
-  TiXmlElement* unit_element = new TiXmlElement(unit_tag);
-  attribute_element->LinkEndChild(unit_element);
+  attribute_element->LinkEndChild(this->create_unit(""));
 
   return attribute_element;
 }
@@ -323,6 +314,14 @@ void xmlwriter::print_to_console(void)
   printer.SetIndent("  ");
   doc.Accept(&printer);
   std::cout << printer.CStr() << std::endl;
+}
+
+TiXmlElement* xmlwriter::create_unit(const char* unit)
+{
+  TiXmlElement* unit_element = new TiXmlElement(unit_tag);
+  if(strlen(unit) > 0)
+    unit_element->LinkEndChild(new TiXmlText(unit));
+  return unit_element;
 }
 //
 // ----------------------------------------------------------
