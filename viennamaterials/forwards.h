@@ -25,10 +25,12 @@ namespace viennamaterials {
 
 typedef double                                                numeric;
 
+class library;
 class backend;
 class proxy;
 class attribute_entity;
 
+typedef viennamaterials::shared_ptr<viennamaterials::library>           library_handle;
 typedef viennamaterials::shared_ptr<viennamaterials::backend>           backend_handle;
 typedef viennamaterials::shared_ptr<viennamaterials::proxy>             proxy_handle;
 typedef viennamaterials::shared_ptr<viennamaterials::attribute_entity>  attribute_handle;
