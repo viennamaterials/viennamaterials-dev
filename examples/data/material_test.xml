@@ -231,43 +231,62 @@
     <name>Germanium</name>
     <category>semiconductor</category>
     <category>indirect</category>
-    <parameters>
-      <attribute>
-        <id>bandgap</id>
-        <scalar type='float'>0.67</scalar>
-        <unit>eV</unit>
-      </attribute>
-      <attribute>
-        <id>intrinsic_carrier_concentration</id>
-        <scalar type='float'>2.4E13</scalar>
-        <unit>1/cm3</unit>
-      </attribute>
-      <attribute>
-        <id>relative_permittivity</id>
-        <scalar type='float'>16</scalar>
-        <unit></unit>
-      </attribute>
-      <attribute>
-        <id>mu_n_0</id>
-        <scalar type='float'>0.3800</scalar>
-        <unit>cm^2/V*s</unit>
-      </attribute>
-      <attribute>
-        <id>mu_p_0</id>
-        <scalar type='float'>0.1800</scalar>
-        <unit>cm^2/V*s</unit>
-      </attribute>
-      <attribute>
-        <id>alpha_n</id>
-        <scalar type='float'>1.66</scalar>
-        <unit>1</unit>
-      </attribute>
-      <attribute>
-        <id>alpha_p</id>
-        <scalar type='float'>2.33</scalar>
-        <unit>1</unit>
-      </attribute>
-    </parameters>
+    <attribute>
+      <id>bandgap</id>
+      <scalar type='float'>0.67</scalar>
+      <unit>eV</unit>
+    </attribute>
+    <attribute>
+      <id>intrinsic_carrier_concentration</id>
+      <scalar type='float'>2.4E13</scalar>
+      <unit>1/cm3</unit>
+    </attribute>
+    <attribute>
+      <id>relative_permittivity</id>
+      <scalar type='float'>16</scalar>
+      <unit></unit>
+    </attribute>
+    <attribute>
+      <id>mu_L_n</id>
+      <name>lattice mobility electrons</name>
+      <function>
+        <code lang='python' call='add'>
+          def add(T):
+            return 0.38 * (T/300.0) ** (-1.66)
+        </code>
+        <arg>
+          <id>0</id>
+          <quantity>T</quantity>
+          <note>temperature</note>
+          <scalar type='float'>300.0</scalar>
+        </arg>
+        <return>
+          <scalar type='float'/>
+        </return>
+      </function>
+      <unit>m2/Vs</unit>
+    </attribute>
+    <attribute>
+      <id>mu_n_0</id>
+      <scalar type='float'>0.3800</scalar>
+      <unit>cm^2/V*s</unit>
+    </attribute>
+    <attribute>
+      <id>mu_p_0</id>
+      <scalar type='float'>0.1800</scalar>
+      <unit>cm^2/V*s</unit>
+    </attribute>
+    <attribute>
+      <id>alpha_n</id>
+      <scalar type='float'>1.66</scalar>
+      <unit>1</unit>
+    </attribute>
+    <attribute>
+      <id>alpha_p</id>
+      <scalar type='float'>2.33</scalar>
+      <unit>1</unit>
+    </attribute>
+
   <!--    <source>http://www.matweb.com/search/DataSheet.aspx?MatGUID=a03ca6b2d6ae431aa5a7e71a129f9a4a</source>-->
   </material>
   <material>
