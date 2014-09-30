@@ -2,25 +2,25 @@
   <material>
     <id>test-material</id>
     <category>testing</category>
-    
+
     <attribute>
       <id>float-scalar</id>
       <scalar type='float'>9.9</scalar>
       <unit>W</unit>
     </attribute>
-    
+
     <attribute>
       <id>int-scalar</id>
       <scalar type='int'>22</scalar>
       <unit>V</unit>
     </attribute>
-    
+
     <attribute>
       <id>bool-scalar</id>
       <scalar type='bool'>true</scalar>
       <unit></unit>
     </attribute>
-    
+
     <attribute>
       <id>float-function-multiply</id>
       <function>
@@ -44,7 +44,7 @@
       </function>
       <unit>A</unit>
     </attribute>
-    
+
     <attribute>
       <id>int-function-add</id>
       <function>
@@ -63,7 +63,7 @@
       </function>
       <unit>A</unit>
     </attribute>
-    
+
     <attribute>
       <id>float-function-references</id>
       <function>
@@ -106,7 +106,7 @@
       </function>
       <unit>A</unit>
     </attribute>
-    
+
     <attribute>
       <id>bool-function-without-args</id>
       <function>
@@ -120,15 +120,15 @@
       </function>
       <unit>A</unit>
     </attribute>
-    
+
   </material>
-  
+
   <material>
     <id>Si</id>
     <name>Silicon</name>
     <category>semiconductor</category>
     <category>indirect</category>
-  
+
     <!--General material parameters-->
     <attribute>
       <id>bandgap</id>
@@ -145,51 +145,86 @@
       <scalar type='float'>11.8</scalar>
       <unit></unit>
     </attribute>
-  
+
+    <attribute>
+      <id>mu_L_n</id>
+      <name>lattice mobility electrons</name>
+      <function>
+        <code lang='python' call='add'>
+          def add(T):
+            return 0.1430 * (T/300.0) ** (-2.33)
+        </code>
+        <arg>
+          <id>0</id>
+          <quantity>T</quantity>
+          <note>temperature</note>
+          <scalar type='float'>300.0</scalar>
+        </arg>
+        <return>
+          <scalar type='float'/>
+        </return>
+      </function>
+      <unit>m2/Vs</unit>
+    </attribute>
+
     <!--Model-specific parameters-->
-    <group>
-      <id>DriftDiffusion</id>
-      <!--General model parameters-->
-      <attribute>
-        <id>some_dd_parameter</id>
-        <scalar type='float'>some_value</scalar>
-        <unit>some_unit</unit>
-      </attribute>
-      <group>
-        <!--Embedded model-specific parameters-->
-        <id>SRH</id>
-        <category>recombination</category>
-        <attribute>
-          <id>para_srh</id>
-          <scalar type='float'>4.0</scalar>
-          <unit>cm</unit>
-        </attribute>
-      </group>
-      <group>
-        <id>Lattice</id>
-        <category>scattering</category>
-        <attribute>
-          <id>some_srh_parameter</id>
-          <scalar type='float'>some_value</scalar>
-          <unit>some_unit</unit>
-        </attribute>
-      </group>
-      <group>
-        <id>IoniziedImpurities</id>
-        <category>scattering</category>
-        <attribute>
-          <id>some_srh_parameter</id>
-          <scalar type='float'>some_value</scalar>
-          <unit>some_unit</unit>
-        </attribute>
-      </group>
-    </group>
-    <group>
-      <id>HydroDynamic</id>
-    </group>
-    <group>
-      <id>SphericalHarmonics</id>
-    </group>
+<!--    <group>-->
+<!--      <id>DriftDiffusion</id>-->
+<!--      <!--General model parameters-->-->
+<!--      <attribute>-->
+<!--        <id>some_dd_parameter</id>-->
+<!--        <scalar type='float'>some_value</scalar>-->
+<!--        <unit>some_unit</unit>-->
+<!--      </attribute>-->
+<!--      <group>-->
+<!--        <!--Embedded model-specific parameters-->-->
+<!--        <id>SRH</id>-->
+<!--        <category>recombination</category>-->
+<!--        <attribute>-->
+<!--          <id>para_srh</id>-->
+<!--          <scalar type='float'>4.0</scalar>-->
+<!--          <unit>cm</unit>-->
+<!--        </attribute>-->
+<!--      </group>-->
+<!--      <group>-->
+<!--        <id>mu_L</id>-->
+<!--        <name>lattice mobility</name>-->
+<!--        <category>scattering</category>-->
+<!--        <attribute>-->
+<!--          <id>some_srh_parameter</id>-->
+<!--          <function>-->
+<!--            <code lang='python' call='add'>-->
+<!--              def add(x):-->
+<!--                return x+1000-->
+<!--            </code>-->
+<!--            <arg>-->
+<!--              <id>0</id>-->
+<!--              <quantity>factor</quantity>-->
+<!--              <scalar type='int'>2</scalar>-->
+<!--            </arg>-->
+<!--            <return>-->
+<!--              <scalar type='int'/>-->
+<!--            </return>-->
+<!--          </function>-->
+<!--          <unit>some_unit</unit>-->
+<!--        </attribute>-->
+<!--      </group>-->
+<!--      <group>-->
+<!--        <id>IoniziedImpurities</id>-->
+<!--        <category>scattering</category>-->
+<!--        <attribute>-->
+<!--          <id>some_srh_parameter</id>-->
+<!--          <scalar type='float'>some_value</scalar>-->
+<!--          <unit>some_unit</unit>-->
+<!--        </attribute>-->
+<!--      </group>-->
+<!--    </group>-->
+<!--    <group>-->
+<!--      <id>HydroDynamic</id>-->
+<!--    </group>-->
+<!--    <group>-->
+<!--      <id>SphericalHarmonics</id>-->
+<!--    </group>-->
   </material>
   <material>
     <id>Ge</id>

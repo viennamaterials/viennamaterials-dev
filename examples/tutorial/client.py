@@ -13,11 +13,12 @@ except socket.error, msg:
   print "[Client][Error] server is not reachable:",host,":",port
   sys.exit(-1)
 
-query='/*/*[id=\'test-material\']/*[id=\'bool-scalar\']'
+query='/*/*[id=\'Si\']/*[id=\'mu_L_n\']'
 
 mySocket.sendall(query)
 
 result = mySocket.recv(buffersize)
-print "[Client] received answer:", result
+print "[Client] received answer:"
+print result
 
 #attribute = generate_attribute(result)

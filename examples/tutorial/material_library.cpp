@@ -13,6 +13,7 @@
 // ViennaMaterials includes
 //
 #include "viennamaterials/library.hpp"
+#include "viennamaterials/generate_attribute.hpp"
 
 int main(int argc, char * argv[])
 {
@@ -109,6 +110,22 @@ int main(int argc, char * argv[])
 
     std::vector<viennamaterials::xml_value_entity_handle> func_args = attribute_4->get_dependencies();
     std::cout << "number of dependencies: " << func_args.size() << std::endl;
+  }
+
+
+  query = "/*/*[id=\'Si\']/*[id=\'mu_L_n\']";
+  std::string string_result = matlib.query_to_string(query);
+  std::cout << string_result << std::endl;
+  attribute = viennamaterials::generate_attribute(string_result);
+  if(attribute->is_function_float())
+  {
+    std::cout << "attribute is function float!" << std::endl;
+    std::cout << "default function result: " << attribute->evaluate_value<double>() << " " << attribute->get_unit() << std::endl;
+
+    std::vector<viennamaterials::xml_value_entity_handle> func_args = attribute->get_dependencies();
+    func_args[0]->set_value(400.);
+    attribute->set_dependencies(func_args);
+    std::cout << "function result for 400K: " << attribute->evaluate_value<double>() << " " << attribute->get_unit() << std::endl;
   }
 
 #endif

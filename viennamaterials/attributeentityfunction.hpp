@@ -19,7 +19,7 @@
 namespace viennamaterials
 {
 
-typedef shared_ptr<function_backend> function_backend_handle;
+
 
 /**
  * @brief Represents an attribute entity used as argument for a function attribute entity.
