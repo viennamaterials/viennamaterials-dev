@@ -1,5 +1,6 @@
 import sys
 import socket
+import pyviennamaterials
 
 mySocket = socket.socket ( socket.AF_INET, socket.SOCK_STREAM )
 
@@ -18,7 +19,13 @@ query='/*/*[id=\'Si\']/*[id=\'mu_L_n\']'
 mySocket.sendall(query)
 
 result = mySocket.recv(buffersize)
-print "[Client] received answer:"
+print "[Client] received string-based answer:"
 print result
 
-#attribute = generate_attribute(result)
+print "Converting to attribute .."
+attribute = pyviennamaterials.generate_attribute(result)
+print "float function value: " , attribute.evaluate_value_float()
+func_args = attribute.get_dependencies()
+func_args[0].set_value(400.)
+attribute.set_dependencies(func_args)
+print "float function value new: " , attribute.evaluate_value_float()

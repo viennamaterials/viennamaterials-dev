@@ -24,6 +24,7 @@
   #include "viennamaterials/xmldatatypes.h"
   #include "viennamaterials/xmlvalueentity.hpp"
   #include "viennamaterials/xmlvaluescalar.hpp"
+  #include "viennamaterials/generate_attribute.hpp"
   #include "viennamaterials/proxy/viennastar.hpp"
   #include "viennamaterials/utils/convert.hpp"
   #include "viennamaterials/utils/file_extension.hpp"
@@ -39,8 +40,8 @@
 %include "viennamaterials/library.hpp"
 %include "viennamaterials/utils/shared_ptr.hpp"
 %include "viennamaterials/quantity.hpp"
-
 %include "viennamaterials/xmldatatypes.h"
+%include "viennamaterials/generate_attribute.hpp"
 %include "viennamaterials/xmlvalueentity.hpp"
 %include "viennamaterials/xmlvaluescalar.hpp"
 %include "viennamaterials/attributeentity.hpp"
