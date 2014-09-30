@@ -59,10 +59,9 @@ public:
   xml_float eval(tag_scalar_float tag,  std::vector<xml_value_entity_handle>& args);
 
 private:
-  PyObject  *function_ptr_; /// Pointer to function in python module object
-  PyObject  *global_ptr_;
-  PyObject  *local_ptr_;
-  PyObject  *module_ptr_;
+  PyObject* function_ptr_; /// Pointer to function in python module object
+  PyObject* module_ptr_;
+  PyObject* code_ptr_;
 
   /**
    * @brief Executes the function specified during initialization
