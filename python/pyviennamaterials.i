@@ -16,7 +16,6 @@
   #include "viennamaterials/exceptions.hpp"
   #include "viennamaterials/functionbackend.hpp"
   #include "viennamaterials/functionbackendpython.hpp"
-  #include "viennamaterials/generator.hpp"
   #include "viennamaterials/library.hpp"
   #include "viennamaterials/proxy.hpp"
   #include "viennamaterials/pugixml.hpp"

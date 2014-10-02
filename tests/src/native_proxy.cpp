@@ -13,7 +13,6 @@
 // ViennaMaterials includes
 //
 #include "viennamaterials/forwards.h"
-#include "viennamaterials/generator.hpp"
 #include "viennamaterials/pugixml.hpp"
 #include "viennamaterials/proxy/viennastar.hpp"
 
@@ -23,8 +22,8 @@ int main(int argc, char * argv[])
   /** A string-path to a test material xml file **/
   std::string filename("../../examples/data/material_test.xml");
 
-  /** Import the file and create a material library object **/
-  viennamaterials::backend_handle matlib = viennamaterials::generator(filename);
+  /** Import the file and create a material backend object **/
+  viennamaterials::backend_handle matlib(new viennamaterials::pugixml(filename));
 
   /** Create the 'viennastar' proxy object, which although simplifies the acces
       expects the input xml file to offer a specific structure **/

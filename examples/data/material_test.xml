@@ -127,6 +127,26 @@
       <unit>A</unit>
     </attribute>
     
+    <attribute>
+      <id>float-function-py-import</id>
+      <function>
+        <code lang='python' call='func'>
+import math
+def func(T):
+  return 3.0 * math.exp(T)
+        </code>
+        <arg>
+          <id>0</id>
+          <quantity>T-value</quantity>
+          <scalar type='float'>1</scalar>
+        </arg>
+        <return>
+          <scalar type='float'/>
+        </return>
+      </function>
+      <unit>A</unit>
+    </attribute>
+    
   </material>
   
   <material>

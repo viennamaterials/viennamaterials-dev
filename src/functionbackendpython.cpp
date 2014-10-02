@@ -23,17 +23,9 @@ void function_backend_python::init(std::string const& code, std::string const& f
   /// Initialize the Python Interpreter
   Py_Initialize();
 
-  global_ptr_ = PyDict_New();
-
-  /// Create a new module object
-  module_ptr_ = PyModule_New("mymod");
-  PyModule_AddStringConstant(module_ptr_, "__file__", "");
-
-  /// Get the dictionary object from my module so it can be passed to PyRun_String
-  local_ptr_ = PyModule_GetDict(module_ptr_);
-
-  /// Define the function in the newly created module
-  PyRun_String(code.c_str(), Py_file_input, global_ptr_, local_ptr_);
+  char module_name[] = "module_name";
+  code_ptr_ = Py_CompileString(code.c_str(), module_name, Py_file_input);
+  module_ptr_ = PyImport_ExecCodeModule(module_name, code_ptr_);
 
   /// Get a pointer to the function
   function_ptr_ = PyObject_GetAttrString(module_ptr_, function_name.c_str());
@@ -42,9 +34,8 @@ void function_backend_python::init(std::string const& code, std::string const& f
 function_backend_python::~function_backend_python()
 {
   Py_XDECREF(function_ptr_);
-  Py_DECREF(global_ptr_);
-  Py_DECREF(local_ptr_);
   Py_DECREF(module_ptr_);
+  Py_DECREF(code_ptr_);
 
   /// Finish the Python Interpreter
   Py_Finalize();

@@ -41,8 +41,7 @@ int main(int argc, char * argv[])
   /** You can also directly use ViennaMaterials quantity objects **/
   viennamaterials::quantity<viennamaterials::numeric> quan(1.0, "V");
   std::cout << "converting quantity: " << quan << " --> ";
-  units_converter.convert(quan, "mV");
-  std::cout << quan << std::endl;
+  std::cout << units_converter.convert(quan, "mV") << std::endl;
 
   return 0;
 }
