@@ -1,6 +1,3 @@
-#ifndef VIENNAMATERIALS_GENERATOR_HPP
-#define VIENNAMATERIALS_GENERATOR_HPP
-
 /* =============================================================================
    Copyright (c) 2013-2014, Institute for Microelectronics, TU Wien
    http://www.iue.tuwien.ac.at/
@@ -8,19 +5,20 @@
             ViennaMaterials - The Vienna Materials Library
                              -----------------
 
-   authors:    Josef Weinbub                      weinbub@iue.tuwien.ac.at
+   authors:    matthias
 
    license:    see file LICENSE in the base directory
 ============================================================================= */
 
-// ViennaMaterials includes
-//
-#include "viennamaterials/backend.hpp"
+#ifndef LIBRARYINTERFACE_HPP_
+#define LIBRARYINTERFACE_HPP_
 
-namespace viennamaterials {
+#include "viennamaterials/attributeentity.hpp"
 
-viennamaterials::backend_handle generator(std::string const& filename);
+namespace viennamaterials
+{
 
-} // viennamaterials
 
-#endif
+
+} /* namespace viennamaterials */
+#endif /* LIBRARYINTERFACE_HPP_ */

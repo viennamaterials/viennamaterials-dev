@@ -17,38 +17,51 @@
 //#include "viennamaterials/platform.hpp"
 #include "viennamaterials/forwards.h"
 #include "viennamaterials/attributeentity.hpp"
-#include "viennamaterials/xmldatatypes.h"
 
 namespace viennamaterials
 {
 
+/**
+ * @brief Interface class for specialized library classes
+ */
+class library_interface
+{
+public:
+  virtual ~library_interface() {};
+
+  /**
+   * @brief Loads all relevant data from backend and returns a attribute entity handle representing the attribute pointed by the query.
+   * @param query_to_attribute The query given as string pointing to a attribute element
+   * @return A smartpointer pointing to an attribute_entity object
+   */
+  virtual attribute_handle query(std::string const& query_to_attribute) = 0;
+
+protected:
+  backend_handle backend_;
+};
+
+/**
+ * @brief Class library provides a high level query function to access material data
+ */
 class library
 {
 public:
   /**
-   * @brief Initiates a broker object by loading a material library object
-   * @param filename A string holding the filename of the material library XML file
+   * @brief Initiates a library object by loading a material frontend. Frontend is chosen by filename extension.
+   * @param filename A string referencing the input file
    */
   library(std::string const& filename);
 
   /**
-   * @brief Loads all relevant data from xml backend and returns a attribute entity handle representing the attribute pointed by the query.
-   * @param xpath_query_to_attribute The XPath query given as string pointing to a attribute XML element
+   * @brief Loads all relevant data from backend and returns a attribute entity handle representing the attribute pointed by the query.
+   * @param query_to_attribute The query given as string pointing to a attribute element
    * @return A smartpointer pointing to an attribute_entity object
    */
-  attribute_handle query(std::string const& xpath_query_to_attribute);
+  attribute_handle query(std::string const& query_to_attribute);
 
 private:
-  backend_handle lib_;
-
-private:
-  /**
-   * @brief Evaluates the type of the attribute pointed by the query
-   * @param xpath_query_to_attribute The XPath query given as string pointing to a attribute XML element
-   * @return The enum xml_attribute_type representation of the attribute
-   */
-  xml_attribute_type get_attribute_type(std::string const& xpath_query_to_attribute);
+  shared_ptr<library_interface> frontend_;
 };
 
 } /* namespace viennamaterials */
-#endif /* BROKER_HPP_ */
+#endif /* LIBRARY_HPP_ */
