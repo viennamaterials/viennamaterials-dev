@@ -97,6 +97,15 @@ int main(int argc, char * argv[])
     std::cout << "bool function without args:  " << attribute_3->evaluate_value<bool>() << std::endl;
   }
 
+  /** Load function with float return type from material library **/
+  query = "/*/*[id='test-material']/*[id='float-function-py-import']";
+  viennamaterials::attribute_handle attribute_5 = matlib.query(query);
+  if(attribute_5->is_function_float())
+  {
+    /// Using default values of function arguments
+    std::cout << "py-import function (defaults):  " << attribute_5->evaluate_value<double>() << std::endl;
+  }
+
   std::cout << "#####" << std::endl;
 
   /** Load function with references from material library **/
