@@ -15,6 +15,7 @@
 #include "viennamaterials/xmlvaluescalar.hpp"
 #include "viennamaterials/utils/convert.hpp"
 #include "viennamaterials/attributeentityscalar.hpp"
+#include "viennamaterials/attributeentitystring.hpp"
 #include "viennamaterials/attributeentityfunction.hpp"
 #include "viennamaterials/utils/file_extension.hpp"
 #include "viennamaterials/pugixml.hpp"
@@ -138,41 +139,50 @@ attribute_handle library_xpath::query(std::string const& xpath_query_to_attribut
     attribute_handle entity(new attribute_entity_function(unit, type, backend, dependencies, referenced_arguments));
 
     return entity;
-  }else if(type == scalar_bool || type == scalar_int || type ==  scalar_float)
+  }else if(type == scalar_bool)
   {
-    std::string query_scalar = xpath_query_to_attribute + "/scalar";
-    const std::string type_attribute = "type";
-    if(backend_->query_attribute(query_scalar, type_attribute).compare("bool") == 0)
+    const std::string query_scalar = xpath_query_to_attribute + "/scalar";
+
+    std::string value = backend_->query(query_scalar + "/text()");
+    std::transform(value.begin(), value.end(), value.begin(), ::tolower);
+    if(value.compare("true") == 0)
     {
-      std::string value = backend_->query(query_scalar + "/text()");
-      std::transform(value.begin(), value.end(), value.begin(), ::tolower);
-      if(value.compare("true") == 0)
-      {
-        /// Create boolean scalar attribute entity holding value true
-        attribute_handle entity(new attribute_entity_scalar_boolean(true, unit));
-        return entity;
-      }
-      else if(value.compare("false") == 0)
-      {
-        /// Create boolean scalar attribute entity holding value false
-        attribute_handle entity(new attribute_entity_scalar_boolean(false, unit));
-        return entity;
-      }
-      else
-        throw library_error("Invalid boolean value encountered (query: " + query_scalar + ")");
-    }else if(backend_->query_attribute(query_scalar, type_attribute).compare("int") == 0)
-    {
-      /// Create integer scalar attribute entity
-      xml_int value = convert<xml_int>(backend_->query(query_scalar + "/text()"));
-      attribute_handle entity(new attribute_entity_scalar_integer(value, unit));
-      return entity;
-    }else if(backend_->query_attribute(query_scalar, type_attribute).compare("float") == 0)
-    {
-      /// Create floating point scalar attribute entity
-      xml_float value = convert<xml_float>(backend_->query(query_scalar + "/text()"));
-      attribute_handle entity(new attribute_entity_scalar_float(value, unit));
+      /// Create boolean scalar attribute entity holding value true
+      attribute_handle entity(new attribute_entity_scalar_boolean(true, unit));
       return entity;
     }
+    else if(value.compare("false") == 0)
+    {
+      /// Create boolean scalar attribute entity holding value false
+      attribute_handle entity(new attribute_entity_scalar_boolean(false, unit));
+      return entity;
+    }
+    else
+      throw library_error("Invalid boolean value encountered (query: " + query_scalar + ")");
+  }else if(type == scalar_int)
+  {
+    const std::string query_scalar = xpath_query_to_attribute + "/scalar";
+
+    /// Create integer scalar attribute entity
+    xml_int value = convert<xml_int>(backend_->query(query_scalar + "/text()"));
+    attribute_handle entity(new attribute_entity_scalar_integer(value, unit));
+    return entity;
+  }else if(type == scalar_float)
+  {
+    const std::string query_scalar = xpath_query_to_attribute + "/scalar";
+
+    /// Create floating point scalar attribute entity
+    xml_float value = convert<xml_float>(backend_->query(query_scalar + "/text()"));
+    attribute_handle entity(new attribute_entity_scalar_float(value, unit));
+    return entity;
+  }else if(type ==  string)
+  {
+    const std::string query_string = xpath_query_to_attribute + "/string";
+
+    /// Create string attribute entity
+    const xml_string value = backend_->query_xpath_string(query_string + "/text()");
+    attribute_handle entity(new attribute_entity_string(value, unit));
+    return entity;
   }
 
   //TODO tensor
@@ -184,12 +194,12 @@ xml_attribute_type library_xpath::get_attribute_type(std::string const& xpath_qu
 {
   /**
    * Precedence of attribute types:
-   *  Function is prefered over scalar or tensor.
-   *  Tensor is prefered over scalar.
-   *  First function element is prefered if two or more functions are defined.
+   *  Function is preferred over scalar or tensor.
+   *  Tensor is preferred over scalar.
+   *  First function element is preferred if two or more functions are defined.
    */
 
-  std::string type_attribute = "type";
+  const std::string type_attribute = "type";
 
   if(backend_->query_number_of_elements(xpath_query_to_attribute + "/function") > 0)
   {
@@ -226,6 +236,10 @@ xml_attribute_type library_xpath::get_attribute_type(std::string const& xpath_qu
       return scalar_float;
 
     throw library_error("No valid type for scalar attribute found (query: " + query + ")");
+
+  }else if(backend_->query_number_of_elements(xpath_query_to_attribute + "/string") > 0)
+  {
+    return string;
   }
 
   throw library_error("No valid attribute type found (query: " + xpath_query_to_attribute + ")");
