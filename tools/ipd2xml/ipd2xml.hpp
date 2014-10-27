@@ -54,6 +54,24 @@ std::string converter(T t)
 //
 
 //TODO doxygen
+class statistic_data
+{
+public:
+  statistic_data();
+  void increment_attribute_number_ipd();
+  long get_number_of_attributes_ipd();
+  void increment_attribute_number_xml();
+  long get_number_of_attributes_xml();
+  void increment_invalid_node_number();
+  long get_number_of_invalid_nodes();
+
+private:
+  long number_of_attributes_ipd;
+  long number_of_attributes_xml;
+  long invalid_ipd_nodes;
+};
+
+//TODO doxygen
 class xmlwriter
 {
 public:
@@ -78,64 +96,77 @@ private:
   TiXmlElement* create_unit(const char* unit);
 
 private:
-  TiXmlDocument doc;
+  TiXmlDocument doc_;
 
-  TiXmlElement * currentnode;
+  TiXmlElement * currentnode_;
 
-  const char* root_tag;
-  const char* id_tag;
-  const char* group_tag;
-  const char* attribute_tag;
-  const char* scalar_tag;
-  const char* type_attribute_tag;
-  const char* type_boolean;
-  const char* type_integer;
-  const char* type_floating;
-  const char* tensor_tag;
-  const char* tensor_row_attribute_tag;
-  const char* tensor_column_attribute_tag;
-  const char* tensor_order_attribute_tag;
-  const char* unit_tag;
-  const char* note_tag;
-  const char* category_tag;
-  const char* material_tag;
-  const char* name_tag;
-  const char* string_tag;
+  const char* root_tag_;
+  const char* id_tag_;
+  const char* group_tag_;
+  const char* attribute_tag_;
+  const char* scalar_tag_;
+  const char* type_attribute_tag_;
+  const char* type_boolean_;
+  const char* type_integer_;
+  const char* type_floating_;
+  const char* tensor_tag_;
+  const char* tensor_row_attribute_tag_;
+  const char* tensor_column_attribute_tag_;
+  const char* tensor_order_attribute_tag_;
+  const char* unit_tag_;
+  const char* note_tag_;
+  const char* category_tag_;
+  const char* material_tag_;
+  const char* name_tag_;
+  const char* string_tag_;
 
-  std::vector< TiXmlElement * > nodecont;
+  std::vector< TiXmlElement * > nodecont_;
 };
 
-/*
- * @brief This method traverses the IPD layout to locate a materials
- * @param iNode IPD iterator pointing to the root of the IPD input file
- * @param xmldoc xmlwriter object used for XML output
- */
-void traverse_ipd_layout(ipdIterator_t * iNode, xmlwriter& xmldoc);
 
-/*
- * @brief This method adds a new material to XML and subsequently traverses the IPD structure for attributes.
- * @param iNode An IPD iterator pointing to a material
- * @param xmldoc xmlwriter object used for XML output
- */
-void access_ipd_material(ipdIterator_t * iNode, xmlwriter& xmldoc);
+//TODO doxygen
+class ipd_importer
+{
 
-/*
- * @brief This method traverses the IPD structure.
- * If a variable is encountered it is passed to the xmlwriter.
- * If a section is encountered the method calls itself.
- * @param iNode IPD iterator which should be traversed
- * @param xmldoc xmlwriter object used for XML output
- */
-void recursive_traverse(ipdIterator_t * iNode, xmlwriter& xmldoc);
+public:
+  ipd_importer(statistic_data* statistics);
 
-/*
- * @brief This method performs the transformation from IPD data structure to ViennaMaterials XML data layout
- * @param name The name of the value to be accessed
- * @param tn IPD tree node structure containing the evaluated value
- * @param xmldoc xmlwriter object used for XML output
- * @return XML element object containing the value in the ViennaMaterials XML layout
- */
-TiXmlElement* ipd_value_to_xml(const char* name, ipdTreeNode_t *tn, xmlwriter& xmldoc);
+  /*
+   * @brief This method traverses the IPD layout to locate a materials
+   * @param iNode IPD iterator pointing to the root of the IPD input file
+   * @param xmldoc xmlwriter object used for XML output
+   */
+  void traverse_ipd_layout(ipdIterator_t * iNode, xmlwriter& xmldoc);
+
+  /*
+   * @brief This method adds a new material to XML and subsequently traverses the IPD structure for attributes.
+   * @param iNode An IPD iterator pointing to a material
+   * @param xmldoc xmlwriter object used for XML output
+   */
+  void access_ipd_material(ipdIterator_t * iNode, xmlwriter& xmldoc);
+
+  /*
+   * @brief This method traverses the IPD structure.
+   * If a variable is encountered it is passed to the xmlwriter.
+   * If a section is encountered the method calls itself.
+   * @param iNode IPD iterator which should be traversed
+   * @param xmldoc xmlwriter object used for XML output
+   */
+  void recursive_traverse(ipdIterator_t * iNode, xmlwriter& xmldoc);
+
+  /*
+   * @brief This method performs the transformation from IPD data structure to ViennaMaterials XML data layout
+   * @param name The name of the value to be accessed
+   * @param tn IPD tree node structure containing the evaluated value
+   * @param xmldoc xmlwriter object used for XML output
+   * @return XML element object containing the value in the ViennaMaterials XML layout
+   */
+  TiXmlElement* ipd_value_to_xml(const char* name, ipdTreeNode_t *tn, xmlwriter& xmldoc);
+
+private:
+  statistic_data* statistics_;
+
+};
 
 
 #endif /* IPD2XML_HPP_ */
