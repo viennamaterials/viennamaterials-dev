@@ -23,6 +23,10 @@
 
 #define VERBOSE_MODE
 
+
+const std::string ipd_item_name("materials"); //using 'materials' IPD item as 'name' for XML material
+const std::string ipd_item_category("class"); //using 'class' IPD item as 'category' for XML material
+
 struct ipd2xml_error : public std::exception
 {
   ipd2xml_error(std::string const& info) : info(info) {}
@@ -138,6 +142,7 @@ public:
    */
   void traverse_ipd_layout(ipdIterator_t * iNode, xmlwriter& xmldoc);
 
+private:
   /*
    * @brief This method adds a new material to XML and subsequently traverses the IPD structure for attributes.
    * @param iNode An IPD iterator pointing to a material
@@ -162,6 +167,9 @@ public:
    * @return XML element object containing the value in the ViennaMaterials XML layout
    */
   TiXmlElement* ipd_value_to_xml(const char* name, ipdTreeNode_t *tn, xmlwriter& xmldoc);
+
+  //TODO doxygen
+  std::string query_string_item_by_name_from_section(const char* section, const char* item_name);
 
 private:
   statistic_data* statistics_;

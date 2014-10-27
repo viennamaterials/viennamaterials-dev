@@ -2,6 +2,8 @@ example_data
 {
   test_material
   {
+    materials     = "materials name";
+    class         = "dummy";
     integer       = 1234;
     double        = 1234.5678; //FIXME ipd rounds to 2 digits
     string        = "hello world"; 
@@ -19,6 +21,8 @@ example_data
     integer       = 9999;
     group_1
     {
+      materials     = "group test";
+      class         = "test";
       val_1       = 1;
       val_2       = 2;
       group_2

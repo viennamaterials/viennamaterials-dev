@@ -15,6 +15,10 @@
 #include <iostream>
 
 /*
+ *  TODO
+ *
+ *  statistic: number of materials?
+ *
  *  value compare (preprocessing: read by viennamaterial library) (dependency to viennamaterials, not standalone)
  *    problem: unit conversion --> udunits compare
  */
@@ -71,7 +75,7 @@ int main(int argc, char** argv)
   std::cout << "Statistics:" << std::endl;
   std::cout << "  " << statistics.get_number_of_attributes_ipd() << " attributes fetched from IPD" << std::endl;
   std::cout << "  " << statistics.get_number_of_attributes_xml() << " attributes exported in XML" << std::endl;
-  std::cout << "  " << statistics.get_number_of_invalid_nodes() << " invalid IPD nodes encountered" << std::endl;
+  std::cout << "  " << statistics.get_number_of_invalid_nodes()  << " invalid IPD nodes encountered" << std::endl;
 
   return 0;
 }
@@ -522,9 +526,14 @@ void ipd_importer::recursive_traverse(ipdIterator_t * iNode, xmlwriter& xmldoc)
     // If the current element is a _variable_
     if (ipdIteratorGetType(iNode) == ipdVARIABLE)
     {
-      TiXmlElement* attribute = ipd_value_to_xml(iNode->tn->node.sv.name, ipdIteratorEval(iNode), xmldoc);
-      if(attribute != 0)
-        xmldoc.add_element(attribute);
+      //skip the current element if it is the 'materials' or 'class' element
+      std::string variable_name(ipdIteratorGetItemName(iNode));
+      if(variable_name.compare(ipd_item_name) != 0 && variable_name.compare(ipd_item_category) != 0)
+      {
+        TiXmlElement* attribute = ipd_value_to_xml(iNode->tn->node.sv.name, ipdIteratorEval(iNode), xmldoc);
+        if(attribute != 0)
+          xmldoc.add_element(attribute);
+      }
 
     // If the current element is a _section_
     }else if (ipdIteratorGetType(iNode) == ipdSECTION)
@@ -538,7 +547,12 @@ void ipd_importer::recursive_traverse(ipdIterator_t * iNode, xmlwriter& xmldoc)
       // Step into the subsection
       ipdIteratorDoStep(iSubNode);
 
-      xmldoc.open_group_element(itemName, "", "");
+      //query name and category from IPD
+      std::string section_full_ipd_name(ipdIteratorGetItemFullName(iNode));
+      std::string name      = query_string_item_by_name_from_section(section_full_ipd_name.c_str(), ipd_item_name.c_str());
+      std::string category  = query_string_item_by_name_from_section(section_full_ipd_name.c_str(), ipd_item_category.c_str());
+
+      xmldoc.open_group_element(itemName, name.c_str(), category.c_str());
       recursive_traverse(iSubNode, xmldoc);
       xmldoc.close_group_element();
 
@@ -573,8 +587,12 @@ void ipd_importer::access_ipd_material(ipdIterator_t * iNode, xmlwriter& xmldoc)
       // Step into the subsection
       ipdIteratorDoStep(iSubNode);
 
-      //TODO extract 'class' and 'materials' but dont extract them in recursive_traverse
-      xmldoc.open_material_element(itemName, "TODO", "TODO"); //FIXME
+      //query name and category from IPD
+      std::string material_full_ipd_name(ipdIteratorGetItemFullName(iNode));
+      std::string name      = query_string_item_by_name_from_section(material_full_ipd_name.c_str(), ipd_item_name.c_str());
+      std::string category  = query_string_item_by_name_from_section(material_full_ipd_name.c_str(), ipd_item_category.c_str());
+
+      xmldoc.open_material_element(itemName, name.c_str(), category.c_str());
       recursive_traverse(iSubNode, xmldoc);
       xmldoc.close_material_element();
 
@@ -638,6 +656,37 @@ void ipd_importer::traverse_ipd_layout(ipdIterator_t * iNode, xmlwriter& xmldoc)
     // Next item
     ipdIteratorDoNext(iNode);
   }
+}
+//
+// ----------------------------------------------------------
+//
+
+std::string ipd_importer::query_string_item_by_name_from_section(const char* section, const char* item_name)
+{
+  std::string return_val("");
+
+  std::string item_full_ipd_name(section);
+  item_full_ipd_name.append(".");
+  item_full_ipd_name.append(item_name);
+  ipdTreeNode_t* node_type = ipdExistVariableByName(item_full_ipd_name.c_str());
+  if(node_type != NULL)
+  {
+    ipdTreeNode_s* node = ipdEvalByName(item_full_ipd_name.c_str(), ipdTRUE);
+    if(node->type == ipdSTRING || node->type == 2080)
+    {
+      ipdChar* string = 0;
+      ipdBoolean ipd_success = ipdGetStringByName(item_full_ipd_name.c_str(), &string);
+      if(ipd_success == ipdFALSE)
+      {
+        std::string name_str(item_full_ipd_name.c_str());
+        throw ipd2xml_error("Error while accessing string value(" + name_str + ")");
+      }
+      //for an empty string in IPD file, ipdGetStringByName returns a zero pointer
+      if(string != 0)
+        return_val = string;
+    }
+  }
+  return return_val;
 }
 //
 // ----------------------------------------------------------
