@@ -39,6 +39,12 @@ xml_float proxy::query_value_dispatch<xml_float>(std::string const& q)
   return query_value_float(q);
 }
 
+template<>
+xml_string proxy::query_value_dispatch<xml_string>(std::string const& q)
+{
+  return query_value_string(q);
+}
+
 template<typename T>
 viennamaterials::quantity<T> proxy::query_quantity_dispatch(std::string const& q)
 {
@@ -61,6 +67,12 @@ template<>
 viennamaterials::quantity<xml_float> proxy::query_quantity_dispatch<xml_float>(std::string const& q)
 {
   return query_quantity_float(q);
+}
+
+template<>
+viennamaterials::quantity<xml_string> proxy::query_quantity_dispatch<xml_string>(std::string const& q)
+{
+  return query_quantity_string(q);
 }
 
 } /* namespace viennamaterials */

@@ -24,7 +24,8 @@ viennastar_proxy::viennastar_proxy(viennamaterials::backend_handle& matlib) :
   placeholder_    ("%"),
   token_          ('/'),
   sub_path_       ("/*[id=\""+placeholder_+"\"]"),
-  value_path_     ("/scalar/text()"),
+  scalar_path_    ("/scalar/text()"),
+  string_path_    ("/string/text()"),
   unit_path_      ("/unit/text()"),
   path_prefix_    ("/database")
 {
@@ -53,7 +54,7 @@ xml_bool  viennastar_proxy::query_value_bool(std::string const& q)
 {
   std::string base_path;
   generate_base_path(q, base_path);
-  base_path += value_path_;
+  base_path += scalar_path_;
 
   std::string value = matlib()->query(base_path);
   std::transform(value.begin(), value.end(), value.begin(), ::tolower);
@@ -69,7 +70,7 @@ xml_int   viennastar_proxy::query_value_int(std::string const& q)
 {
   std::string base_path;
   generate_base_path(q, base_path);
-  base_path += value_path_;
+  base_path += scalar_path_;
   return convert<xml_int>(matlib()->query(base_path));
 }
 
@@ -77,8 +78,16 @@ xml_float viennastar_proxy::query_value_float(std::string const& q)
 {
   std::string base_path;
   generate_base_path(q, base_path);
-  base_path += value_path_;
+  base_path += scalar_path_;
   return convert<xml_float>(matlib()->query(base_path));
+}
+
+xml_string viennastar_proxy::query_value_string(std::string const& q)
+{
+  std::string base_path;
+  generate_base_path(q, base_path);
+  base_path += string_path_;
+  return matlib()->query(base_path);
 }
 
 viennamaterials::quantity<xml_bool>   viennastar_proxy::query_quantity_bool(std::string const& q)
@@ -94,6 +103,11 @@ viennamaterials::quantity<xml_int>    viennastar_proxy::query_quantity_int(std::
 viennamaterials::quantity<xml_float>  viennastar_proxy::query_quantity_float(std::string const& q)
 {
   return quantity<xml_float>(query_value<xml_float>(q), query_unit(q));
+}
+
+viennamaterials::quantity<xml_string>  viennastar_proxy::query_quantity_string(std::string const& q)
+{
+  return quantity<xml_string>(query_value<xml_string>(q), query_unit(q));
 }
 
 void viennastar_proxy::generate_base_path(std::string const& q, std::string & base_path)

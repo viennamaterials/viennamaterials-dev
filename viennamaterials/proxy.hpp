@@ -53,18 +53,20 @@ public:
 
 private:
   template<typename T>
-  T                 query_value_dispatch (std::string const& q);
+  T                   query_value_dispatch (std::string const& q);
 
-  virtual xml_bool  query_value_bool (std::string const& q)   = 0;
-  virtual xml_int   query_value_int (std::string const& q)    = 0;
-  virtual xml_float query_value_float (std::string const& q)  = 0;
+  virtual xml_bool    query_value_bool (std::string const& q)   = 0;
+  virtual xml_int     query_value_int (std::string const& q)    = 0;
+  virtual xml_float   query_value_float (std::string const& q)  = 0;
+  virtual xml_string  query_value_string (std::string const& q) = 0;
 
   template<typename T>
   viennamaterials::quantity<T>                  query_quantity_dispatch (std::string const& q);
 
-  virtual viennamaterials::quantity<xml_bool>   query_quantity_bool(std::string const& q)  = 0;
-  virtual viennamaterials::quantity<xml_int>    query_quantity_int(std::string const& q)   = 0;
-  virtual viennamaterials::quantity<xml_float>  query_quantity_float(std::string const& q) = 0;
+  virtual viennamaterials::quantity<xml_bool>   query_quantity_bool(std::string const& q)   = 0;
+  virtual viennamaterials::quantity<xml_int>    query_quantity_int(std::string const& q)    = 0;
+  virtual viennamaterials::quantity<xml_float>  query_quantity_float(std::string const& q)  = 0;
+  virtual viennamaterials::quantity<xml_string> query_quantity_string(std::string const& q) = 0;
 
 private:
   viennamaterials::backend_handle& matlib_;
