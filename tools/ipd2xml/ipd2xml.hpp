@@ -23,6 +23,20 @@
 
 #define VERBOSE_MODE
 
+//#define VERIFY_XML // uses functionality of viennamaterials to import the data from XML and verify against IPD data //XXX
+
+#ifdef VERIFY_XML
+#include "viennamaterials/forwards.h"
+#include "viennamaterials/pugixml.hpp"
+#include "viennamaterials/proxy/viennastar.hpp"
+#include <math.h>
+
+void recurise_traverse_and_verify(ipdIterator_t * iNode, viennamaterials::proxy_handle myproxy);
+std::string ipd_path_to_xml(const char* ipd_path);
+void output_mismatch(const char* name);
+bool almost_equal(double a, double b);
+#endif
+
 
 const std::string ipd_item_name("materials"); //using 'materials' IPD item as 'name' for XML material
 const std::string ipd_item_category("class"); //using 'class' IPD item as 'category' for XML material

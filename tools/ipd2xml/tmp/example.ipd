@@ -5,7 +5,7 @@ example_data
     materials     = "materials name";
     class         = "dummy";
     integer       = 1234;
-    double        = 1234.5678; //FIXME ipd rounds to 2 digits
+    double        = 1234.5678;
     string        = "hello world"; 
     empty_string  = "";
     quantity      = 5678.1 "V/m"; 
