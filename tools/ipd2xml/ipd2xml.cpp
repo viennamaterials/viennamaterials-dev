@@ -17,8 +17,6 @@
 /*
  *  TODO
  *
- *  statistic: number of materials?
- *
  *
  *  move xmldoc function argument to ipd_importer class (member variable)
  */
@@ -162,25 +160,25 @@ int main(int argc, char** argv)
 
 xmlwriter::xmlwriter(const char* note)
 {
-  root_tag_                    = "database";
-  id_tag_                      = "id";
-  group_tag_                   = "group";
-  attribute_tag_               = "attribute";
-  scalar_tag_                  = "scalar";
-  type_attribute_tag_          = "type";
-  type_boolean_                = "bool";
-  type_integer_                = "int";
-  type_floating_               = "float";
-  tensor_tag_                  = "tensor";
-  tensor_row_attribute_tag_    = "row";
-  tensor_column_attribute_tag_ = "col";
-  tensor_order_attribute_tag_  = "order";
-  unit_tag_                    = "unit";
-  note_tag_                    = "note";
-  category_tag_                = "category";
-  material_tag_                = "material";
-  name_tag_                    = "name";
-  string_tag_                  = "string";
+  root_tag_                       = "database";
+  id_tag_                         = "id";
+  group_tag_                      = "group";
+  attribute_tag_                  = "attribute";
+  scalar_tag_                     = "scalar";
+  type_attribute_tag_             = "type";
+  type_boolean_                   = "bool";
+  type_integer_                   = "int";
+  type_floating_                  = "float";
+  tensor_tag_                     = "tensor";
+  tensor_order_attribute_tag_     = "order";
+  tensor_dimension_attribute_tag_ = "d";
+  tensor_index_attribute_tag_     = "i";
+  unit_tag_                       = "unit";
+  note_tag_                       = "note";
+  category_tag_                   = "category";
+  material_tag_                   = "material";
+  name_tag_                       = "name";
+  string_tag_                     = "string";
 
   TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );
   doc_.LinkEndChild( decl );
@@ -258,42 +256,66 @@ TiXmlElement* xmlwriter::create_scalar(const char* id, const viennamaterials::xm
   return attribute_element;
 }
 
-TiXmlElement* xmlwriter::create_tensor(const char* id, const double& tensor_rows, const double& tensor_columns, const double& tensor_order, const double* values, const char* unit)
+TiXmlElement* xmlwriter::create_tensor(const char* id, const ipdLong& dimensions, const ipdLong* dimension_length, const ipdDouble* values, const char* unit)
 {
   TiXmlElement* attribute_element = new TiXmlElement(attribute_tag_);
 
   TiXmlElement* id_element = new TiXmlElement(id_tag_);
   id_element->LinkEndChild(new TiXmlText(id));
   attribute_element->LinkEndChild(id_element);
-
   TiXmlElement* tensor_element = new TiXmlElement(tensor_tag_);
-  tensor_element->SetAttribute(tensor_row_attribute_tag_, tensor_rows);
-  tensor_element->SetAttribute(tensor_column_attribute_tag_, tensor_columns);
-  tensor_element->SetAttribute(tensor_order_attribute_tag_, tensor_order);
+  tensor_element->SetAttribute(tensor_order_attribute_tag_, dimensions);
+  for(long i = 0; i < dimensions; i++)
+  {
+    std::string dimension = tensor_dimension_attribute_tag_;
+    dimension.append(converter(i+1));
+    tensor_element->SetAttribute(dimension.c_str(), dimension_length[dimensions - 1 - i]);
+  }
   tensor_element->SetAttribute(type_attribute_tag_, type_floating_);
   attribute_element->LinkEndChild(tensor_element);
 
   attribute_element->LinkEndChild(this->create_unit(unit));
 
-  long row, column, order;
-  long value_item = 0;
-  for(order = 1; order <= tensor_order; order++)
+  long* tensor_index = new long[dimensions];
+  long number_of_values = 1;
+  for(long i = 0; i < dimensions; i++)
   {
-    for(row = 1; row <= tensor_rows; row++)
-    {
-      for(column = 1; column <= tensor_columns; column++)
-      {
-        TiXmlElement* scalar_element = new TiXmlElement(scalar_tag_);
-        scalar_element->SetAttribute(tensor_row_attribute_tag_, row);
-        scalar_element->SetAttribute(tensor_column_attribute_tag_, column);
-        scalar_element->SetAttribute(tensor_order_attribute_tag_, order);
-        scalar_element->LinkEndChild( new TiXmlText(converter(values[value_item]).c_str()) );
-        tensor_element->LinkEndChild(scalar_element);
+    number_of_values *= dimension_length[i];
+  }
 
-        value_item++;
+  TiXmlElement* scalar_element = NULL;
+  for(long value_index = 0; value_index < number_of_values; value_index++) //index of IPD value field
+  {
+    if(values[value_index] != 0.0)
+      scalar_element = new TiXmlElement(scalar_tag_);
+
+    for(long current_index = 0; current_index < dimensions; current_index++) //index of scalar element
+    {
+      long my_index = value_index;
+      long index_offset = 1;
+      for(long i = current_index; i > 0; i--)
+      {
+        my_index      -= tensor_index[i-1];
+        index_offset  *= dimension_length[dimensions - i];
+      }
+      tensor_index[current_index] = (my_index / index_offset) % dimension_length[dimensions - 1 - current_index];
+
+      if(values[value_index] != 0.0 && scalar_element != NULL)
+      {
+        std::string attribute = tensor_index_attribute_tag_;
+        attribute.append(converter(current_index));
+        scalar_element->SetAttribute(attribute.c_str(), tensor_index[current_index]);
       }
     }
+
+    if(values[value_index] != 0.0 && scalar_element != NULL)
+    {
+      scalar_element->LinkEndChild( new TiXmlText(converter(values[value_index]).c_str()) );
+      tensor_element->LinkEndChild(scalar_element);
+      scalar_element = NULL;
+    }
   }
+  delete[] tensor_index;
 
   return attribute_element;
 }
@@ -510,46 +532,7 @@ TiXmlElement* ipd_importer::ipd_value_to_xml(const char* name, ipdTreeNode_t *tn
         std::string name_str(name);
         throw ipd2xml_error("Error while accessing array/matrix/tensor value(" + name_str + ")");
       }
-
-      if(dimension > 3)
-      {
-        /*
-         * Tensors with dimension greater than 3 are not supported in the ViennaMaterials XML layout.
-         * Thus, this tensor is ignored!
-         */
-  #ifdef VERBOSE_MODE
-        std::cout << "INFO: IPD tensor variable ignored (" << name << ")" << std::endl;
-  #endif
-        attribute_element = 0;
-        break;
-      }
-
-      double tensor_rows    = 1;
-      double tensor_columns = 1;
-      double tensor_order   = 1;
-
-      switch(dimension)
-      {
-        case 1:
-          tensor_columns  = length[0];
-          break;
-        case 2:
-          tensor_rows     = length[0];
-          tensor_columns  = length[1];
-          break;
-        case 3:
-          tensor_order    = length[0];
-          tensor_rows     = length[1];
-          tensor_columns  = length[2];
-          break;
-        default:
-          std::string name_str(name);
-          throw ipd2xml_error("Invalid dimension value of array/matrix/tensor encountered (" + name_str + ")");
-      }
-
-      std::stringstream ss;
-      ss << unit;
-      attribute_element = xmldoc.create_tensor(name, tensor_rows, tensor_columns, tensor_order, matrix, ss.str().c_str());
+      attribute_element = xmldoc.create_tensor(name, dimension, length, matrix, converter(unit).c_str());
 
       free(length);
       free(matrix);

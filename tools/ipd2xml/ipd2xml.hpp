@@ -23,8 +23,6 @@
 
 #define VERBOSE_MODE
 
-//#define VERIFY_XML // uses functionality of viennamaterials to import the data from XML and verify against IPD data //XXX
-
 #ifdef VERIFY_XML
 #include "viennamaterials/forwards.h"
 #include "viennamaterials/pugixml.hpp"
@@ -98,7 +96,7 @@ public:
   TiXmlElement* create_scalar(const char* id, const viennamaterials::xml_bool& value, const char* unit);
   TiXmlElement* create_scalar(const char* id, const viennamaterials::xml_int& value, const char* unit);
   TiXmlElement* create_scalar(const char* id, const viennamaterials::xml_float& value, const char* unit);
-  TiXmlElement* create_tensor(const char* id, const double& tensor_rows, const double& tensor_columns, const double& tensor_order, const double* values, const char* unit);
+  TiXmlElement* create_tensor(const char* id, const ipdLong& dimensions, const ipdLong* dimension_length, const ipdDouble* values, const char* unit);
   TiXmlElement* create_string(const char* id, const viennamaterials::xml_string& value);
   void add_note(const char* note);
   void open_material_element(const char* id, const char* name, const char* category);
@@ -128,9 +126,9 @@ private:
   const char* type_integer_;
   const char* type_floating_;
   const char* tensor_tag_;
-  const char* tensor_row_attribute_tag_;
-  const char* tensor_column_attribute_tag_;
   const char* tensor_order_attribute_tag_;
+  const char* tensor_dimension_attribute_tag_;
+  const char* tensor_index_attribute_tag_;
   const char* unit_tag_;
   const char* note_tag_;
   const char* category_tag_;
