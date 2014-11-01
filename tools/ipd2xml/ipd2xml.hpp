@@ -69,16 +69,27 @@ std::string converter(T t)
 // ----------------------------------------------------------
 //
 
-//TODO doxygen
+/**
+ * @brief Class holding counters which are used for statistics
+ */
 class statistic_data
 {
 public:
   statistic_data();
+  /// @brief Increment the IPD attributes counter by 1
   void increment_attribute_number_ipd();
+  /// @brief Get the value of IPD attributes counter
+  /// @return long Value of the counter
   long get_number_of_attributes_ipd();
+  /// @brief Increment the XML attributes counter by 1
   void increment_attribute_number_xml();
+  /// @brief Get the value of XML attributes counter
+  /// @return long Value of the counter
   long get_number_of_attributes_xml();
+  /// @brief Increment the invalid attributes counter by 1
   void increment_invalid_node_number();
+  /// @brief Get the value of invalid attributes counter
+  /// @return long Value of the counter
   long get_number_of_invalid_nodes();
 
 private:
@@ -87,25 +98,118 @@ private:
   long invalid_ipd_nodes;
 };
 
-//TODO doxygen
+/**
+ * @brief This class provides methods to create an writes attributes to XML files according to the ViennaMaterials XML layout.
+ */
 class xmlwriter
 {
 public:
   xmlwriter(const char* note);
+
+  /**
+   * @brief This method adds the given XML element to the current node in the XML tree
+   * @param element The element which should be added
+   */
   void add_element(TiXmlElement* element);
+
+  /**
+   * @brief This method creates a new XML representation of a scalar attribute according to the values given and returns a pointer to the new XML element object.
+   * @param id The ID of this attribute
+   * @param value The boolean value of this attribute
+   * @param unit The unit of this attribute
+   * @return A pointer to the new XML element object
+   */
   TiXmlElement* create_scalar(const char* id, const viennamaterials::xml_bool& value, const char* unit);
+
+  /**
+   * @brief This method creates a new XML representation of a scalar attribute according to the values given and returns a pointer to the new XML element object.
+   * @param id The ID of this attribute
+   * @param value The integer value of this attribute
+   * @param unit The unit of this attribute
+   * @return A pointer to the new XML element object
+   */
   TiXmlElement* create_scalar(const char* id, const viennamaterials::xml_int& value, const char* unit);
+
+  /**
+   * @brief This method creates a new XML representation of a scalar attribute according to the values given and returns a pointer to the new XML element object.
+   * @param id The ID of this attribute
+   * @param value The floating point value of this attribute
+   * @param unit The unit of this attribute
+   * @return A pointer to the new XML element object
+   */
   TiXmlElement* create_scalar(const char* id, const viennamaterials::xml_float& value, const char* unit);
+
+  /**
+   * @brief This method creates a new XML representation of a tensor attribute according to the values given and returns a pointer to the new XML element object.
+   * @param id The ID of this attribute
+   * @param dimensions The order (number of dimensions) of the tensor
+   * @param dimension_length An array containing the length of each dimension of the tensor
+   * @param values An array containing the values of this attribute
+   * @param unit The unit of this attribute
+   * @return A pointer to the new XML element object
+   */
   TiXmlElement* create_tensor(const char* id, const ipdLong& dimensions, const ipdLong* dimension_length, const ipdDouble* values, const char* unit);
+
+  /**
+   * @brief This method creates a new XML representation of a string attribute according to the values given and returns a pointer to the new XML element object.
+   * @param id The ID of this attribute
+   * @param value The string value of this attribute
+   * @return A pointer to the new XML element object
+   */
   TiXmlElement* create_string(const char* id, const viennamaterials::xml_string& value);
+
+  /**
+   * @brief This method adds a note-XML element to the current node in the XML tree
+   * @param note The note text which
+   */
   void add_note(const char* note);
+
+  /**
+   * @brief This method adds a new material element to the XML tree and sets the current node to this material element
+   * @param id The ID of this material
+   * @param name The name of this material
+   * @param category The category of this material
+   */
   void open_material_element(const char* id, const char* name, const char* category);
+
+  /**
+   * @brief Wrapper function for update()
+   */
   void close_material_element(); //wrapper for update(), use with care
+
+  /**
+   * @brief This method adds a new group element to the XML tree and sets the current node to this group element
+   * @param id The ID of this group
+   * @param name The name of this group
+   * @param category The category of this group
+   */
   void open_group_element(const char* id, const char* name, const char* category);
+
+  /**
+   * @brief Wrapper function for update()
+   */
   void close_group_element(); //wrapper for update(), use with care
+
+  /**
+   * @brief This method finishes/closes the current node and sets the parent node as current node
+   */
   void update();
+
+  /**
+   * @brief This methods writes the XML tree to the specified output file
+   * @param filename The filename of the output file
+   */
   void print(std::string filename);
+
+  /**
+   * @brief This methods writes the XML tree to the specified output file
+   * @param filename The filename of the output file
+   */
   void print(const char* filename);
+
+  /**
+   * @brief This methods prints the XML tree to the standard output stream
+   */
   void print_to_console(void);
 
 private:
@@ -140,52 +244,56 @@ private:
 };
 
 
-//TODO doxygen
+/**
+ * @brief This class provides methods to traverse a defined IPD structure to extract material attributes.
+ *        The material attributes are passed to an XML writer object.
+ */
 class ipd_importer
 {
 
 public:
-  ipd_importer(statistic_data* statistics);
+  ipd_importer(statistic_data* statistics, xmlwriter* xmldoc);
 
-  /*
+  /**
    * @brief This method traverses the IPD layout to locate a materials
    * @param iNode IPD iterator pointing to the root of the IPD input file
-   * @param xmldoc xmlwriter object used for XML output
    */
-  void traverse_ipd_layout(ipdIterator_t * iNode, xmlwriter& xmldoc);
+  void traverse_ipd_layout(ipdIterator_t * iNode);
 
 private:
-  /*
+  /**
    * @brief This method adds a new material to XML and subsequently traverses the IPD structure for attributes.
    * @param iNode An IPD iterator pointing to a material
-   * @param xmldoc xmlwriter object used for XML output
    */
-  void access_ipd_material(ipdIterator_t * iNode, xmlwriter& xmldoc);
+  void access_ipd_material(ipdIterator_t * iNode);
 
-  /*
+  /**
    * @brief This method traverses the IPD structure.
    * If a variable is encountered it is passed to the xmlwriter.
    * If a section is encountered the method calls itself.
    * @param iNode IPD iterator which should be traversed
-   * @param xmldoc xmlwriter object used for XML output
    */
-  void recursive_traverse(ipdIterator_t * iNode, xmlwriter& xmldoc);
+  void recursive_traverse(ipdIterator_t * iNode);
 
-  /*
+  /**
    * @brief This method performs the transformation from IPD data structure to ViennaMaterials XML data layout
    * @param name The name of the value to be accessed
    * @param tn IPD tree node structure containing the evaluated value
-   * @param xmldoc xmlwriter object used for XML output
    * @return XML element object containing the value in the ViennaMaterials XML layout
    */
-  TiXmlElement* ipd_value_to_xml(const char* name, ipdTreeNode_t *tn, xmlwriter& xmldoc);
+  TiXmlElement* ipd_value_to_xml(const char* name, ipdTreeNode_t *tn);
 
-  //TODO doxygen
+  /**
+   * @brief This method queries a string item by its name within an given section in the IPD structure.
+   * @param section An IPD path to a section
+   * @param item_name The name of the item within the given section holding a string value
+   * @return A string holding the value of the identified item
+   */
   std::string query_string_item_by_name_from_section(const char* section, const char* item_name);
 
 private:
   statistic_data* statistics_;
-
+  xmlwriter* xmldoc_;
 };
 
 

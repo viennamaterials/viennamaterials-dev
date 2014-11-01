@@ -14,13 +14,6 @@
 #include "tools/ipd2xml/ipd2xml.hpp"
 #include <iostream>
 
-/*
- *  TODO
- *
- *
- *  move xmldoc function argument to ipd_importer class (member variable)
- */
-
 int main(int argc, char** argv)
 {
 
@@ -58,8 +51,8 @@ int main(int argc, char** argv)
   ipdIteratorDoStep(iNode);
 
   statistic_data statistics;
-  ipd_importer importer(&statistics);
-  importer.traverse_ipd_layout(iNode, xmldoc);
+  ipd_importer importer(&statistics, &xmldoc);
+  importer.traverse_ipd_layout(iNode);
 
   // Free the iterator
   ipdIteratorFree(iNode);
@@ -123,7 +116,6 @@ int main(int argc, char** argv)
           }else
           {
             std::string full_name = ipdIteratorGetItemFullName(iSubNode);
-      //      throw ipd2xml_error("Invalid IPD layout (" + full_name + ")");
 #ifdef VERBOSE_MODE
             std::cout << "INFO: Invalid IPD layout (" + full_name + ")" << std::endl;
 #endif
@@ -154,9 +146,6 @@ int main(int argc, char** argv)
 
   return 0;
 }
-//
-// ----------------------------------------------------------
-//
 
 xmlwriter::xmlwriter(const char* note)
 {
@@ -437,23 +426,17 @@ TiXmlElement* xmlwriter::create_unit(const char* unit)
     unit_element->LinkEndChild(new TiXmlText(unit));
   return unit_element;
 }
-//
-// ----------------------------------------------------------
-//
 
-ipd_importer::ipd_importer(statistic_data* statistics)
+ipd_importer::ipd_importer(statistic_data* statistics, xmlwriter* xmldoc)
 {
   this->statistics_ = statistics;
+  this->xmldoc_     = xmldoc;
 }
-//
-// ----------------------------------------------------------
-//
 
-TiXmlElement* ipd_importer::ipd_value_to_xml(const char* name, ipdTreeNode_t *tn, xmlwriter& xmldoc)
+TiXmlElement* ipd_importer::ipd_value_to_xml(const char* name, ipdTreeNode_t *tn)
 {
   TiXmlElement* attribute_element = 0;
-
-  ipdBoolean ipd_success = ipdFALSE;
+  ipdBoolean ipd_success          = ipdFALSE;
 
   statistics_->increment_attribute_number_ipd();
 
@@ -469,7 +452,7 @@ TiXmlElement* ipd_importer::ipd_value_to_xml(const char* name, ipdTreeNode_t *tn
         throw ipd2xml_error("Error while accessing integer value(" + name_str + ")");
       }
       viennamaterials::xml_int val = value;
-      attribute_element = xmldoc.create_scalar(name, val, "");
+      attribute_element = xmldoc_->create_scalar(name, val, "");
       break;
     }
 
@@ -483,7 +466,7 @@ TiXmlElement* ipd_importer::ipd_value_to_xml(const char* name, ipdTreeNode_t *tn
         std::string name_str(name);
         throw ipd2xml_error("Error while accessing real/rational value(" + name_str + ")");
       }
-      attribute_element = xmldoc.create_scalar(name, value, "");
+      attribute_element = xmldoc_->create_scalar(name, value, "");
       break;
     }
 
@@ -498,7 +481,7 @@ TiXmlElement* ipd_importer::ipd_value_to_xml(const char* name, ipdTreeNode_t *tn
         std::string name_str(name);
         throw ipd2xml_error("Error while accessing real quantity value(" + name_str + ")");
       }
-      attribute_element = xmldoc.create_scalar(name, value, unit);
+      attribute_element = xmldoc_->create_scalar(name, value, unit);
       break;
     }
 
@@ -516,7 +499,7 @@ TiXmlElement* ipd_importer::ipd_value_to_xml(const char* name, ipdTreeNode_t *tn
         val = true;
       else
         val = false;
-      attribute_element = xmldoc.create_scalar(name, val, "");
+      attribute_element = xmldoc_->create_scalar(name, val, "");
       break;
     }
 
@@ -532,7 +515,7 @@ TiXmlElement* ipd_importer::ipd_value_to_xml(const char* name, ipdTreeNode_t *tn
         std::string name_str(name);
         throw ipd2xml_error("Error while accessing array/matrix/tensor value(" + name_str + ")");
       }
-      attribute_element = xmldoc.create_tensor(name, dimension, length, matrix, converter(unit).c_str());
+      attribute_element = xmldoc_->create_tensor(name, dimension, length, matrix, converter(unit).c_str());
 
       free(length);
       free(matrix);
@@ -554,7 +537,7 @@ TiXmlElement* ipd_importer::ipd_value_to_xml(const char* name, ipdTreeNode_t *tn
       viennamaterials::xml_string value = "";
       if(string != 0)
         value = string;
-      attribute_element = xmldoc.create_string(name, value);
+      attribute_element = xmldoc_->create_string(name, value);
       break;
     }
 
@@ -571,11 +554,8 @@ TiXmlElement* ipd_importer::ipd_value_to_xml(const char* name, ipdTreeNode_t *tn
 
   return attribute_element;
 }
-//
-// ----------------------------------------------------------
-//
 
-void ipd_importer::recursive_traverse(ipdIterator_t * iNode, xmlwriter& xmldoc)
+void ipd_importer::recursive_traverse(ipdIterator_t * iNode)
 {
   // Traverse the ViennaIPD datastructure using the iterator
   while (ipdIteratorIsValid(iNode))
@@ -590,9 +570,9 @@ void ipd_importer::recursive_traverse(ipdIterator_t * iNode, xmlwriter& xmldoc)
       std::string variable_name(ipdIteratorGetItemName(iNode));
       if(variable_name.compare(ipd_item_name) != 0 && variable_name.compare(ipd_item_category) != 0)
       {
-        TiXmlElement* attribute = ipd_value_to_xml(iNode->tn->node.sv.name, ipdIteratorEval(iNode), xmldoc);
+        TiXmlElement* attribute = ipd_value_to_xml(iNode->tn->node.sv.name, ipdIteratorEval(iNode));
         if(attribute != 0)
-          xmldoc.add_element(attribute);
+          xmldoc_->add_element(attribute);
       }
 
     // If the current element is a _section_
@@ -612,9 +592,9 @@ void ipd_importer::recursive_traverse(ipdIterator_t * iNode, xmlwriter& xmldoc)
       std::string name      = query_string_item_by_name_from_section(section_full_ipd_name.c_str(), ipd_item_name.c_str());
       std::string category  = query_string_item_by_name_from_section(section_full_ipd_name.c_str(), ipd_item_category.c_str());
 
-      xmldoc.open_group_element(itemName, name.c_str(), category.c_str());
-      recursive_traverse(iSubNode, xmldoc);
-      xmldoc.close_group_element();
+      xmldoc_->open_group_element(itemName, name.c_str(), category.c_str());
+      recursive_traverse(iSubNode);
+      xmldoc_->close_group_element();
 
       ipdIteratorFree(iSubNode);
     }
@@ -624,11 +604,8 @@ void ipd_importer::recursive_traverse(ipdIterator_t * iNode, xmlwriter& xmldoc)
   }
 
 }
-//
-// ----------------------------------------------------------
-//
 
-void ipd_importer::access_ipd_material(ipdIterator_t * iNode, xmlwriter& xmldoc)
+void ipd_importer::access_ipd_material(ipdIterator_t * iNode)
 {
   // Traverse the ViennaIPD data structure using the iterator
   if(ipdIteratorIsValid(iNode))
@@ -652,9 +629,9 @@ void ipd_importer::access_ipd_material(ipdIterator_t * iNode, xmlwriter& xmldoc)
       std::string name      = query_string_item_by_name_from_section(material_full_ipd_name.c_str(), ipd_item_name.c_str());
       std::string category  = query_string_item_by_name_from_section(material_full_ipd_name.c_str(), ipd_item_category.c_str());
 
-      xmldoc.open_material_element(itemName, name.c_str(), category.c_str());
-      recursive_traverse(iSubNode, xmldoc);
-      xmldoc.close_material_element();
+      xmldoc_->open_material_element(itemName, name.c_str(), category.c_str());
+      recursive_traverse(iSubNode);
+      xmldoc_->close_material_element();
 
       ipdIteratorFree(iSubNode);
 
@@ -663,7 +640,6 @@ void ipd_importer::access_ipd_material(ipdIterator_t * iNode, xmlwriter& xmldoc)
       statistics_->increment_invalid_node_number();
 
       std::string full_name = ipdIteratorGetItemFullName(iNode);
-//      throw ipd2xml_error("Invalid IPD layout (" + full_name + ")");
 #ifdef VERBOSE_MODE
       std::cout << "INFO: Invalid IPD layout (" + full_name + ")" << std::endl;
 #endif
@@ -673,11 +649,8 @@ void ipd_importer::access_ipd_material(ipdIterator_t * iNode, xmlwriter& xmldoc)
     throw ipd2xml_error("Invalid IPD iterator passed to access_ipd_material");
   }
 }
-//
-// ----------------------------------------------------------
-//
 
-void ipd_importer::traverse_ipd_layout(ipdIterator_t * iNode, xmlwriter& xmldoc)
+void ipd_importer::traverse_ipd_layout(ipdIterator_t * iNode)
 {
   // Traverse the ViennaIPD data structure using the iterator
   while (ipdIteratorIsValid(iNode))
@@ -698,7 +671,7 @@ void ipd_importer::traverse_ipd_layout(ipdIterator_t * iNode, xmlwriter& xmldoc)
 
       while(ipdIteratorIsValid(iSubNode))
       {
-        access_ipd_material(iSubNode, xmldoc);
+        access_ipd_material(iSubNode);
         ipdIteratorDoNext(iSubNode);
       }
 
@@ -715,9 +688,6 @@ void ipd_importer::traverse_ipd_layout(ipdIterator_t * iNode, xmlwriter& xmldoc)
     ipdIteratorDoNext(iNode);
   }
 }
-//
-// ----------------------------------------------------------
-//
 
 std::string ipd_importer::query_string_item_by_name_from_section(const char* section, const char* item_name)
 {
@@ -746,9 +716,6 @@ std::string ipd_importer::query_string_item_by_name_from_section(const char* sec
   }
   return return_val;
 }
-//
-// ----------------------------------------------------------
-//
 
 statistic_data::statistic_data()
 {
@@ -873,7 +840,6 @@ void recurise_traverse_and_verify(ipdIterator_t * iNode, viennamaterials::proxy_
             }
             viennamaterials::xml_float value_xml = myproxy->query_value<viennamaterials::xml_float>(ipd_path_to_xml(name));
             std::string unit_xml = myproxy->query_unit(ipd_path_to_xml(name));
-//            if(value != value_xml || unit_xml.compare(unit) != 0)
             if(almost_equal(value, value_xml) == false || unit_xml.compare(unit) != 0)
             {
               output_mismatch(name);
