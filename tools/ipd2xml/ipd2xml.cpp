@@ -669,11 +669,15 @@ void ipd_importer::traverse_ipd_layout(ipdIterator_t * iNode)
       // Step into the subsection
       ipdIteratorDoStep(iSubNode);
 
+      xmldoc_->open_group_element(itemName, "", "");
+
       while(ipdIteratorIsValid(iSubNode))
       {
         access_ipd_material(iSubNode);
         ipdIteratorDoNext(iSubNode);
       }
+
+      xmldoc_->close_group_element();
 
       ipdIteratorFree(iSubNode);
     }else
@@ -945,8 +949,7 @@ void recurise_traverse_and_verify(ipdIterator_t * iNode, viennamaterials::proxy_
 std::string ipd_path_to_xml(const char* ipd_path)
 {
   std::string path_conversion(ipd_path);
-  size_t position = path_conversion.find(".");
-  path_conversion = path_conversion.substr(position+1);
+  path_conversion = path_conversion.erase(0, 1);
   std::replace(path_conversion.begin(), path_conversion.end(), '.', '/');
   return path_conversion;
 }
