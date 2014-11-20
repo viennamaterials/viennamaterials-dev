@@ -12,7 +12,6 @@
 ============================================================================= */
 
 #include "tools/ipd2xml/ipd2xml.hpp"
-#include <iostream>
 
 int main(int argc, char** argv)
 {
@@ -77,63 +76,7 @@ int main(int argc, char** argv)
 
   // Traverse the ViennaIPD data structure using the iterator
   while (ipdIteratorIsValid(iNode))
-  {
-    // Get the name of the current item
-    ipdConstString itemName = ipdIteratorGetItemName(iNode);
-
-    if (ipdIteratorGetType(iNode) == ipdSECTION) //must be a section
-    {
-      // Create a new iterator which should traverse the subsection, the materials
-      ipdIterator_t  *iSubNode = NULL;
-
-      // Set the iterator to origin at this particular section
-      ipdIteratorNewByName(&iSubNode, itemName, ipdANY, ipdANY);
-
-      // Step into the subsection
-      ipdIteratorDoStep(iSubNode);
-
-      // Traverse the ViennaIPD data structure using the iterator
-      while(ipdIteratorIsValid(iSubNode))
-      {
-          // Get the name of the current item, the material
-          ipdConstString itemName = ipdIteratorGetItemName(iSubNode);
-
-          if (ipdIteratorGetType(iSubNode) == ipdSECTION) //IPD material node must be a section
-          {
-            // Create a new iterator which should traverse the subsection, the attributes of the material
-            ipdIterator_t  *iSubNode = NULL;
-
-            // Set the iterator to origin at this particular section
-            ipdIteratorNewByName(&iSubNode, itemName, ipdANY, ipdANY);
-
-            // Step into the subsection
-            ipdIteratorDoStep(iSubNode);
-
-            recurise_traverse_and_verify(iSubNode, myproxy);
-
-            ipdIteratorFree(iSubNode);
-
-          }else
-          {
-            std::string full_name = ipdIteratorGetItemFullName(iSubNode);
-#ifdef VERBOSE_MODE
-            std::cout << "INFO: Invalid IPD layout (" + full_name + ")" << std::endl;
-#endif
-          }
-
-        ipdIteratorDoNext(iSubNode);
-      }
-
-      ipdIteratorFree(iSubNode);
-    }else
-    {
-      std::string full_name = ipdIteratorGetItemFullName(iNode);
-      throw ipd2xml_error("Invalid IPD layout (" + full_name + ")");
-    }
-
-    // Next item
-    ipdIteratorDoNext(iNode);
-  }
+    recurise_traverse_and_verify(iNode, myproxy);
 
   // Free the iterator
   ipdIteratorFree(iNode);
@@ -635,6 +578,11 @@ void ipd_importer::access_ipd_material(ipdIterator_t * iNode)
 
       ipdIteratorFree(iSubNode);
 
+    }else if (ipdIteratorGetType(iNode) == ipdVARIABLE)
+    {
+      TiXmlElement* attribute = ipd_value_to_xml(iNode->tn->node.sv.name, ipdIteratorEval(iNode));
+      if(attribute != 0)
+        xmldoc_->add_element(attribute);
     }else
     {
       statistics_->increment_invalid_node_number();
@@ -658,7 +606,7 @@ void ipd_importer::traverse_ipd_layout(ipdIterator_t * iNode)
     // Get the name of the current item
     ipdConstString itemName = ipdIteratorGetItemName(iNode);
 
-    if (ipdIteratorGetType(iNode) == ipdSECTION) //must be a section
+    if (ipdIteratorGetType(iNode) == ipdSECTION)
     {
       // Create a new iterator which should traverse the subsection, the materials
       ipdIterator_t  *iSubNode = NULL;
@@ -680,12 +628,20 @@ void ipd_importer::traverse_ipd_layout(ipdIterator_t * iNode)
       xmldoc_->close_group_element();
 
       ipdIteratorFree(iSubNode);
+
+    }else if (ipdIteratorGetType(iNode) == ipdVARIABLE)
+    {
+      TiXmlElement* attribute = ipd_value_to_xml(iNode->tn->node.sv.name, ipdIteratorEval(iNode));
+      if(attribute != 0)
+        xmldoc_->add_element(attribute);
     }else
     {
       statistics_->increment_invalid_node_number();
 
       std::string full_name = ipdIteratorGetItemFullName(iNode);
-      throw ipd2xml_error("Invalid IPD layout (" + full_name + ")");
+#ifdef VERBOSE_MODE
+      std::cout << "INFO: Invalid IPD layout (" + full_name + ")" << std::endl;
+#endif
     }
 
     // Next item
