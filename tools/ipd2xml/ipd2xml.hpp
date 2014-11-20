@@ -21,8 +21,6 @@
 #include "tools/ipd2xml/ViennaIPD/src/include/ipd.h"
 #include "viennamaterials/xmldatatypes.h"
 
-#define VERBOSE_MODE
-
 #ifdef VERIFY_XML
 #include "viennamaterials/forwards.h"
 #include "viennamaterials/pugixml.hpp"
