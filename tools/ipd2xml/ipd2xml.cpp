@@ -25,6 +25,8 @@ int main(int argc, char** argv)
     outputfile_xml = argv[2];
   }else
   {
+    std::cout << "loading from tools/ipd2xml/tmp/example.ipd" << std::endl;
+    std::cout << "exporting to tools/ipd2xml/tmp/example.xml" << std::endl << std::endl;
     inputfile_ipd = "tools/ipd2xml/tmp/example.ipd";
     outputfile_xml = "tools/ipd2xml/tmp/example.xml";
   }
@@ -500,7 +502,7 @@ TiXmlElement* ipd_importer::ipd_value_to_xml(const char* name, ipdTreeNode_t *tn
 
 void ipd_importer::recursive_traverse(ipdIterator_t * iNode)
 {
-  // Traverse the ViennaIPD datastructure using the iterator
+  // Traverse the ViennaIPD data structure using the iterator
   while (ipdIteratorIsValid(iNode))
   {
     // Get the name of the current item
@@ -716,7 +718,7 @@ long statistic_data::get_number_of_invalid_nodes()
 #ifdef VERIFY_XML
 void recurise_traverse_and_verify(ipdIterator_t * iNode, viennamaterials::proxy_handle myproxy)
 {
-  // Traverse the ViennaIPD datastructure using the iterator
+  // Traverse the ViennaIPD data structure using the iterator
   while (ipdIteratorIsValid(iNode))
   {
     // Get the name of the current item
