@@ -11,6 +11,22 @@
    license:    see file LICENSE in the base directory
 ============================================================================= */
 
+/*
+ * This tool assumes a certain layout of the IPD data:
+ *   First level:               IPD sections are mapped to ViennaMaterials groups (containing attributes and/or materials)
+ *   |                          IPD variables are mapped to ViennaMaterials attributes (this attributes are not associated with a group or material)
+ *   |
+ *   -> Second level:           IPD sections are mapped to Viennamaterials materials
+ *      |                       IPD variables are mapped to ViennaMaterials attributes (associated with the group of the first level)
+ *      |
+ *      -> Consecutive levels:  IPD sections are mappe to ViennaMaterials groups
+ *                              IPD variables are mapped to ViennaMaterials attributes
+ *
+ *
+ * Furthermore, this tool assumes 2 IPD variables of defined name which are mapped to 'name' and 'category' of ViennaMaterials materials.
+ * See ipd_item_name and ipd_item_category in ipd2xml.hpp for the mapping.
+ */
+
 #include "tools/ipd2xml/ipd2xml.hpp"
 
 int main(int argc, char** argv)
@@ -51,24 +67,30 @@ int main(int argc, char** argv)
 
   ipdIteratorDoStep(iNode);
 
+  // Create a statistic_data object for the importer
   statistic_data statistics;
+
+  // Create importer and access the IPD layout
   ipd_importer importer(&statistics, &xmldoc);
   importer.traverse_ipd_layout(iNode);
 
   // Free the iterator
   ipdIteratorFree(iNode);
 
+  // Write the output file
   xmldoc.print(outputfile_xml);
 
+  // Output the gathered statistic data
   std::cout << "Statistics:" << std::endl;
-  std::cout << "  " << statistics.get_number_of_attributes_ipd() << " attributes fetched from IPD" << std::endl;
-  std::cout << "  " << statistics.get_number_of_attributes_xml() << " attributes exported in XML" << std::endl;
-  std::cout << "  " << statistics.get_number_of_invalid_nodes()  << " invalid IPD nodes encountered" << std::endl;
+  std::cout << "  " << statistics.get_number_of_attributes_ipd() << " attributes fetched from IPD"    << std::endl;
+  std::cout << "  " << statistics.get_number_of_attributes_xml() << " attributes exported in XML"     << std::endl;
+  std::cout << "  " << statistics.get_number_of_invalid_nodes()  << " invalid IPD nodes encountered"  << std::endl;
 
 #ifdef VERIFY_XML
   std::cout << std::endl << "Verifiying..." << std::endl;
-
   std::string filename(outputfile_xml);
+
+  // Create a pugiXML backend and a proxy object to access the previously created XML file
   viennamaterials::backend_handle matlib(new viennamaterials::pugixml(filename));
   viennamaterials::proxy_handle myproxy(new viennamaterials::viennastar_proxy(matlib));
 
@@ -114,15 +136,20 @@ xmlwriter::xmlwriter(const char* note)
   name_tag_                       = "name";
   string_tag_                     = "string";
 
+  // Initialize the XML document by inserting XML version, root element and optional note element
+
   TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );
   doc_.LinkEndChild( decl );
 
   TiXmlElement * root = new TiXmlElement( root_tag_ );
   doc_.LinkEndChild( root );
 
-  TiXmlElement * rootid = new TiXmlElement( note_tag_ );
-  rootid->LinkEndChild( new TiXmlText( note ));
-  root->LinkEndChild( rootid );
+  if(strlen(note) > 0)
+  {
+    TiXmlElement * root_note = new TiXmlElement( note_tag_ );
+    root_note->LinkEndChild( new TiXmlText( note ));
+    root->LinkEndChild( root_note );
+  }
 
   currentnode_ = root;
   nodecont_.push_back( root );
@@ -199,54 +226,53 @@ TiXmlElement* xmlwriter::create_tensor(const char* id, const ipdLong& dimensions
   attribute_element->LinkEndChild(id_element);
   TiXmlElement* tensor_element = new TiXmlElement(tensor_tag_);
   tensor_element->SetAttribute(tensor_order_attribute_tag_, dimensions);
-  for(long i = 0; i < dimensions; i++)
+  for(long i = 0; i < dimensions; i++) // Add dimension XML attributes to the tensor element
   {
     std::string dimension = tensor_dimension_attribute_tag_;
     dimension.append(converter(i+1));
     tensor_element->SetAttribute(dimension.c_str(), dimension_length[dimensions - 1 - i]);
   }
   tensor_element->SetAttribute(type_attribute_tag_, type_floating_);
-  attribute_element->LinkEndChild(tensor_element);
+  attribute_element->LinkEndChild(tensor_element); // Link the 'empty' tensor element
 
   attribute_element->LinkEndChild(this->create_unit(unit));
 
-  long* tensor_index = new long[dimensions];
+  // Fill the tensor element (add scalar elements)
   long number_of_values = 1;
   for(long i = 0; i < dimensions; i++)
   {
     number_of_values *= dimension_length[i];
   }
 
-  TiXmlElement* scalar_element = NULL;
-  for(long value_index = 0; value_index < number_of_values; value_index++) //index of IPD value field
+  long* tensor_index = new long[dimensions];
+  for(long value_index = 0; value_index < number_of_values; value_index++) // Index of IPD value field
   {
+    // Only create and add scalar element if value != 0.0
     if(values[value_index] != 0.0)
-      scalar_element = new TiXmlElement(scalar_tag_);
-
-    for(long current_index = 0; current_index < dimensions; current_index++) //index of scalar element
     {
-      long my_index = value_index;
-      long index_offset = 1;
-      for(long i = current_index; i > 0; i--)
-      {
-        my_index      -= tensor_index[i-1];
-        index_offset  *= dimension_length[dimensions - i];
-      }
-      tensor_index[current_index] = (my_index / index_offset) % dimension_length[dimensions - 1 - current_index];
+      TiXmlElement* scalar_element  = new TiXmlElement(scalar_tag_);
 
-      if(values[value_index] != 0.0 && scalar_element != NULL)
+      // Calculate indices for current scalar value
+      for(long current_index = 0; current_index < dimensions; current_index++) // Indices of scalar element
       {
+        long my_index = value_index;
+        long index_offset = 1;
+        for(long i = current_index; i > 0; i--)
+        {
+          my_index      -= tensor_index[i-1];
+          index_offset  *= dimension_length[dimensions - i];
+        }
+        tensor_index[current_index] = (my_index / index_offset) % dimension_length[dimensions - 1 - current_index];
+
+        // Compose the index XML attribute tag
         std::string attribute = tensor_index_attribute_tag_;
         attribute.append(converter(current_index));
+        // Add the index XML attribute to the scalar element
         scalar_element->SetAttribute(attribute.c_str(), tensor_index[current_index]);
       }
-    }
 
-    if(values[value_index] != 0.0 && scalar_element != NULL)
-    {
       scalar_element->LinkEndChild( new TiXmlText(converter(values[value_index]).c_str()) );
       tensor_element->LinkEndChild(scalar_element);
-      scalar_element = NULL;
     }
   }
   delete[] tensor_index;
@@ -287,7 +313,7 @@ void xmlwriter::open_material_element(const char* id, const char* name, const ch
   id_element->LinkEndChild(new TiXmlText(id));
   material_element->LinkEndChild(id_element);
 
-  if(strlen(name) != 0)
+  if(strlen(name) != 0) // Name element is optional
   {
     TiXmlElement* name_element = new TiXmlElement(name_tag_);
     name_element->LinkEndChild(new TiXmlText(name));
@@ -316,14 +342,14 @@ void xmlwriter::open_group_element(const char* id, const char* name, const char*
   id_element->LinkEndChild(new TiXmlText(id));
   group_element->LinkEndChild(id_element);
 
-  if(strlen(name) != 0)
+  if(strlen(name) != 0) // Name element is optional
   {
     TiXmlElement* name_element = new TiXmlElement(name_tag_);
     name_element->LinkEndChild(new TiXmlText(name));
     group_element->LinkEndChild(name_element);
   }
 
-  if(strlen(category) != 0)
+  if(strlen(category) != 0) // Category element is optional
   {
     TiXmlElement* category_element = new TiXmlElement(category_tag_);
     category_element->LinkEndChild(new TiXmlText(category));
@@ -385,6 +411,7 @@ TiXmlElement* ipd_importer::ipd_value_to_xml(const char* name, ipdTreeNode_t *tn
 
   statistics_->increment_attribute_number_ipd();
 
+  // According to the IPD type, the corresponding ViennaMaterials data type is created and given to the XML writer
   switch (tn->type)
   {
     case ipdINTEGER:
@@ -411,7 +438,8 @@ TiXmlElement* ipd_importer::ipd_value_to_xml(const char* name, ipdTreeNode_t *tn
         std::string name_str(name);
         throw ipd2xml_error("Error while accessing real/rational value(" + name_str + ")");
       }
-      attribute_element = xmldoc_->create_scalar(name, value, "");
+      viennamaterials::xml_float val = value;
+      attribute_element = xmldoc_->create_scalar(name, val, "");
       break;
     }
 
@@ -426,7 +454,8 @@ TiXmlElement* ipd_importer::ipd_value_to_xml(const char* name, ipdTreeNode_t *tn
         std::string name_str(name);
         throw ipd2xml_error("Error while accessing real quantity value(" + name_str + ")");
       }
-      attribute_element = xmldoc_->create_scalar(name, value, unit);
+      viennamaterials::xml_float val = value;
+      attribute_element = xmldoc_->create_scalar(name, val, unit);
       break;
     }
 
@@ -509,9 +538,10 @@ void ipd_importer::recursive_traverse(ipdIterator_t * iNode)
     ipdConstString itemName = ipdIteratorGetItemName(iNode);
 
     // If the current element is a _variable_
-    if (ipdIteratorGetType(iNode) == ipdVARIABLE)
+    if (ipdIteratorGetType(iNode) == ipdVARIABLE) // Corresponds to attribute in ViennaMaterials data layout
     {
-      //skip the current element if it is the 'materials' or 'class' element
+      // Skip the current element if it is the 'materials' or 'class' element
+      // (those are already handled in the ipdSECTION program path of recursive_traverse() or access_ipd_material() )
       std::string variable_name(ipdIteratorGetItemName(iNode));
       if(variable_name.compare(ipd_item_name) != 0 && variable_name.compare(ipd_item_category) != 0)
       {
@@ -521,7 +551,7 @@ void ipd_importer::recursive_traverse(ipdIterator_t * iNode)
       }
 
     // If the current element is a _section_
-    }else if (ipdIteratorGetType(iNode) == ipdSECTION)
+    }else if (ipdIteratorGetType(iNode) == ipdSECTION) // Corresponds to group in ViennaMaterials data layout
     {
       // Create a new iterator which should traverse the subsection
       ipdIterator_t  *iSubNode = NULL;
@@ -532,7 +562,7 @@ void ipd_importer::recursive_traverse(ipdIterator_t * iNode)
       // Step into the subsection
       ipdIteratorDoStep(iSubNode);
 
-      //query name and category from IPD
+      // Query name and category from IPD
       std::string section_full_ipd_name(ipdIteratorGetItemFullName(iNode));
       std::string name      = query_string_item_by_name_from_section(section_full_ipd_name.c_str(), ipd_item_name.c_str());
       std::string category  = query_string_item_by_name_from_section(section_full_ipd_name.c_str(), ipd_item_category.c_str());
@@ -552,13 +582,13 @@ void ipd_importer::recursive_traverse(ipdIterator_t * iNode)
 
 void ipd_importer::access_ipd_material(ipdIterator_t * iNode)
 {
-  // Traverse the ViennaIPD data structure using the iterator
+  // Traverse the ViennaIPD material data structure using the iterator
   if(ipdIteratorIsValid(iNode))
   {
     // Get the name of the current item, the material
     ipdConstString itemName = ipdIteratorGetItemName(iNode);
 
-    if (ipdIteratorGetType(iNode) == ipdSECTION) //IPD material node must be a section
+    if (ipdIteratorGetType(iNode) == ipdSECTION) // Corresponds to material in ViennaMaterials data layout
     {
       // Create a new iterator which should traverse the subsection, the attributes of the material
       ipdIterator_t  *iSubNode = NULL;
@@ -569,23 +599,24 @@ void ipd_importer::access_ipd_material(ipdIterator_t * iNode)
       // Step into the subsection
       ipdIteratorDoStep(iSubNode);
 
-      //query name and category from IPD
+      // Query name and category from IPD
       std::string material_full_ipd_name(ipdIteratorGetItemFullName(iNode));
       std::string name      = query_string_item_by_name_from_section(material_full_ipd_name.c_str(), ipd_item_name.c_str());
       std::string category  = query_string_item_by_name_from_section(material_full_ipd_name.c_str(), ipd_item_category.c_str());
 
       xmldoc_->open_material_element(itemName, name.c_str(), category.c_str());
+      // Traverse the material data structure
       recursive_traverse(iSubNode);
       xmldoc_->close_material_element();
 
       ipdIteratorFree(iSubNode);
 
-    }else if (ipdIteratorGetType(iNode) == ipdVARIABLE)
+    }else if (ipdIteratorGetType(iNode) == ipdVARIABLE) // Corresponds to attribute in ViennaMaterials data layout
     {
       TiXmlElement* attribute = ipd_value_to_xml(iNode->tn->node.sv.name, ipdIteratorEval(iNode));
       if(attribute != 0)
         xmldoc_->add_element(attribute);
-    }else
+    }else // Invalid IPD layout
     {
       statistics_->increment_invalid_node_number();
 
@@ -608,7 +639,7 @@ void ipd_importer::traverse_ipd_layout(ipdIterator_t * iNode)
     // Get the name of the current item
     ipdConstString itemName = ipdIteratorGetItemName(iNode);
 
-    if (ipdIteratorGetType(iNode) == ipdSECTION)
+    if (ipdIteratorGetType(iNode) == ipdSECTION) // Corresponds to group in ViennaMaterials data layout
     {
       // Create a new iterator which should traverse the subsection, the materials
       ipdIterator_t  *iSubNode = NULL;
@@ -619,8 +650,10 @@ void ipd_importer::traverse_ipd_layout(ipdIterator_t * iNode)
       // Step into the subsection
       ipdIteratorDoStep(iSubNode);
 
+      // Section at first level of IPD data layout is assumed as group
       xmldoc_->open_group_element(itemName, "", "");
 
+      // Second level if IPD data layout is assumed as material
       while(ipdIteratorIsValid(iSubNode))
       {
         access_ipd_material(iSubNode);
@@ -631,12 +664,12 @@ void ipd_importer::traverse_ipd_layout(ipdIterator_t * iNode)
 
       ipdIteratorFree(iSubNode);
 
-    }else if (ipdIteratorGetType(iNode) == ipdVARIABLE)
+    }else if (ipdIteratorGetType(iNode) == ipdVARIABLE) // Corresponds to attribute in ViennaMaterials data layout
     {
       TiXmlElement* attribute = ipd_value_to_xml(iNode->tn->node.sv.name, ipdIteratorEval(iNode));
       if(attribute != 0)
         xmldoc_->add_element(attribute);
-    }else
+    }else // Invalid IPD layout
     {
       statistics_->increment_invalid_node_number();
 
@@ -658,9 +691,12 @@ std::string ipd_importer::query_string_item_by_name_from_section(const char* sec
   std::string item_full_ipd_name(section);
   item_full_ipd_name.append(".");
   item_full_ipd_name.append(item_name);
+
+  // Check if item exists
   ipdTreeNode_t* node_type = ipdExistVariableByName(item_full_ipd_name.c_str());
   if(node_type != NULL)
   {
+    // Eval item to get type
     ipdTreeNode_s* node = ipdEvalByName(item_full_ipd_name.c_str(), ipdTRUE);
     if(node->type == ipdSTRING || node->type == 2080)
     {
@@ -671,7 +707,7 @@ std::string ipd_importer::query_string_item_by_name_from_section(const char* sec
         std::string name_str(item_full_ipd_name.c_str());
         throw ipd2xml_error("Error while accessing string value(" + name_str + ")");
       }
-      //for an empty string in IPD file, ipdGetStringByName returns a zero pointer
+      // For an empty string in IPD file, ipdGetStringByName returns a zero pointer
       if(string != 0)
         return_val = string;
     }
@@ -716,7 +752,7 @@ long statistic_data::get_number_of_invalid_nodes()
 }
 
 #ifdef VERIFY_XML
-void recurise_traverse_and_verify(ipdIterator_t * iNode, viennamaterials::proxy_handle myproxy)
+void recurise_traverse_and_verify(ipdIterator_t * iNode, viennamaterials::proxy_handle my_proxy)
 {
   // Traverse the ViennaIPD data structure using the iterator
   while (ipdIteratorIsValid(iNode))
@@ -727,7 +763,7 @@ void recurise_traverse_and_verify(ipdIterator_t * iNode, viennamaterials::proxy_
     // If the current element is a _variable_
     if (ipdIteratorGetType(iNode) == ipdVARIABLE)
     {
-      //skip the current element if it is the 'materials' or 'class' element
+      // Skip the current element if it is the 'materials' or 'class' element
       std::string variable_name(ipdIteratorGetItemName(iNode));
       if(variable_name.compare(ipd_item_name) != 0 && variable_name.compare(ipd_item_category) != 0)
       {
@@ -738,6 +774,7 @@ void recurise_traverse_and_verify(ipdIterator_t * iNode, viennamaterials::proxy_
 
         std::cout.precision(STRINGSTREAM_PRECISION);
 
+        // Gather data from IPD and ViennaMaterials and compare results according to the type of data
         switch (tn->type)
         {
           case ipdINTEGER:
@@ -749,14 +786,14 @@ void recurise_traverse_and_verify(ipdIterator_t * iNode, viennamaterials::proxy_
               std::string name_str(name);
               throw ipd2xml_error("Error while accessing integer value(" + name_str + ")");
             }
-            viennamaterials::xml_int value_xml = myproxy->query_value<viennamaterials::xml_int>(ipd_path_to_xml(name));
+            viennamaterials::xml_int value_xml = my_proxy->query_value<viennamaterials::xml_int>(ipd_path_to_xml(name));
             if(value != value_xml)
             {
               output_mismatch(name);
               std::cout << "  IPD: " << value     << std::endl;
               std::cout << "  XML: " << value_xml << std::endl;
             }
-            if((myproxy->query_unit(ipd_path_to_xml(name)).length() != 0))
+            if((my_proxy->query_unit(ipd_path_to_xml(name)).length() != 0))
             {
               output_mismatch(name);
               std::cout << "  unit mismatch" << std::endl;
@@ -774,14 +811,14 @@ void recurise_traverse_and_verify(ipdIterator_t * iNode, viennamaterials::proxy_
               std::string name_str(name);
               throw ipd2xml_error("Error while accessing real/rational value(" + name_str + ")");
             }
-            viennamaterials::xml_float value_xml = myproxy->query_value<viennamaterials::xml_float>(ipd_path_to_xml(name));
+            viennamaterials::xml_float value_xml = my_proxy->query_value<viennamaterials::xml_float>(ipd_path_to_xml(name));
             if(value != value_xml)
             {
               output_mismatch(name);
               std::cout << "  IPD: " << value     << std::endl;
               std::cout << "  XML: " << value_xml << std::endl;
             }
-            if((myproxy->query_unit(ipd_path_to_xml(name)).length() != 0))
+            if((my_proxy->query_unit(ipd_path_to_xml(name)).length() != 0))
             {
               output_mismatch(name);
               std::cout << "  unit mismatch" << std::endl;
@@ -800,8 +837,8 @@ void recurise_traverse_and_verify(ipdIterator_t * iNode, viennamaterials::proxy_
               std::string name_str(name);
               throw ipd2xml_error("Error while accessing real quantity value(" + name_str + ")");
             }
-            viennamaterials::xml_float value_xml = myproxy->query_value<viennamaterials::xml_float>(ipd_path_to_xml(name));
-            std::string unit_xml = myproxy->query_unit(ipd_path_to_xml(name));
+            viennamaterials::xml_float value_xml = my_proxy->query_value<viennamaterials::xml_float>(ipd_path_to_xml(name));
+            std::string unit_xml = my_proxy->query_unit(ipd_path_to_xml(name));
             if(almost_equal(value, value_xml) == false || unit_xml.compare(unit) != 0)
             {
               output_mismatch(name);
@@ -822,14 +859,14 @@ void recurise_traverse_and_verify(ipdIterator_t * iNode, viennamaterials::proxy_
               std::string name_str(name);
               throw ipd2xml_error("Error while accessing boolean value(" + name_str + ")");
             }
-            viennamaterials::xml_bool value_xml = myproxy->query_value<viennamaterials::xml_bool>(ipd_path_to_xml(name));
+            viennamaterials::xml_bool value_xml = my_proxy->query_value<viennamaterials::xml_bool>(ipd_path_to_xml(name));
             if( (value == ipdTRUE && value_xml == false) || (value == ipdFALSE && value_xml == true))
             {
               output_mismatch(name);
               std::cout << "  IPD: " << value     << std::endl;
               std::cout << "  XML: " << value_xml << std::endl;
             }
-            if((myproxy->query_unit(ipd_path_to_xml(name)).length() != 0))
+            if((my_proxy->query_unit(ipd_path_to_xml(name)).length() != 0))
             {
               output_mismatch(name);
               std::cout << "  unit mismatch" << std::endl;
@@ -839,7 +876,7 @@ void recurise_traverse_and_verify(ipdIterator_t * iNode, viennamaterials::proxy_
 
           case 192: //array
           {
-            //TODO array (matrix) not supported yet by viennamaterials
+            //TODO array (matrix) not supported yet by ViennaMaterials
             break;
           }
 
@@ -859,14 +896,14 @@ void recurise_traverse_and_verify(ipdIterator_t * iNode, viennamaterials::proxy_
             if(string != 0)
               value = string;
 
-            viennamaterials::xml_string value_xml = myproxy->query_value<viennamaterials::xml_string>(ipd_path_to_xml(name));
+            viennamaterials::xml_string value_xml = my_proxy->query_value<viennamaterials::xml_string>(ipd_path_to_xml(name));
             if(value_xml.compare(value) != 0)
             {
               output_mismatch(name);
               std::cout << "  IPD: " << value     << std::endl;
               std::cout << "  XML: " << value_xml << std::endl;
             }
-            if((myproxy->query_unit(ipd_path_to_xml(name)).length() != 0))
+            if((my_proxy->query_unit(ipd_path_to_xml(name)).length() != 0))
             {
               output_mismatch(name);
               std::cout << "  unit mismatch" << std::endl;
@@ -894,7 +931,7 @@ void recurise_traverse_and_verify(ipdIterator_t * iNode, viennamaterials::proxy_
       // Step into the subsection
       ipdIteratorDoStep(iSubNode);
 
-      recurise_traverse_and_verify(iSubNode, myproxy);
+      recurise_traverse_and_verify(iSubNode, my_proxy);
 
       ipdIteratorFree(iSubNode);
     }
@@ -907,29 +944,28 @@ void recurise_traverse_and_verify(ipdIterator_t * iNode, viennamaterials::proxy_
 std::string ipd_path_to_xml(const char* ipd_path)
 {
   std::string path_conversion(ipd_path);
-  path_conversion = path_conversion.erase(0, 1);
-  std::replace(path_conversion.begin(), path_conversion.end(), '.', '/');
+  path_conversion = path_conversion.erase(0, 1); // Remove facing '~'
+  std::replace(path_conversion.begin(), path_conversion.end(), '.', '/'); // Replace '.' with '/'
   return path_conversion;
 }
 
-void output_mismatch(const char* name)
+void output_mismatch(const char* ipd_path)
 {
   std::cout << "MISMATCH: "   << std::endl;
-  std::cout << "  IPD path: " << name << std::endl;
-  std::cout << "  XML path: " << ipd_path_to_xml(name) << std::endl;
+  std::cout << "  IPD path: " << ipd_path                   << std::endl;
+  std::cout << "  XML path: " << ipd_path_to_xml(ipd_path)  << std::endl;
 }
 
 bool almost_equal(double a, double b)
 {
-  const double max_realtive_error = 1e-6;
+  const double max_relative_error = 1e-6;
   if(a != 0.0)
   {
-    if(fabs(a-b)/fabs(a) <= max_realtive_error)
+    if(fabs(a-b)/fabs(a) <= max_relative_error)
       return true;
   }else
-    if(fabs(a-b) <= max_realtive_error)
+    if(fabs(a-b) <= max_relative_error)
       return true;
-
 
   return false;
 }

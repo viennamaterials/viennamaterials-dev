@@ -27,15 +27,40 @@
 #include "viennamaterials/proxy/viennastar.hpp"
 #include <math.h>
 
-void recurise_traverse_and_verify(ipdIterator_t * iNode, viennamaterials::proxy_handle myproxy);
+/**
+ * @brief This method recursively traverses the given IPD structure, evaluates the IPD data and verifies it with the corresponding data queried by a ViennaMaterials proxy.
+ * @param iNode IPD iterator of the current level of the IPD data structure
+ * @param my_proxy ViennaMaterials proxy_handle used to access data by ViennaMaterials
+ */
+void recurise_traverse_and_verify(ipdIterator_t * iNode, viennamaterials::proxy_handle my_proxy);
+
+/**
+ * @brief This method returns the corresponding ViennaMaterials proxy path from a given IPD path
+ * @param ipd_path A C-string containing the full/absolute IPD path
+ * @return A string containing the ViennaMaterials proxy path
+ */
 std::string ipd_path_to_xml(const char* ipd_path);
-void output_mismatch(const char* name);
+
+/**
+ * @brief This method writes IPD and ViennaMaterials path to the console.
+ * @param ipd_path A C-string containing the full/absolute IPD path
+ */
+void output_mismatch(const char* ipd_path);
+
+/**
+ * @brief This method compares two given double values if they are (almost) equal.
+ * @param a Examinee
+ * @param b Examinee
+ * @return true if 'a' can be considered equal as 'b', false otherwise
+ */
 bool almost_equal(double a, double b);
 #endif
 
 
-const std::string ipd_item_name("materials"); //using 'materials' IPD item as 'name' for XML material
-const std::string ipd_item_category("class"); //using 'class' IPD item as 'category' for XML material
+/// String holding the IPD item name of the 'name' XML element of a ViennaMaterials material
+const std::string ipd_item_name("materials"); //'materials' IPD item is mapped to 'name' XML element of a ViennaMaterials material
+/// String holding the IPD item name of the 'category' XML element of a ViennaMaterials material
+const std::string ipd_item_category("class"); //'class' IPD item is mapped to 'category' XML element of a ViennaMaterials material
 
 struct ipd2xml_error : public std::exception
 {
@@ -51,7 +76,7 @@ struct ipd2xml_error : public std::exception
 };
 
 
-/// @brief precision for stringstream used in converter method
+/// @brief Precision for stringstream used in converter method
 #define STRINGSTREAM_PRECISION 15
 
 template < typename T >
@@ -283,7 +308,7 @@ private:
 
   /**
    * @brief This method queries a string item by its name within an given section in the IPD structure.
-   * @param section An IPD path to a section
+   * @param section An IPD path (full/absolute path) to a section
    * @param item_name The name of the item within the given section holding a string value
    * @return A string holding the value of the identified item
    */
