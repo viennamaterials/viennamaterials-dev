@@ -14,12 +14,12 @@
 /*
  * This tool assumes a certain layout of the IPD data:
  *   First level:               IPD sections are mapped to ViennaMaterials groups (containing attributes and/or materials)
- *   |                          IPD variables are mapped to ViennaMaterials attributes (this attributes are not associated with a group or material)
+ *   |                          IPD variables are mapped to ViennaMaterials attributes (these attributes are not associated with a group or material)
  *   |
- *   -> Second level:           IPD sections are mapped to Viennamaterials materials
+ *   -> Second level:           IPD sections are mapped to ViennaMaterials materials
  *      |                       IPD variables are mapped to ViennaMaterials attributes (associated with the group of the first level)
  *      |
- *      -> Consecutive levels:  IPD sections are mappe to ViennaMaterials groups
+ *      -> Consecutive levels:  IPD sections are mapped to ViennaMaterials groups
  *                              IPD variables are mapped to ViennaMaterials attributes
  *
  *
