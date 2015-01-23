@@ -32,4 +32,9 @@ attribute_handle library::query(std::string const& query_to_attribute)
   return frontend_->query(query_to_attribute);
 }
 
+void library::dump(std::ostream& stream)
+{
+  frontend_->dump(stream);
+}
+
 } /* namespace viennamaterials */

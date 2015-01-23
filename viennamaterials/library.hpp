@@ -36,6 +36,8 @@ public:
    */
   virtual attribute_handle query(std::string const& query_to_attribute) = 0;
 
+  virtual void dump(std::ostream& stream) = 0;
+
 protected:
   backend_handle backend_;
 };
@@ -58,6 +60,8 @@ public:
    * @return A smartpointer pointing to an attribute_entity object
    */
   attribute_handle query(std::string const& query_to_attribute);
+
+  void dump(std::ostream& stream = std::cout);
 
 private:
   shared_ptr<library_interface> frontend_;

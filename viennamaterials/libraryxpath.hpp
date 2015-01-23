@@ -40,6 +40,8 @@ public:
    */
   attribute_handle query(std::string const& xpath_query_to_attribute);
 
+  void dump(std::ostream& stream);
+
 private:
   /**
    * @brief Evaluates the type of the attribute pointed by the query

@@ -231,4 +231,9 @@ xml_attribute_type library_xpath::get_attribute_type(std::string const& xpath_qu
   throw library_error("No valid attribute type found (query: " + xpath_query_to_attribute + ")");
 }
 
+void library_xpath::dump(std::ostream& stream)
+{
+  backend_->dump(stream);
+}
+
 } /* namespace viennamaterials */
