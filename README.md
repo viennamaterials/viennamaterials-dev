@@ -100,4 +100,4 @@ you can quickly execute all tests after the building step via executing
 <pre>
 $> make test
 </pre>
-in the build folder.
+in the build/ folder.
