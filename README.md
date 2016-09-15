@@ -12,11 +12,11 @@ ViennaMaterials is currently in a prototype state.
 System requirements
 --------------------------
 
-* C++ compiler (tested with GCC 4.8.1)
-* CMake (tested with CMake 2.8.11.2)
-* SWIG (tested with 2.0.10) :: optional, required for Python interface
-* libpython (tested with 2.7.5) :: optional, required for Python interface
-* UDUNITS (tested with 2.1.23) :: optional, required for physical unit conversions
+* C++ compiler (tested with GCC 5.4.0)
+* CMake (tested with CMake 3.5.1)
+* SWIG (tested under Linux Mint swig3.0 3.0.8) :: optional, required for Python interface
+* libpython (tested under Linux Mint libpython2.7-dev 2.7.12) :: optional, required for Python interface
+* UDUNITS (tested under Linux Mint libudunits2-dev 2.2.20) :: optional, required for physical unit conversions
 
 These packages should be available via your distribution's packaging system,
 for instance, on Linux Mint 16 install the following packages: g++, cmake, swig, libpython-dev, libudunits2-dev.
@@ -91,6 +91,16 @@ $> cd examples
 <pre>
 $> cd examples/tutorial/
 </pre>
+
+Warning: For the python example to work you need to add the installed python folder to your PYTHONPATH, otherwise the pyviennamaterials module won't be found!
+To do this temporarily, one can pass this to the environment upon execution, see the following example:
+<pre>
+$> cd /path/to/viennamaterials/installation/folder/
+$> cd examples/
+$> PYTHONPATH=/path/to/viennamaterials/installation/folder/python/:$PYTHONPATH python python.py data/material_test.xml ../units/units.xml
+</pre>
+
+
 
 Tests
 --------------------------
