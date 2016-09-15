@@ -54,11 +54,13 @@ or use the following additional, optional configuration parameters
  -DBUILD_EXAMPLES=OFF
 # don't build tests (default: on)
  -DBUILD_TESTS=OFF
+# build with units support (default: on)
+ -DBUILD_UNITS=OFF
 # build Python library (default: off)
  -DBUILD_PYLIB=ON
 </pre>
 
-For instance, here is a configuration for building the default setup plus the Python module:
+For instance, here is a configuration for building the default setup plus the Python module (requires SWIG):
 <pre>
 cmake -DBUILD_PYLIB=ON  ..
 </pre>
@@ -70,7 +72,7 @@ Now build the library (and potentially the examples and tests)
 $> make -j4  # adjust to your CPU core count for efficient parallel building
 </pre>
 
-If desired, the required files can be installed to a specific location via issuing.
+If desired, the required files can be installed to a specific location via using CMakes "CMAKE_INSTALL_PREFIX" parameter during the configuration phase (see above).
 Note that the run-time path to the ViennaMaterials library will be encoded into the examples,
 enabling to execute the examples outside of the build location.
 <pre>
@@ -80,7 +82,12 @@ make install
 Examples
 --------------------------
 
-If the examples have been activated during the configuration phase, execute the examples in the tutorial build folder
+If the examples have been activated during the configuration phase, examples can be found in
+(relative to the installation path):
+<pre>
+$> cd examples
+</pre>
+(relative to the build path):
 <pre>
 $> cd examples/tutorial/
 </pre>
@@ -89,7 +96,8 @@ Tests
 --------------------------
 
 If ViennaMaterials has been configured to generate tests (cf. Building instructions),
-you can quickly execute all tests after the building step via executing:
+you can quickly execute all tests after the building step via executing
 <pre>
 $> make test
 </pre>
+in the build folder.
